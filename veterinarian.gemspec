@@ -1,16 +1,16 @@
 # -*- encoding: utf-8 -*-
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'superintendent/version'
+require 'veterinarian/version'
 
 Gem::Specification.new do |gem|
-  gem.name          = "superintendent"
-  gem.version       = Superintendent::VERSION
+  gem.name          = "veterinarian"
+  gem.version       = Veterinarian::VERSION
   gem.authors       = ["Michael Klishin"]
   gem.email         = ["michael@defprotocol.org"]
   gem.description   = %q{RabbitMQ HTTP API client for Ruby}
   gem.summary       = %q{RabbitMQ HTTP API client for Ruby}
-  gem.homepage      = "http://github.com/ruby-amqp/superintendent"
+  gem.homepage      = "http://github.com/ruby-amqp/veterinarian"
   gem.licenses      = ["MIT", "Mozilla Public License"]
 
   gem.files         = `git ls-files`.split($/)

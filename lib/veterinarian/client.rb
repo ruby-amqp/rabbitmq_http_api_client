@@ -6,7 +6,7 @@ require "multi_json"
 # for URI encoding
 require "cgi"
 
-module Superintendent
+module Veterinarian
   class Client
 
     #
@@ -122,4 +122,4 @@ module Superintendent
     end
 
   end # Client
-end # Superintendent
+end # Veterinarian

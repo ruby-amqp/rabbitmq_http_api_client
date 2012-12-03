@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe Superintendent::Client do
+describe Veterinarian::Client do
   let(:endpoint) { "http://127.0.0.1:55672" }
 
   subject do

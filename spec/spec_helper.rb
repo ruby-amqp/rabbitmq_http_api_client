@@ -8,5 +8,5 @@ Bundler.setup(:default, :test)
 
 require "effin_utf8"
 require "rspec"
-require "superintendent"
+require "veterinarian"
 require "bunny"
