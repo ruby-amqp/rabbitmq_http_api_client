@@ -1,12 +1,34 @@
-# Superintendent, a RabbitMQ HTTP API Client for Ruby
+# Veterinarian, a RabbitMQ HTTP API Client for Ruby
 
-TODO: Write a gem description
+Veterinarian is a RabbitMQ HTTP API Client for Ruby. It supports
+
+ * Getting cluster overview information
+ * Getting cluster nodes status (# file descriptors used, RAM consumption and so on)
+ * Getting information about exchanges, queues, bindings
+ * Publishing messages via HTTP
+ * Closing client connections
+ * Getting information about vhosts, users, permissions
+
+## Supported Ruby Versions
+
+ * MRI 1.9.3
+ * JRuby 1.7+
+ * Rubinius 2.0+
+ * MRI 1.9.2
+ * MRI 1.8.7
+
+## Supported RabbitMQ Versions
+
+ * RabbitMQ 3.x
+ * RabbitMQ 2.x
+
+All versions require [RabbitMQ Management UI plugin](http://www.rabbitmq.com/management.html) to be installed and enabled.
 
 ## Installation
 
 Add this line to your application's Gemfile:
 
-    gem 'superintendent'
+    gem 'veterinarian'
 
 And then execute:
 
@@ -14,7 +36,7 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install superintendent
+    $ gem install veterinarian
 
 ## Usage
 
