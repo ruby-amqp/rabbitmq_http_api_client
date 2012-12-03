@@ -224,7 +224,7 @@ describe Veterinarian::Client do
   end
 
   describe "GET /api/exchanges/:vhost" do
-    it "returns a list of all exchanges in the vhost" do
+    it "returns a list of all exchanges in a vhost" do
       xs = subject.list_exchanges("/")
       f  = xs.first
 
@@ -272,5 +272,219 @@ describe Veterinarian::Client do
       e.delete
       q.delete
     end
+  end
+
+
+  describe "GET /api/exchanges/:vhost/:name/bindings/destination" do
+    before :all do
+      @connection = Bunny.new
+      @connection.start
+      @channel    = @connection.create_channel
+    end
+    after :all do
+      @connection.close
+    end
+
+    it "returns a list of all bindings in which the given exchange is the source" do
+      e1  = @channel.fanout("http.api.tests.fanout1", :durable => true)
+      e2  = @channel.fanout("http.api.tests.fanout2", :durable => true)
+      e1.bind(e2)
+
+      xs = subject.list_bindings_by_destination("/", "http.api.tests.fanout1")
+      f  = xs.first
+
+      f.destination.should == e1.name
+      f.destination_type.should == "exchange"
+      f.routing_key.should == ""
+      f.source.should == e2.name
+      f.vhost.should == "/"
+
+      e1.delete
+      e2.delete
+    end
+  end
+
+
+
+  describe "POST /api/exchanges/:vhost/:name/publish" do
+    it "publishes a messages to the exchange"
+  end
+
+  describe "GET /api/queues" do
+    it "returns a list of all queues"
+  end
+
+  describe "GET /api/queues/:vhost" do
+    it "returns a list of all queues"
+  end
+
+  describe "GET /api/queues/:vhost/:name" do
+    it "returns information about a queue"
+  end
+
+  describe "PUT /api/queues/:vhost/:name" do
+    it "declares a queue"
+  end
+
+  describe "DELETE /api/queues/:vhost/:name" do
+    it "deletes a queue"
+  end
+
+  describe "GET /api/queues/:vhost/:name/bindings" do
+    it "returns a list of bindings for a queue"
+  end
+
+  describe "DELETE /api/queues/:vhost/:name/contents" do
+    it "purges a queue"
+  end
+
+  describe "GET /api/queues/:vhost/:name/get" do
+    it "fetches a message from a queue, a la basic.get"
+  end
+
+  describe "GET /api/bindings" do
+    it "returns a list of all bindings"
+  end
+
+  describe "GET /api/bindings/:vhost" do
+    it "returns a list of all bindings in a vhost"
+  end
+
+  describe "GET /api/bindings/:vhost/e/:exchange/q/:queue" do
+    it "returns a list of all bindings between an exchange and a queue"
+  end
+
+  describe "POST /api/bindings/:vhost/e/:exchange/q/:queue" do
+    it "creates a binding between an exchange and a queue"
+  end
+
+  describe "GET /api/bindings/:vhost/e/:exchange/q/:queue/props" do
+    it "returns an individual binding between an exchange and a queue"
+  end
+
+  describe "DELETE /api/bindings/:vhost/e/:exchange/q/:queue/props" do
+    it "deletes an individual binding between an exchange and a queue"
+  end
+
+  describe "GET /api/vhosts" do
+    it "returns a list of vhosts"
+  end
+
+  describe "GET /api/vhosts/:name" do
+    it "returns infomation about a vhost"
+  end
+
+  describe "POST /api/vhosts/:name" do
+    it "creates a vhost"
+  end
+
+  describe "PUT /api/vhosts/:name" do
+    it "updates a vhost"
+  end
+
+  describe "GET /api/vhosts/:name/permissions" do
+    it "returns a list of permissions in a vhost"
+  end
+
+  describe "GET /api/users" do
+    it "returns a list of all users"
+  end
+
+  describe "GET /api/users/:name" do
+    it "returns information about a user"
+  end
+
+  describe "PUT /api/users/:name" do
+    it "updates information about a user"
+  end
+
+  describe "POST /api/users/:name" do
+    it "creates a user"
+  end
+
+  describe "GET /api/users/:name/permissions" do
+    it "returns a list of permissions for a user"
+  end
+
+  describe "GET /api/whoami" do
+    it "returns information about the current user"
+  end
+
+  describe "GET /api/permissions" do
+    it "lists all permissions"
+  end
+
+  describe "GET /api/permissions/:vhost/:user" do
+    it "returns a list of permissions of a user in a vhost"
+  end
+
+  describe "PUT /api/permissions/:vhost/:user" do
+    it "updates permissions of a user in a vhost"
+  end
+
+  describe "DELETE /api/permissions/:vhost/:user" do
+    it "clears permissions of a user in a vhost"
+  end
+
+  #
+  # Parameters
+  #
+
+  describe "GET /api/parameters" do
+    it "returns a list of all parameters"
+  end
+
+  describe "GET /api/parameters/:component" do
+    it "returns a list of all parameters for a component"
+  end
+
+  describe "GET /api/parameters/:component/:vhost" do
+    it "returns a list of all parameters for a component in a vhost"
+  end
+
+  describe "GET /api/parameters/:component/:vhost/:name" do
+    it "returns information about a specific parameter"
+  end
+
+  describe "PUT /api/parameters/:component/:vhost/:name" do
+    it "updates information about a specific parameter"
+  end
+
+  describe "DELETE /api/parameters/:component/:vhost/:name" do
+    it "clears information about a specific parameter"
+  end
+
+
+  #
+  # Policies
+  #
+
+  describe "GET /api/policies" do
+    it "returns a list of all policies"
+  end
+
+  describe "GET /api/policies/:vhost" do
+    it "returns a list of all policies in a vhost"
+  end
+
+  describe "GET /api/policies/:vhost/:name" do
+    it "returns information about a policy in a vhost"
+  end
+
+  describe "PUT /api/policies/:vhost/:name" do
+    it "updates information about a policy in a vhost"
+  end
+
+  describe "DELETE /api/policies/:vhost/:name" do
+    it "clears information about a policy in a vhost"
+  end
+
+
+  #
+  # Aliveness Test
+  #
+
+  describe "GET /api/aliveness-test/:vhost" do
+    it "performs aliveness check"
   end
 end
