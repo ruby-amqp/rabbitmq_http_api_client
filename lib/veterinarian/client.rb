@@ -25,28 +25,23 @@ module Veterinarian
     end
 
     def overview
-      response = @connection.get("/api/overview")
-      Hashie::Mash.new(response.body)
+      decode_resource(@connection.get("/api/overview"))
     end
 
     def list_nodes
-      response = @connection.get("/api/nodes")
-      response.body.map { |i| Hashie::Mash.new(i) }
+      decode_resource_collection(@connection.get("/api/nodes"))
     end
 
     def node_info(name)
-      response = @connection.get("/api/nodes/#{uri_encode(name)}")
-      Hashie::Mash.new(response.body)
+      decode_resource(@connection.get("/api/nodes/#{uri_encode(name)}"))
     end
 
     def list_extensions
-      response = @connection.get("/api/extensions")
-      response.body.map { |i| Hashie::Mash.new(i) }
+      decode_resource_collection(@connection.get("/api/extensions"))
     end
 
     def list_definitions
-      response = @connection.get("/api/definitions")
-      response.body.map { |i| Hashie::Mash.new(i) }
+      decode_resource_collection(@connection.get("/api/definitions"))
     end
 
     def upload_definitions(defs)
@@ -54,28 +49,23 @@ module Veterinarian
     end
 
     def list_connections
-      response = @connection.get("/api/connections")
-      response.body.map { |i| Hashie::Mash.new(i) }
+      decode_resource_collection(@connection.get("/api/connections"))
     end
 
     def connection_info(name)
-      response = @connection.get("/api/connections/#{uri_encode(name)}")
-      Hashie::Mash.new(response.body)
+      decode_resource(@connection.get("/api/connections/#{uri_encode(name)}"))
     end
 
     def close_connection(name)
-      response = @connection.delete("/api/connections/#{uri_encode(name)}")
-      Hashie::Mash.new(response.body)
+      decode_resource(@connection.delete("/api/connections/#{uri_encode(name)}"))
     end
 
     def list_channels
-      response = @connection.get("/api/channels")
-      response.body.map { |i| Hashie::Mash.new(i) }
+      decode_resource_collection(@connection.get("/api/channels"))
     end
 
     def channel_info(name)
-      response = @connection.get("/api/channels/#{uri_encode(name)}")
-      Hashie::Mash.new(response.body)
+      decode_resource(@connection.get("/api/channels/#{uri_encode(name)}"))
     end
 
     def list_exchanges(vhost = nil)
@@ -85,23 +75,88 @@ module Veterinarian
                "/api/exchanges/#{uri_encode(vhost)}"
              end
 
-      response = @connection.get(path)
-      response.body.map { |i| Hashie::Mash.new(i) }
+      decode_resource_collection(@connection.get(path))
     end
 
     def exchange_info(vhost, name)
-      response = @connection.get("/api/exchanges/#{uri_encode(vhost)}/#{uri_encode(name)}")
-      Hashie::Mash.new(response.body)
+      decode_resource(@connection.get("/api/exchanges/#{uri_encode(vhost)}/#{uri_encode(name)}"))
     end
 
     def list_bindings_by_source(vhost, exchange)
-      response = @connection.get("/api/exchanges/#{uri_encode(vhost)}/#{uri_encode(exchange)}/bindings/source")
-      response.body.map { |i| Hashie::Mash.new(i) }
+      decode_resource_collection(@connection.get("/api/exchanges/#{uri_encode(vhost)}/#{uri_encode(exchange)}/bindings/source"))
     end
 
     def list_bindings_by_destination(vhost, exchange)
-      response = @connection.get("/api/exchanges/#{uri_encode(vhost)}/#{uri_encode(exchange)}/bindings/destination")
-      response.body.map { |i| Hashie::Mash.new(i) }
+      decode_resource_collection(@connection.get("/api/exchanges/#{uri_encode(vhost)}/#{uri_encode(exchange)}/bindings/destination"))
+    end
+
+    def list_queues(vhost = nil)
+      path = if vhost.nil?
+               "/api/queues"
+             else
+               "/api/queues/#{uri_encode(vhost)}"
+             end
+
+      decode_resource_collection(@connection.get(path))
+    end
+
+    def queue_info(vhost, name)
+      decode_resource(@connection.get("/api/queues/#{uri_encode(vhost)}/#{uri_encode(name)}"))
+    end
+
+    def declare_queue(vhost, name, attributes)
+      raise NotImplementedError.new
+    end
+
+    def delete_queue(vhost, name)
+      raise NotImplementedError.new
+    end
+
+    def purge_queue(vhost, name)
+      raise NotImplementedError.new
+    end
+
+
+    def list_bindings(vhost = nil)
+      path = if vhost.nil?
+               "/api/bindings"
+             else
+               "/api/bindings/#{uri_encode(vhost)}"
+             end
+
+      decode_resource_collection(@connection.get(path))
+    end
+
+    def list_vhosts
+      decode_resource_collection(@connection.get("/api/vhosts"))
+    end
+
+    def vhost_info(name)
+      decode_resource(@connection.get("/api/vhosts/#{uri_encode(name)}"))
+    end
+
+
+
+    def list_users
+      decode_resource_collection(@connection.get("/api/users"))
+    end
+
+
+
+    def list_policies
+      decode_resource_collection(@connection.get("/api/policies"))
+    end
+
+
+    def list_parameters
+      decode_resource_collection(@connection.get("/api/parameters"))
+    end
+
+
+
+    def aliveness_test(vhost)
+      r = @connection.get("/api/aliveness-test/#{uri_encode(vhost)}")
+      r.body["status"] == "ok"
     end
 
 
@@ -121,5 +176,12 @@ module Veterinarian
       CGI.escape(s)
     end
 
+    def decode_resource(response)
+      Hashie::Mash.new(response.body)
+    end
+
+    def decode_resource_collection(response)
+      response.body.map { |i| Hashie::Mash.new(i) }
+    end
   end # Client
 end # Veterinarian

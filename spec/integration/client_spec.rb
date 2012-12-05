@@ -311,18 +311,75 @@ describe Veterinarian::Client do
   end
 
   describe "GET /api/queues" do
-    it "returns a list of all queues"
+    before :all do
+      @connection = Bunny.new
+      @connection.start
+      @channel    = @connection.create_channel
+    end
+    after :all do
+      @connection.close
+    end
+
+    it "returns a list of all queues" do
+      q  = @channel.queue("", :exclusive => true)
+
+      xs = subject.list_queues
+      xs.detect { |x| x.name == q.name }.should_not be_empty
+    end
   end
 
   describe "GET /api/queues/:vhost" do
-    it "returns a list of all queues"
+    before :all do
+      @connection = Bunny.new
+      @connection.start
+      @channel    = @connection.create_channel
+    end
+    after :all do
+      @connection.close
+    end
+
+    it "returns a list of all queues" do
+      q  = @channel.queue("", :exclusive => true)
+
+      xs = subject.list_queues("/")
+      xs.detect { |x| x.name == q.name }.should_not be_empty
+    end
   end
 
   describe "GET /api/queues/:vhost/:name" do
-    it "returns information about a queue"
+    before :all do
+      @connection = Bunny.new
+      @connection.start
+      @channel    = @connection.create_channel
+    end
+    after :all do
+      @connection.close
+    end
+
+    it "returns information about a queue" do
+      q  = @channel.queue("", :exclusive => true, :durable => false)
+      i  = subject.queue_info("/", q.name)
+
+      i.durable.should be_false
+      i.durable.should == q.durable?
+
+      i.name.should == q.name
+      i.auto_delete.should == q.auto_delete?
+      i.active_consumers.should == 0
+      i.backing_queue_status.avg_ack_egress_rate.should == 0.0
+    end
   end
 
   describe "PUT /api/queues/:vhost/:name" do
+    before :all do
+      @connection = Bunny.new
+      @connection.start
+      @channel    = @connection.create_channel
+    end
+    after :all do
+      @connection.close
+    end
+
     it "declares a queue"
   end
 
@@ -343,11 +400,29 @@ describe Veterinarian::Client do
   end
 
   describe "GET /api/bindings" do
-    it "returns a list of all bindings"
+    it "returns a list of all bindings" do
+      xs = subject.list_bindings
+      b  = xs.first
+
+      b.destination.should_not be_nil
+      b.destination_type.should_not be_nil
+      b.source.should_not be_nil
+      b.routing_key.should_not be_nil
+      b.vhost.should_not be_nil
+    end
   end
 
   describe "GET /api/bindings/:vhost" do
-    it "returns a list of all bindings in a vhost"
+    it "returns a list of all bindings in a vhost" do
+      xs = subject.list_bindings("/")
+      b  = xs.first
+
+      b.destination.should_not be_nil
+      b.destination_type.should_not be_nil
+      b.source.should_not be_nil
+      b.routing_key.should_not be_nil
+      b.vhost.should_not be_nil
+    end
   end
 
   describe "GET /api/bindings/:vhost/e/:exchange/q/:queue" do
@@ -367,11 +442,22 @@ describe Veterinarian::Client do
   end
 
   describe "GET /api/vhosts" do
-    it "returns a list of vhosts"
+    it "returns a list of vhosts" do
+      xs = subject.list_vhosts
+      v  = xs.first
+
+      v.name.should_not be_nil
+      v.tracing.should be_false
+    end
   end
 
   describe "GET /api/vhosts/:name" do
-    it "returns infomation about a vhost"
+    it "returns infomation about a vhost" do
+      v = subject.vhost_info("/")
+
+      v.name.should_not be_nil
+      v.tracing.should be_false
+    end
   end
 
   describe "POST /api/vhosts/:name" do
@@ -387,7 +473,14 @@ describe Veterinarian::Client do
   end
 
   describe "GET /api/users" do
-    it "returns a list of all users"
+    it "returns a list of all users" do
+      xs = subject.list_users
+      u  = xs.first
+
+      u.name.should_not be_nil
+      u.password_hash.should_not be_nil
+      u.tags.should_not be_nil
+    end
   end
 
   describe "GET /api/users/:name" do
@@ -431,7 +524,10 @@ describe Veterinarian::Client do
   #
 
   describe "GET /api/parameters" do
-    it "returns a list of all parameters"
+    it "returns a list of all parameters" do
+      xs = subject.list_parameters
+      xs.should be_kind_of(Array)
+    end
   end
 
   describe "GET /api/parameters/:component" do
@@ -460,7 +556,10 @@ describe Veterinarian::Client do
   #
 
   describe "GET /api/policies" do
-    it "returns a list of all policies"
+    it "returns a list of all policies" do
+      xs = subject.list_policies
+      xs.should be_kind_of(Array)
+    end
   end
 
   describe "GET /api/policies/:vhost" do
@@ -485,6 +584,10 @@ describe Veterinarian::Client do
   #
 
   describe "GET /api/aliveness-test/:vhost" do
-    it "performs aliveness check"
+    it "performs aliveness check" do
+      r = subject.aliveness_test("/")
+
+      r.should be_true
+    end
   end
 end
