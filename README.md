@@ -33,7 +33,7 @@ All versions require [RabbitMQ Management UI plugin](http://www.rabbitmq.com/man
 
 Add this line to your application's Gemfile:
 
-    gem 'veterinarian'
+    gem 'rabbitmq_http_api_client'
 
 And then execute:
 
@@ -41,7 +41,7 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install veterinarian
+    $ gem install rabbitmq_http_api_client
 
 ## Usage
 
