@@ -1,13 +1,18 @@
-# Veterinarian, a RabbitMQ HTTP API Client for Ruby
+# RabbitMQ HTTP API Client for Ruby
 
-Veterinarian is a RabbitMQ HTTP API Client for Ruby. It supports
+This gem is a RabbitMQ HTTP API Client for Ruby. It supports
 
  * Getting cluster overview information
  * Getting cluster nodes status (# file descriptors used, RAM consumption and so on)
  * Getting information about exchanges, queues, bindings
- * Publishing messages via HTTP
  * Closing client connections
  * Getting information about vhosts, users, permissions
+
+and will support more HTTP API features in the future
+
+ * Publishing messages via HTTP
+ * Operations on components/extensions
+ * Operations on federation policies
 
 ## Supported Ruby Versions
 

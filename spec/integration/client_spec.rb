@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe Veterinarian::Client do
+describe RabbitMQ::HTTP::Client do
   let(:endpoint) { "http://127.0.0.1:55672" }
 
   subject do
