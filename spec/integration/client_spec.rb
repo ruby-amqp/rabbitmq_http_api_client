@@ -94,11 +94,18 @@ describe RabbitMQ::HTTP::Client do
   #
 
   describe "GET /api/definitions" do
+    it "returns a list of all resources/definitions (vhosts, users, permissions, queues, exchanges, bindings, etc)" do
+      xs = subject.list_definitions
 
+      xs.bindings.should be_instance_of(Array)
+      xs.queues.should be_instance_of(Array)
+      xs.exchanges.should be_instance_of(Array)
+      xs.users.should be_instance_of(Array)
+      xs.vhosts.should be_instance_of(Array)
+    end
   end
 
   describe "POST /api/definitions" do
-
   end
 
   #

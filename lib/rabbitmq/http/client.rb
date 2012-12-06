@@ -42,7 +42,7 @@ module RabbitMQ
       end
 
       def list_definitions
-        decode_resource_collection(@connection.get("/api/definitions"))
+        decode_resource(@connection.get("/api/definitions"))
       end
 
       def upload_definitions(defs)
