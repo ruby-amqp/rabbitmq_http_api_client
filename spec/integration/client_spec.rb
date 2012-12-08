@@ -508,16 +508,34 @@ describe RabbitMQ::HTTP::Client do
     end
   end
 
-  describe "POST /api/vhosts/:name" do
-    it "creates a vhost"
+  describe "PUT /api/vhosts/:name" do
+    let(:vhost) { "http-created" }
+
+    it "creates a vhost" do
+      subject.create_vhost(vhost)
+      subject.create_vhost(vhost)
+
+      v = subject.vhost_info(vhost)
+      v.name.should == vhost
+    end
   end
 
-  describe "PUT /api/vhosts/:name" do
-    it "updates a vhost"
+  describe "DELETE /api/vhosts/:name" do
+    let(:vhost) { "http-created2" }
+
+    it "deletes a vhost" do
+      subject.create_vhost(vhost)
+      subject.delete_vhost(vhost)
+    end
   end
 
   describe "GET /api/vhosts/:name/permissions" do
-    it "returns a list of permissions in a vhost"
+    it "returns a list of permissions in a vhost" do
+      xs = subject.list_permissions("/")
+      p  = xs.detect { |x| x.user == "guest" }
+
+      p.read.should == ".*"
+    end
   end
 
   describe "GET /api/users" do

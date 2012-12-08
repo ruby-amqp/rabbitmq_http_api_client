@@ -159,6 +159,21 @@ module RabbitMQ
         decode_resource(@connection.get("/api/vhosts/#{uri_encode(name)}"))
       end
 
+      def create_vhost(name)
+        response = @connection.put("/api/vhosts/#{uri_encode(name)}") do |req|
+          req.headers['Content-Type'] = "application/json"
+        end
+        decode_resource(response)
+      end
+
+      def delete_vhost(name)
+        decode_resource(@connection.delete("/api/vhosts/#{uri_encode(name)}"))
+      end
+
+      def list_permissions(vhost)
+        decode_resource_collection(@connection.get("/api/vhosts/#{uri_encode(vhost)}/permissions"))
+      end
+
 
 
       def list_users
