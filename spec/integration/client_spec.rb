@@ -455,7 +455,26 @@ describe RabbitMQ::HTTP::Client do
   end
 
   describe "GET /api/bindings/:vhost/e/:exchange/q/:queue" do
-    it "returns a list of all bindings between an exchange and a queue"
+    before :all do
+      @channel    = @connection.create_channel
+    end
+
+    it "returns a list of all bindings between an exchange and a queue" do
+      q = @channel.queue("")
+      x = @channel.fanout("http.client.fanout")
+      q.bind(x)
+
+      xs = subject.list_bindings_between_queue_and_exchange("/", q.name, x.name)
+      b  = xs.first
+      b.destination.should == q.name
+      b.destination_type.should == "queue"
+      b.source.should == x.name
+      b.routing_key.should_not be_nil
+      b.vhost.should == "/"
+
+      q.delete
+      x.delete
+    end
   end
 
   describe "POST /api/bindings/:vhost/e/:exchange/q/:queue" do

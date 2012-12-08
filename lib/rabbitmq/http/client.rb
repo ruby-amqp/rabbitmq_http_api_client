@@ -144,6 +144,13 @@ module RabbitMQ
         decode_resource_collection(@connection.get(path))
       end
 
+      def list_bindings_between_queue_and_exchange(vhost, queue, exchange)
+        decode_resource_collection(@connection.get("/api/bindings/#{uri_encode(vhost)}/e/#{uri_encode(exchange)}/q/#{uri_encode(queue)}"))
+      end
+
+
+
+
       def list_vhosts
         decode_resource_collection(@connection.get("/api/vhosts"))
       end
