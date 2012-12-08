@@ -550,15 +550,27 @@ describe RabbitMQ::HTTP::Client do
   end
 
   describe "GET /api/users/:name" do
-    it "returns information about a user"
+    it "returns information about a user" do
+      u = subject.user_info("guest")
+      u.name.should == "guest"
+      u.tags.should == "administrator"
+    end
   end
 
   describe "PUT /api/users/:name" do
-    it "updates information about a user"
+    it "updates information about a user" do
+      subject.update_user("alt", :tags => "http", :password => "alt")
+
+      u = subject.user_info("alt")
+      u.tags.should == "http"
+    end
   end
 
-  describe "POST /api/users/:name" do
-    it "creates a user"
+  describe "DELETE /api/users/:name" do
+    it "deletes a user" do
+      subject.update_user("alt2", :tags => "http", :password => "alt")
+      subject.delete_user("alt2")
+    end
   end
 
   describe "GET /api/users/:name/permissions" do

@@ -180,6 +180,22 @@ module RabbitMQ
         decode_resource_collection(@connection.get("/api/users"))
       end
 
+      def user_info(name)
+        decode_resource(@connection.get("/api/users/#{uri_encode(name)}"))
+      end
+
+      def update_user(name, attributes)
+        response = @connection.put("/api/users/#{uri_encode(name)}") do |req|
+          req.headers['Content-Type'] = "application/json"
+          req.body = MultiJson.dump(attributes)
+        end
+        decode_resource(response)
+      end
+
+      def delete_user(name)
+        decode_resource(@connection.delete("/api/users/#{uri_encode(name)}"))
+      end
+
 
 
       def list_policies
