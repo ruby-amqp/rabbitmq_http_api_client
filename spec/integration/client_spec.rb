@@ -1,10 +1,19 @@
 require "spec_helper"
 
 describe RabbitMQ::HTTP::Client do
-  let(:endpoint) { "http://127.0.0.1:55672" }
+  let(:endpoint) { "http://127.0.0.1:15672" }
 
   subject do
     described_class.connect(endpoint, :username => "guest", :password => "guest")
+  end
+
+  before :all do
+    @connection = Bunny.new
+    @connection.start
+  end
+
+  after :all do
+    @connection.close
   end
 
 
@@ -106,6 +115,7 @@ describe RabbitMQ::HTTP::Client do
   end
 
   describe "POST /api/definitions" do
+    it "uploads definitions to RabbitMQ"
   end
 
   #
@@ -116,9 +126,6 @@ describe RabbitMQ::HTTP::Client do
     before :all do
       @connection = Bunny.new
       @connection.start
-    end
-    after :all do
-      @connection.close
     end
 
     it "returns a list of all active connections" do
@@ -131,14 +138,6 @@ describe RabbitMQ::HTTP::Client do
   end
 
   describe "GET /api/connections/:name" do
-    before :all do
-      @connection = Bunny.new
-      @connection.start
-    end
-    after :all do
-      @connection.close
-    end
-
     it "returns information about the connection" do
       xs = subject.list_connections
       c  = subject.connection_info(xs.first.name)
@@ -149,15 +148,6 @@ describe RabbitMQ::HTTP::Client do
   end
 
   describe "DELETE /api/connections/:name" do
-    before :all do
-      @connection = Bunny.new
-      @connection.start
-    end
-    after :all do
-      @connection.close if @connection.open?
-    end
-
-
     it "closes the connection" do
       pending "Needs investigation, DELETE does not seem to close the connection"
       xs = subject.list_connections
@@ -177,12 +167,7 @@ describe RabbitMQ::HTTP::Client do
 
   describe "GET /api/channels" do
     before :all do
-      @connection = Bunny.new
-      @connection.start
       @channel    = @connection.create_channel
-    end
-    after :all do
-      @connection.close
     end
 
     it "returns a list of all active channels" do
@@ -196,12 +181,7 @@ describe RabbitMQ::HTTP::Client do
 
   describe "GET /api/channels/:name" do
     before :all do
-      @connection = Bunny.new
-      @connection.start
       @channel    = @connection.create_channel
-    end
-    after :all do
-      @connection.close
     end
 
     it "returns information about the channel" do
@@ -254,12 +234,7 @@ describe RabbitMQ::HTTP::Client do
 
   describe "GET /api/exchanges/:vhost/:name/bindings/source" do
     before :all do
-      @connection = Bunny.new
-      @connection.start
       @channel    = @connection.create_channel
-    end
-    after :all do
-      @connection.close
     end
 
     it "returns a list of all bindings in which the given exchange is the source" do
@@ -284,12 +259,7 @@ describe RabbitMQ::HTTP::Client do
 
   describe "GET /api/exchanges/:vhost/:name/bindings/destination" do
     before :all do
-      @connection = Bunny.new
-      @connection.start
       @channel    = @connection.create_channel
-    end
-    after :all do
-      @connection.close
     end
 
     it "returns a list of all bindings in which the given exchange is the source" do
@@ -319,12 +289,7 @@ describe RabbitMQ::HTTP::Client do
 
   describe "GET /api/queues" do
     before :all do
-      @connection = Bunny.new
-      @connection.start
       @channel    = @connection.create_channel
-    end
-    after :all do
-      @connection.close
     end
 
     it "returns a list of all queues" do
@@ -337,12 +302,7 @@ describe RabbitMQ::HTTP::Client do
 
   describe "GET /api/queues/:vhost" do
     before :all do
-      @connection = Bunny.new
-      @connection.start
       @channel    = @connection.create_channel
-    end
-    after :all do
-      @connection.close
     end
 
     it "returns a list of all queues" do
@@ -355,12 +315,7 @@ describe RabbitMQ::HTTP::Client do
 
   describe "GET /api/queues/:vhost/:name" do
     before :all do
-      @connection = Bunny.new
-      @connection.start
       @channel    = @connection.create_channel
-    end
-    after :all do
-      @connection.close
     end
 
     it "returns information about a queue" do
@@ -379,31 +334,98 @@ describe RabbitMQ::HTTP::Client do
 
   describe "PUT /api/queues/:vhost/:name" do
     before :all do
-      @connection = Bunny.new
-      @connection.start
       @channel    = @connection.create_channel
     end
-    after :all do
-      @connection.close
-    end
 
-    it "declares a queue"
+    let(:queue_name) { "httpdeclared" }
+
+    it "declares a queue" do
+      subject.declare_queue("/", queue_name, :durable => false, :auto_delete => true)
+
+      q = @channel.queue(queue_name, :durable => false, :auto_delete => true)
+      q.delete
+    end
   end
 
   describe "DELETE /api/queues/:vhost/:name" do
-    it "deletes a queue"
+    before :all do
+      @channel    = @connection.create_channel
+    end
+
+    let(:queue_name) { "httpdeclared" }
+
+    it "deletes a queue" do
+      q = @channel.queue(queue_name, :durable => false)
+      subject.delete_queue("/", queue_name)
+    end
   end
 
   describe "GET /api/queues/:vhost/:name/bindings" do
-    it "returns a list of bindings for a queue"
+    before :all do
+      @channel    = @connection.create_channel
+    end
+
+    it "returns a list of bindings for a queue" do
+      q  = @channel.queue("")
+      q.bind("amq.fanout")
+
+      xs = subject.list_queue_bindings("/", q.name)
+      x  = xs.first
+
+      x.destination.should == q.name
+      x.destination_type.should == "queue"
+    end
   end
 
   describe "DELETE /api/queues/:vhost/:name/contents" do
-    it "purges a queue"
+    before :all do
+      @channel    = @connection.create_channel
+    end
+
+    it "purges a queue" do
+      q   = @channel.queue("")
+      x   = @channel.fanout("amq.fanout", :durable => true, :auto_delete => false)
+      q.bind(x)
+
+      10.times do
+        x.publish("", :routing_key => q.name)
+      end
+      sleep 0.7
+
+      q.message_count.should == 10
+      subject.purge_queue("/", q.name)
+      sleep 0.5
+      q.message_count.should == 0
+      q.delete
+    end
   end
 
-  describe "GET /api/queues/:vhost/:name/get" do
-    it "fetches a message from a queue, a la basic.get"
+  # yes, POST, because it potentially modifies the state (ordering) of the queue
+  describe "POST /api/queues/:vhost/:name/get" do
+    before :all do
+      @channel    = @connection.create_channel
+    end
+
+    it "fetches a message from a queue, a la basic.get" do
+      q   = @channel.queue("")
+      x   = @channel.fanout("amq.fanout", :durable => true, :auto_delete => false)
+      q.bind(x)
+
+      10.times do |i|
+        x.publish("msg #{i}", :routing_key => q.name, :content_type => "application/xyz")
+      end
+      sleep 0.7
+
+      q.message_count.should == 10
+      xs = subject.get_messages("/", q.name, :count => 10, :requeue => false, :encoding => "auto")
+      m  = xs.first
+
+      m.properties.content_type.should == "application/xyz"
+      m.payload.should == "msg 0"
+      m.payload_encoding.should == "string"
+
+      q.delete
+    end
   end
 
   describe "GET /api/bindings" do

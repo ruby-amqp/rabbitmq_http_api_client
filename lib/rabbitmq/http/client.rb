@@ -106,15 +106,31 @@ module RabbitMQ
       end
 
       def declare_queue(vhost, name, attributes)
-        raise NotImplementedError.new
+        response = @connection.put("/api/queues/#{uri_encode(vhost)}/#{uri_encode(name)}") do |req|
+          req.headers['Content-Type'] = "application/json"
+          req.body = MultiJson.dump(attributes)
+        end
+        decode_resource(response)
       end
 
       def delete_queue(vhost, name)
-        raise NotImplementedError.new
+        decode_resource(@connection.delete("/api/queues/#{uri_encode(vhost)}/#{uri_encode(name)}"))
+      end
+
+      def list_queue_bindings(vhost, queue)
+        decode_resource_collection(@connection.get("/api/queues/#{uri_encode(vhost)}/#{uri_encode(queue)}/bindings"))
       end
 
       def purge_queue(vhost, name)
-        raise NotImplementedError.new
+        decode_resource(@connection.delete("/api/queues/#{uri_encode(vhost)}/#{uri_encode(name)}/contents"))
+      end
+
+      def get_messages(vhost, name, options)
+        response = @connection.post("/api/queues/#{uri_encode(vhost)}/#{uri_encode(name)}/get") do |req|
+          req.headers['Content-Type'] = "application/json"
+          req.body = MultiJson.dump(options)
+        end
+        decode_resource_collection(response)
       end
 
 
