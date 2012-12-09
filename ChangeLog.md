@@ -1,6 +1,12 @@
 ## Changes Between 0.1.0 and 0.2.0
 
-No changes yet.
+### Support for more HTTP API operations
+
+ * Operations on queues
+ * Operations on users
+ * Operations on permissions
+ * Operations on parameters
+ * Operations on policies
 
 
 ## Original Release: 0.1.0
