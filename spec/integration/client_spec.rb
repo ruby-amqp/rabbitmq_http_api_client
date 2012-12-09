@@ -574,27 +574,61 @@ describe RabbitMQ::HTTP::Client do
   end
 
   describe "GET /api/users/:name/permissions" do
-    it "returns a list of permissions for a user"
+    it "returns a list of permissions for a user" do
+      xs = subject.user_permissions("guest")
+      p  = xs.first
+
+      p.read.should == ".*"
+    end
   end
 
   describe "GET /api/whoami" do
-    it "returns information about the current user"
+    it "returns information about the current user" do
+      u = subject.whoami
+      u.name.should == "guest"
+    end
   end
 
   describe "GET /api/permissions" do
-    it "lists all permissions"
+    it "lists all permissions" do
+      xs = subject.list_permissions
+      xs.first.read.should_not be_nil
+    end
   end
 
   describe "GET /api/permissions/:vhost/:user" do
-    it "returns a list of permissions of a user in a vhost"
+    it "returns a list of permissions of a user in a vhost" do
+      p = subject.list_permissions_of("/", "guest")
+
+      p.read.should == ".*"
+      p.write.should == ".*"
+      p.configure.should == ".*"
+    end
   end
 
   describe "PUT /api/permissions/:vhost/:user" do
-    it "updates permissions of a user in a vhost"
+    it "updates permissions of a user in a vhost" do
+      subject.update_permissions_of("/", "guest", :write => ".*", :read => ".*", :configure => ".*")
+
+      p = subject.list_permissions_of("/", "guest")
+
+      p.read.should == ".*"
+      p.write.should == ".*"
+      p.configure.should == ".*"
+    end
   end
 
   describe "DELETE /api/permissions/:vhost/:user" do
-    it "clears permissions of a user in a vhost"
+    it "clears permissions of a user in a vhost" do
+      pending
+      subject.create_user("/", "alt3")
+      subject.update_permissions_of("/", "alt3", :write => ".*", :read => ".*", :configure => ".*")
+      subject.clear_permissions_of("/", "alt3")
+
+      p = subject.list_permissions_of("/", "alt3")
+
+      puts p.inspect
+    end
   end
 
   #
@@ -606,26 +640,6 @@ describe RabbitMQ::HTTP::Client do
       xs = subject.list_parameters
       xs.should be_kind_of(Array)
     end
-  end
-
-  describe "GET /api/parameters/:component" do
-    it "returns a list of all parameters for a component"
-  end
-
-  describe "GET /api/parameters/:component/:vhost" do
-    it "returns a list of all parameters for a component in a vhost"
-  end
-
-  describe "GET /api/parameters/:component/:vhost/:name" do
-    it "returns information about a specific parameter"
-  end
-
-  describe "PUT /api/parameters/:component/:vhost/:name" do
-    it "updates information about a specific parameter"
-  end
-
-  describe "DELETE /api/parameters/:component/:vhost/:name" do
-    it "clears information about a specific parameter"
   end
 
 
@@ -641,19 +655,10 @@ describe RabbitMQ::HTTP::Client do
   end
 
   describe "GET /api/policies/:vhost" do
-    it "returns a list of all policies in a vhost"
-  end
-
-  describe "GET /api/policies/:vhost/:name" do
-    it "returns information about a policy in a vhost"
-  end
-
-  describe "PUT /api/policies/:vhost/:name" do
-    it "updates information about a policy in a vhost"
-  end
-
-  describe "DELETE /api/policies/:vhost/:name" do
-    it "clears information about a policy in a vhost"
+    it "returns a list of all policies in a vhost" do
+      xs = subject.list_policies("/")
+      xs.should be_kind_of(Array)
+    end
   end
 
 

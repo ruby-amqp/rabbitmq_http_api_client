@@ -170,8 +170,32 @@ module RabbitMQ
         decode_resource(@connection.delete("/api/vhosts/#{uri_encode(name)}"))
       end
 
-      def list_permissions(vhost)
-        decode_resource_collection(@connection.get("/api/vhosts/#{uri_encode(vhost)}/permissions"))
+
+
+      def list_permissions(vhost = nil)
+        path = if vhost
+                 "/api/vhosts/#{uri_encode(vhost)}/permissions"
+               else
+                 "/api/permissions"
+               end
+
+        decode_resource_collection(@connection.get(path))
+      end
+
+      def list_permissions_of(vhost, user)
+        decode_resource(@connection.get("/api/permissions/#{uri_encode(vhost)}/#{uri_encode(user)}"))
+      end
+
+      def update_permissions_of(vhost, user, attributes)
+        response = @connection.put("/api/permissions/#{uri_encode(vhost)}/#{uri_encode(user)}") do |req|
+          req.headers['Content-Type'] = "application/json"
+          req.body = MultiJson.dump(attributes)
+        end
+        decode_resource(response)
+      end
+
+      def clear_permissions_of(vhost, user)
+        decode_resource(@connection.delete("/api/permissions/#{uri_encode(vhost)}/#{uri_encode(user)}"))
       end
 
 
@@ -191,20 +215,84 @@ module RabbitMQ
         end
         decode_resource(response)
       end
+      alias create_user update_user
 
       def delete_user(name)
         decode_resource(@connection.delete("/api/users/#{uri_encode(name)}"))
       end
 
+      def user_permissions(name)
+        decode_resource_collection(@connection.get("/api/users/#{uri_encode(name)}/permissions"))
+      end
 
-
-      def list_policies
-        decode_resource_collection(@connection.get("/api/policies"))
+      def whoami
+        decode_resource(@connection.get("/api/whoami"))
       end
 
 
-      def list_parameters
-        decode_resource_collection(@connection.get("/api/parameters"))
+
+      def list_policies(vhost = nil)
+        path = if vhost
+                 "/api/policies/#{uri_encode(vhost)}"
+               else
+                 "/api/policies"
+               end
+
+        decode_resource_collection(@connection.get(path))
+      end
+
+      def list_policies_of(vhost, name = nil)
+        path = if name
+                 "/api/policies/#{uri_encode(vhost)}/#{uri_encode(name)}"
+               else
+                 "/api/policies/#{uri_encode(vhost)}"
+               end
+        decode_resource_collection(@connection.get(path))
+      end
+
+      def update_policies_of(vhost, name, attributes)
+        response = @connection.put("/api/policies/#{uri_encode(vhost)}/#{uri_encode(name)}") do |req|
+          req.headers['Content-Type'] = "application/json"
+          req.body = MultiJson.dump(attributes)
+        end
+        decode_resource(response)
+      end
+
+      def clear_policies_of(vhost, name)
+        decode_resource(@connection.delete("/api/policies/#{uri_encode(vhost)}/#{uri_encode(name)}"))
+      end
+
+
+
+
+      def list_parameters(component = nil)
+        path = if component
+                 "/api/parameters/#{uri_encode(component)}"
+               else
+                 "/api/parameters"
+               end
+        decode_resource_collection(@connection.get(path))
+      end
+
+      def list_parameters_of(component, vhost, name = nil)
+        path = if name
+                 "/api/parameters/#{uri_encode(component)}/#{uri_encode(vhost)}/#{uri_encode(name)}"
+               else
+                 "/api/parameters/#{uri_encode(component)}/#{uri_encode(vhost)}"
+               end
+        decode_resource_collection(@connection.get(path))
+      end
+
+      def update_parameters_of(component, vhost, name, attributes)
+        response = @connection.put("/api/parameters/#{uri_encode(component)}/#{uri_encode(vhost)}/#{uri_encode(name)}") do |req|
+          req.headers['Content-Type'] = "application/json"
+          req.body = MultiJson.dump(attributes)
+        end
+        decode_resource(response)
+      end
+
+      def clear_parameters_of(component, vhost, name)
+        decode_resource(@connection.delete("/api/parameters/#{uri_encode(component)}/#{uri_encode(vhost)}/#{uri_encode(name)}"))
       end
 
 
