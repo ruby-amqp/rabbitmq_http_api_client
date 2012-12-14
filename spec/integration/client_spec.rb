@@ -287,6 +287,11 @@ describe RabbitMQ::HTTP::Client do
     it "publishes a messages to the exchange"
   end
 
+
+  #
+  # Queues
+  #
+
   describe "GET /api/queues" do
     before :all do
       @channel    = @connection.create_channel
