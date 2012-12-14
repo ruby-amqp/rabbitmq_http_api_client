@@ -256,7 +256,7 @@ client.delete_vhost("myapp.staging")
 
 ``` ruby
 # List all users
-us = subject.list_users
+us = client.list_users
 u  = us.first
 
 puts u.name
