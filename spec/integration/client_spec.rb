@@ -45,7 +45,7 @@ describe RabbitMQ::HTTP::Client do
       rabbit = n.applications.detect { |app| app.name == "rabbit" }
       rabbit.description.should == "RabbitMQ"
 
-      n.name.should == "rabbit@localhost"
+      n.name.should =~ /^rabbit/
       n.partitions.should == []
       n.fd_used.should_not be_nil
       n.fd_total.should_not be_nil
@@ -63,12 +63,13 @@ describe RabbitMQ::HTTP::Client do
 
   describe "GET /api/node/:name" do
     it "returns status information for a single cluster node" do
-      n = subject.node_info("rabbit@localhost")
+      ns = subject.list_nodes
+      n  = subject.node_info(ns.first.name)
 
       rabbit = n.applications.detect { |app| app.name == "rabbit" }
       rabbit.description.should == "RabbitMQ"
 
-      n.name.should == "rabbit@localhost"
+      n.name.should =~ /^rabbit/
       n.partitions.should == []
       n.fd_used.should_not be_nil
       n.fd_total.should_not be_nil
