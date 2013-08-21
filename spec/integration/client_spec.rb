@@ -98,7 +98,7 @@ describe RabbitMQ::HTTP::Client do
       xs = subject.list_extensions
       f  = xs.first
 
-      f.javascript.should == "dispatcher.js"
+      ["dispatcher.js", "shovel.js"].should include(f.javascript)
     end
   end
 
