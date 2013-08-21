@@ -25,8 +25,11 @@ describe RabbitMQ::HTTP::Client do
     it "returns an overview" do
       r = subject.overview
 
-      r.exchange_types.map { |h| h.name }.
-        sort.should == ["direct", "fanout", "headers", "topic"]
+      ts = r.exchange_types.map { |h| h.name }.
+        sort
+      ["direct", "fanout", "headers", "topic"].each do |t|
+        ts.should include(t)
+      end
 
       r.rabbitmq_version.should_not be_nil
       r.erlang_version.should_not be_nil
