@@ -336,7 +336,7 @@ describe RabbitMQ::HTTP::Client do
 
       i.name.should == q.name
       i.auto_delete.should == q.auto_delete?
-      i.active_consumers.should == 0
+      i.active_consumers.should be_nil
       i.backing_queue_status.avg_ack_egress_rate.should == 0.0
     end
   end
