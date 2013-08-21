@@ -59,8 +59,8 @@ Use `RabbitMQ::HTTP::Client#connect` to specify RabbitMQ HTTP API endpoint (e.g.
 ``` ruby
 require "rabbitmq/http/client"
 
-client = RabbitMQ::HTTP::Client.new
-client.connect(endpoint, :username => "guest", :password => "guest")
+endpoint = "http://127.0.0.1:55672"
+client = RabbitMQ::HTTP::Client.new(endpoint, :username => "guest", :password => "guest")
 ```
 
 ### Client API Design Overview
