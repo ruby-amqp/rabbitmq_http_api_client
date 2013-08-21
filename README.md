@@ -1,6 +1,6 @@
 # RabbitMQ HTTP API Client for Ruby
 
-This gem is a RabbitMQ HTTP API Client for Ruby. It supports
+This gem is a [RabbitMQ HTTP API](http://hg.rabbitmq.com/rabbitmq-management/raw-file/450b7ea22cfd/priv/www/api/index.html) client for Ruby. It supports
 
  * Getting cluster overview information
  * Getting cluster nodes status (# file descriptors used, RAM consumption and so on)
@@ -16,6 +16,7 @@ and will support more HTTP API features in the future
 
 ## Supported Ruby Versions
 
+ * MRI 2.0
  * MRI 1.9.3
  * JRuby 1.7+
  * Rubinius 2.0+
