@@ -312,7 +312,6 @@ ps = client.update_permissions_of("/", "guest", :write => ".*", :read => ".*", :
 ps = client.clear_permissions_of("/", "guest")
 ```
 
-
 ## Contributing
 
 1. Fork it
