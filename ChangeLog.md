@@ -1,3 +1,10 @@
+## Changes Between 0.2.0 and 0.3.0
+
+### MultiJSON Upgrade
+
+The library now depends on `multi_json ~> 1.7.0`.
+
+
 ## Changes Between 0.1.0 and 0.2.0
 
 ### Support for more HTTP API operations

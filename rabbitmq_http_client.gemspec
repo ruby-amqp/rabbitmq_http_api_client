@@ -19,7 +19,7 @@ Gem::Specification.new do |gem|
   gem.require_paths = ["lib"]
 
   gem.add_dependency    "hashie",             "~> 1.2.0"
-  gem.add_dependency    "multi_json",         "~> 1.4.0"
+  gem.add_dependency    "multi_json",         "~> 1.7.0"
   gem.add_dependency    "faraday",            "~> 0.8.4"
   gem.add_dependency    "faraday_middleware", "~> 0.9.0"
   gem.add_dependency    "effin_utf8",         "~> 1.0.0"
