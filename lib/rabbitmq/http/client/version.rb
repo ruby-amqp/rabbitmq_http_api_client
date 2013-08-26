@@ -1,7 +1,7 @@
 module RabbitMQ
   module HTTP
     class Client
-      VERSION = "0.3.0"
+      VERSION = "0.4.0.pre"
     end
   end
 end
