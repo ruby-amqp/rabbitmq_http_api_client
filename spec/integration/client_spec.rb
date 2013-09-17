@@ -323,21 +323,31 @@ describe RabbitMQ::HTTP::Client do
   end
 
   describe "GET /api/queues/:vhost/:name" do
-    before :all do
-      @channel    = @connection.create_channel
+    context "when queue exists" do
+      before :all do
+        @channel    = @connection.create_channel
+      end
+
+      it "returns information about a queue" do
+        q  = @channel.queue("", :exclusive => true, :durable => false)
+        i  = subject.queue_info("/", q.name)
+
+        i.durable.should be_false
+        i.durable.should == q.durable?
+
+        i.name.should == q.name
+        i.auto_delete.should == q.auto_delete?
+        i.active_consumers.should be_nil
+        i.backing_queue_status.avg_ack_egress_rate.should == 0.0
+      end
     end
 
-    it "returns information about a queue" do
-      q  = @channel.queue("", :exclusive => true, :durable => false)
-      i  = subject.queue_info("/", q.name)
-
-      i.durable.should be_false
-      i.durable.should == q.durable?
-
-      i.name.should == q.name
-      i.auto_delete.should == q.auto_delete?
-      i.active_consumers.should be_nil
-      i.backing_queue_status.avg_ack_egress_rate.should == 0.0
+    context "when queue DOES NOT exist" do
+      it "raises NotFound" do
+        lambda do
+          subject.queue_info("/", Time.now.to_i.to_s)
+        end.should raise_error(Faraday::Error::ResourceNotFound)
+      end
     end
   end
 
@@ -509,12 +519,23 @@ describe RabbitMQ::HTTP::Client do
   end
 
   describe "GET /api/vhosts/:name" do
-    it "returns infomation about a vhost" do
-      v = subject.vhost_info("/")
+    context "when vhost exists" do
+      it "returns infomation about a vhost" do
+        v = subject.vhost_info("/")
 
-      v.name.should_not be_nil
-      v.tracing.should be_false
+        v.name.should_not be_nil
+        v.tracing.should be_false
+      end
     end
+
+    context "when vhost DOES NOT exist" do
+      it "raises NotFound" do
+        lambda do
+          subject.vhost_info(Time.now.to_i.to_s)
+        end.should raise_error(Faraday::Error::ResourceNotFound)
+      end
+    end
+
   end
 
   describe "PUT /api/vhosts/:name" do
