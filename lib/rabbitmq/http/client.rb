@@ -14,6 +14,8 @@ module RabbitMQ
       # API
       #
 
+      attr_reader :endpoint
+
       def self.connect(endpoint, options = {})
         new(endpoint, options)
       end
