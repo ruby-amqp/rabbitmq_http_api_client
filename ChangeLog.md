@@ -1,3 +1,11 @@
+## Changes Between 0.4.0 and 0.5.0
+
+### Endpoint Reader
+
+`RabbitMQ::HTTP::Client#endpoint` is a new reader (getter) that makes
+it possible to access the URI a client instance uses.
+
+
 ## Changes Between 0.3.0 and 0.4.0
 
 ### Meaningful Exceptions for 4xx and 5xx Responses
