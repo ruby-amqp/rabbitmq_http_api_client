@@ -78,7 +78,7 @@ puts r.erlang_version
 ### Accessing Management API with HTTPS
 
 All additional options other than `:username` and `:password` are passed
-to [Faraday::Connection](). So, it is possible to use HTTPS
+to [Faraday::Connection](https://github.com/lostisland/faraday). So, it is possible to use HTTPS
 like so:
 
 ``` ruby
