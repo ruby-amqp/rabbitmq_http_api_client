@@ -308,7 +308,7 @@ module RabbitMQ
       protected
 
       def initialize_connection(endpoint, options = {})
-        @connection = Faraday.new(:url => endpoint) do |conn|
+        @connection = Faraday.new(options.merge(:url => endpoint)) do |conn|
           conn.basic_auth options.fetch(:username, "guest"), options.fetch(:password, "guest")
           conn.use        FaradayMiddleware::FollowRedirects, :limit => 3
           conn.use        Faraday::Response::RaiseError
