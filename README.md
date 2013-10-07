@@ -75,6 +75,29 @@ puts r[:rabbitmq_version]
 puts r.erlang_version
 ```
 
+### Accessing Management API with HTTPS
+
+All additional options other than `:username` and `:password` are passed
+to [Faraday::Connection](). So, it is possible to use HTTPS
+like so:
+
+``` ruby
+c = RabbitMQ::HTTP::Client.new("https://127.0.0.1:15672/", username: "guest", password: "guest", ssl: {
+  client_cer: ...,
+  client_key: ...,
+  ca_file:    ...,
+  ca_path:    ...,
+  cert_store: ...
+})
+```
+
+Or, if you have good reasons to do so, disable peer verification:
+
+``` ruby
+c = RabbitMQ::HTTP::Client.new("https://127.0.0.1:15672/", username: "guest", password: "guest", ssl: {
+  verify: false
+})
+```
 
 
 ### Node and Cluster Status
