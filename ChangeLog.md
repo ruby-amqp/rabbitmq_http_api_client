@@ -1,3 +1,14 @@
+## Changes Between 0.6.0 and 0.7.0
+
+### Support for Basic HTTP Auth Credentials in URI
+
+It is now possible to pass credentials in the endpoint URI:
+
+``` ruby
+c = RabbitMQ::HTTP::Client.new("https://guest:guest@127.0.0.1:15672/")
+```
+
+
 ## Changes Between 0.5.0 and 0.6.0
 
 ### Support for Advanced Connection Options
