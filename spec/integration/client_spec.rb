@@ -18,6 +18,21 @@ describe RabbitMQ::HTTP::Client do
 
 
   #
+  # URI-only access
+  #
+
+  describe "URI-only access" do
+    it "authenticates successfully" do
+      c = described_class.connect("http://guest:guest@127.0.0.1:15672")
+
+      r = c.overview
+      r.rabbitmq_version.should_not be_nil
+      r.erlang_version.should_not be_nil
+    end
+  end
+
+
+  #
   # Overview
   #
 

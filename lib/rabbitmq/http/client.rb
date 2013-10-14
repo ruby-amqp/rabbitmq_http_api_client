@@ -2,6 +2,7 @@ require "hashie"
 require "faraday"
 require "faraday_middleware"
 require "multi_json"
+require "uri"
 
 # for URI encoding
 require "cgi"
@@ -308,8 +309,13 @@ module RabbitMQ
       protected
 
       def initialize_connection(endpoint, options = {})
+        uri     = URI.parse(endpoint)
+
+        user     = uri.user     || options[:username] || "guest"
+        password = uri.password || options[:password] || "guest"
+
         @connection = Faraday.new(options.merge(:url => endpoint)) do |conn|
-          conn.basic_auth options.fetch(:username, "guest"), options.fetch(:password, "guest")
+          conn.basic_auth user, password
           conn.use        FaradayMiddleware::FollowRedirects, :limit => 3
           conn.use        Faraday::Response::RaiseError
           conn.response   :json, :content_type => /\bjson$/
