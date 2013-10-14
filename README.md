@@ -66,11 +66,9 @@ client = RabbitMQ::HTTP::Client.new(endpoint, :username => "guest", :password =>
 Alternatively, credentials can be specified in the endpoint URI:
 
 ``` ruby
-``` ruby
 require "rabbitmq/http/client"
 
 client = RabbitMQ::HTTP::Client.new("http://guest:guest@127.0.0.1:55672")
-```
 ```
 
 ### Client API Design Overview
