@@ -8,5 +8,6 @@ Bundler.setup(:default, :test)
 
 require "effin_utf8"
 require "rspec"
+require "json"
 require "rabbitmq/http/client"
 require "bunny"
