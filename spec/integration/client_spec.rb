@@ -51,6 +51,15 @@ describe RabbitMQ::HTTP::Client do
     end
   end
 
+  describe "#enabled_protocols" do
+    it "returns a list of enabled protocols" do
+      xs = subject.enabled_protocols
+
+      puts xs.inspect
+      xs.should include("amqp")
+    end
+  end
+
   #
   # Nodes
   #

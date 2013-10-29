@@ -32,6 +32,24 @@ module RabbitMQ
         decode_resource(@connection.get("/api/overview"))
       end
 
+      # Returns a list of messaging protocols supported by
+      # the node (or cluster).
+      #
+      # Common values are:
+      #
+      # * amqp
+      # * amqp/ssl
+      # * mqtt
+      # * stomp
+      #
+      # The exact value depends on RabbitMQ configuration and enabled
+      # plugins.
+      def enabled_protocols
+        self.overview.listeners.
+          map { |lnr| lnr.protocol }.
+          uniq
+      end
+
       def list_nodes
         decode_resource_collection(@connection.get("/api/nodes"))
       end
