@@ -44,10 +44,20 @@ module RabbitMQ
       #
       # The exact value depends on RabbitMQ configuration and enabled
       # plugins.
+      #
+      # @return [Array<String>] Enabled protocols
       def enabled_protocols
         self.overview.listeners.
           map { |lnr| lnr.protocol }.
           uniq
+      end
+
+      # Returns a hash of protocol => port.
+      #
+      # @return [Hash<String, Integer>] Hash of protocol => port
+      def protocol_ports
+        self.overview.listeners.
+          reduce(Hash.new) { |acc, lnr| acc[lnr.protocol] = lnr.port; acc }
       end
 
       def list_nodes

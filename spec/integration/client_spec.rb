@@ -59,6 +59,15 @@ describe RabbitMQ::HTTP::Client do
     end
   end
 
+  describe "#enabled_protocols" do
+    it "returns a list of enabled protocols" do
+      xs = subject.protocol_ports
+
+      # hash of protocol => port
+      xs["amqp"].should == 5672
+    end
+  end
+
   #
   # Nodes
   #
