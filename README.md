@@ -7,6 +7,7 @@ This gem is a [RabbitMQ HTTP API](http://hg.rabbitmq.com/rabbitmq-management/raw
  * Getting information about exchanges, queues, bindings
  * Closing client connections
  * Getting information about vhosts, users, permissions
+ * Getting information about enabled plugins, protocols, their ports, etc
 
 and will support more HTTP API features in the future
 
