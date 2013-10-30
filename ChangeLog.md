@@ -1,3 +1,33 @@
+## Changes Between 0.7.0 and 0.8.0
+
+### Client#protocol_ports
+
+`RabbitMQ::HTTP::Client#enabled_protocols` is a new method that returns
+a hash of enabled protocols to their ports. The keys are the same as
+returned by `Client#enabled_protocols`:
+
+``` ruby
+# when TLS and MQTT plugin is enabled
+c.protocol_ports # => {"amqp" => 5672, "amqp/ssl" => 5671, "mqtt" => 1883}
+```
+
+### Client#enabled_protocols
+
+`RabbitMQ::HTTP::Client#enabled_protocols` is a new method that returns
+a list of enabled protocols. Some common values are:
+
+ * `amqp` (AMQP 0-9-1)
+ * `amqp/ssl` (AMQP 0-9-1 with TLS enabled)
+ * `mqtt`
+ * `stomp`
+
+``` ruby
+# when TLS and MQTT plugin is enabled
+c.enabled_protocols # => ["amqp", "amqp/ssl", "mqtt"]
+```
+
+
+
 ## Changes Between 0.6.0 and 0.7.0
 
 ### Support for Basic HTTP Auth Credentials in URI
