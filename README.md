@@ -286,7 +286,7 @@ client.create_vhost("myapp.staging")
 client.delete_vhost("myapp.staging")
 ```
 
-### Operations on Users
+### Managing Users
 
 ``` ruby
 # List all users
@@ -311,7 +311,7 @@ client.update_user("myapp", :tags => "services", :password => "t0ps3krEt")
 client.delete_user("myapp")
 ```
 
-### Operations on Permissions
+### Managing Permissions
 
 ``` ruby
 # List all permissions
