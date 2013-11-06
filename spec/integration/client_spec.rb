@@ -572,6 +572,8 @@ describe RabbitMQ::HTTP::Client do
   end
 
   describe "PUT /api/vhosts/:name" do
+    gen = Rantly.new
+
     [
       "http-created",
       "http_created",
@@ -588,6 +590,22 @@ describe RabbitMQ::HTTP::Client do
       "ถูกสร้างขึ้นผ่าน HTTP",
       "±!@^&#*"
     ].each do |vhost|
+      context "when vhost name is #{vhost}" do
+        it "creates a vhost" do
+          subject.create_vhost(vhost)
+          subject.create_vhost(vhost)
+
+          v = subject.vhost_info(vhost)
+          v.name.should == vhost
+
+          subject.delete_vhost(v.name)
+        end
+      end
+    end
+
+    1000.times do
+      vhost = gen.string
+
       context "when vhost name is #{vhost}" do
         it "creates a vhost" do
           subject.create_vhost(vhost)
