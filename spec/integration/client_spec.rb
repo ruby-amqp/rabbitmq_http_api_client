@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 require "spec_helper"
 
 describe RabbitMQ::HTTP::Client do
@@ -571,14 +572,33 @@ describe RabbitMQ::HTTP::Client do
   end
 
   describe "PUT /api/vhosts/:name" do
-    let(:vhost) { "http-created" }
+    [
+      "http-created",
+      "http_created",
+      "http created",
+      "создан по хатэтэпэ",
+      "creado a través de HTTP",
+      "通过http",
+      "HTTP를 통해 생성",
+      "HTTPを介して作成",
+      "created over http?",
+      "created @ http API",
+      "erstellt über http",
+      "http पर बनाया",
+      "ถูกสร้างขึ้นผ่าน HTTP",
+      "±!@^&#*"
+    ].each do |vhost|
+      context "when vhost name is #{vhost}" do
+        it "creates a vhost" do
+          subject.create_vhost(vhost)
+          subject.create_vhost(vhost)
 
-    it "creates a vhost" do
-      subject.create_vhost(vhost)
-      subject.create_vhost(vhost)
+          v = subject.vhost_info(vhost)
+          v.name.should == vhost
 
-      v = subject.vhost_info(vhost)
-      v.name.should == vhost
+          subject.delete_vhost(v.name)
+        end
+      end
     end
   end
 
