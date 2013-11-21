@@ -522,6 +522,7 @@ describe RabbitMQ::HTTP::Client do
       b.destination_type.should == "queue"
       b.source.should == x.name
       b.routing_key.should_not be_nil
+      b.properties_key.should_not be_nil
       b.vhost.should == "/"
 
       q.delete
@@ -530,15 +531,69 @@ describe RabbitMQ::HTTP::Client do
   end
 
   describe "POST /api/bindings/:vhost/e/:exchange/q/:queue" do
-    it "creates a binding between an exchange and a queue"
+    before :all do
+      @channel    = @connection.create_channel
+    end
+  
+    it "creates a binding between an exchange and a queue" do
+      routing_key = 'test.key'
+      q = @channel.queue("")
+      x = @channel.fanout("http.client.fanout")
+      q.bind(x)
+
+      b = subject.bind_queue("/", q.name, x.name, routing_key)
+
+      b.should == q.name + "/" + routing_key
+
+      q.delete
+      x.delete
+    end
   end
 
   describe "GET /api/bindings/:vhost/e/:exchange/q/:queue/props" do
-    it "returns an individual binding between an exchange and a queue"
+    before :all do
+      @channel    = @connection.create_channel
+    end
+
+    it "returns an individual binding between an exchange and a queue" do
+      routing_key = 'test.key'
+      q = @channel.queue("")
+      x = @channel.fanout("http.client.fanout")
+      q.bind(x)
+
+      xs = subject.list_bindings_between_queue_and_exchange("/", q.name, x.name)
+      b1 = xs.first
+      
+      b2 = subject.queue_binding_info("/", q.name, x.name, b1.properties_key)
+      
+      b1.should == b2
+    
+    end
   end
 
   describe "DELETE /api/bindings/:vhost/e/:exchange/q/:queue/props" do
-    it "deletes an individual binding between an exchange and a queue"
+    before :all do
+      @channel    = @connection.create_channel
+    end
+  
+    it "deletes an individual binding between an exchange and a queue" do
+      routing_key = 'test.key'
+      q = @channel.queue("")
+      x = @channel.fanout("http.client.fanout")
+      q.bind(x)
+
+      xs = subject.list_bindings_between_queue_and_exchange("/", q.name, x.name)
+      b  = xs.first
+      
+      subject.delete_queue_binding("/", q.name, x.name, b.properties_key).should be_true
+
+      xs = subject.list_bindings_between_queue_and_exchange("/", q.name, x.name)
+      
+      xs.size.should == 0
+
+      q.delete
+      x.delete
+    end
   end
 
   describe "GET /api/vhosts" do

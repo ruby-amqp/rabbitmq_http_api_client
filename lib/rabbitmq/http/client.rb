@@ -179,6 +179,22 @@ module RabbitMQ
         decode_resource_collection(@connection.get("/api/bindings/#{uri_encode(vhost)}/e/#{uri_encode(exchange)}/q/#{uri_encode(queue)}"))
       end
 
+      def queue_binding_info(vhost, queue, exchange, properties_key)
+        decode_resource(@connection.get("/api/bindings/#{uri_encode(vhost)}/e/#{uri_encode(exchange)}/q/#{uri_encode(queue)}/#{uri_encode(properties_key)}"))
+      end
+      
+      def bind_queue(vhost, queue, exchange, routing_key, arguments = [])
+        resp = @connection.post("/api/bindings/#{uri_encode(vhost)}/e/#{uri_encode(exchange)}/q/#{uri_encode(queue)}") do |req|
+          req.headers['Content-Type'] = 'application/json'
+          req.body = MultiJson.dump({ routing_key: routing_key, arguments: arguments })
+        end
+        resp.headers['location']
+      end
+      
+      def delete_queue_binding(vhost, queue, exchange, properties_key)
+        resp = @connection.delete("/api/bindings/#{uri_encode(vhost)}/e/#{uri_encode(exchange)}/q/#{uri_encode(queue)}/#{uri_encode(properties_key)}")
+        resp.success?
+      end
 
 
 
