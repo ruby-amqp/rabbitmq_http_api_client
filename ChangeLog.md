@@ -1,3 +1,23 @@
+## Changes Between 0.8.0 and 0.9.0
+
+### New Queue Binding Methods
+
+`RabbitMQ::HTTP::Client#queue_binding_info`,
+`RabbitMQ::HTTP::Client#bind_queue`, and
+`RabbitMQ::HTTP::Client#delete_queue_binding`
+are new methods that operate on queue bindings:
+
+``` ruby
+c = RabbitMQ::HTTP::Client.new("http://guest:guest@127.0.0.1:15672")
+
+c.bind_queue("/", "a.queue", "an.exchange", "routing.key")
+c.queue_binding_info("/", "a.queue", "an.exchange", "properties.key")
+c.delete_queue_binding("/", "a.queue", "an.exchange", "properties.key")
+```
+
+Contributed by Noah Magram.
+
+
 ## Changes Between 0.7.0 and 0.8.0
 
 ### Client#protocol_ports
