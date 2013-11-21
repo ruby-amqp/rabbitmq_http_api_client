@@ -541,7 +541,7 @@ describe RabbitMQ::HTTP::Client do
       x = @channel.fanout("http.client.fanout")
       q.bind(x)
 
-      b = subject.create_binding_between_queue_and_exchange("/", q.name, x.name, routing_key)
+      b = subject.bind_queue("/", q.name, x.name, routing_key)
 
       b.should == q.name + "/" + routing_key
 
@@ -564,7 +564,7 @@ describe RabbitMQ::HTTP::Client do
       xs = subject.list_bindings_between_queue_and_exchange("/", q.name, x.name)
       b1 = xs.first
       
-      b2 = subject.get_binding_between_queue_and_exchange("/", q.name, x.name, b1.properties_key)
+      b2 = subject.queue_binding_info("/", q.name, x.name, b1.properties_key)
       
       b1.should == b2
     
@@ -585,7 +585,7 @@ describe RabbitMQ::HTTP::Client do
       xs = subject.list_bindings_between_queue_and_exchange("/", q.name, x.name)
       b  = xs.first
       
-      subject.delete_binding_between_queue_and_exchange("/", q.name, x.name, b.properties_key).should be_true
+      subject.delete_queue_binding("/", q.name, x.name, b.properties_key).should be_true
 
       xs = subject.list_bindings_between_queue_and_exchange("/", q.name, x.name)
       
