@@ -359,3 +359,7 @@ ps = client.clear_permissions_of("/", "guest")
 Double-licensed under the MIT and Mozilla Public License (same as RabbitMQ).
 
 (c) Michael S. Klishin, 2012-2013.
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/ruby-amqp/rabbitmq_http_api_client/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
