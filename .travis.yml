@@ -1,6 +1,7 @@
 bundler_args: --without development
 script: "bundle exec rspec -cfs spec"
 rvm:
+  - "2.1"
   - "2.0"
   - "1.9.3"
   - "jruby-19mode"
