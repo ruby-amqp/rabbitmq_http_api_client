@@ -1,5 +1,10 @@
 ## Changes Between 0.9.0 and 1.0.0
 
+### Faraday Upgrade
+
+The library now depends on `faraday ~> 0.8.9`.
+
+
 ### MultiJSON Upgrade
 
 The library now depends on `multi_json ~> 1.8.4`.
