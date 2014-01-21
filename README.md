@@ -18,6 +18,7 @@ and will support more HTTP API features in the future
 
 ## Supported Ruby Versions
 
+ * MRI 2.1
  * MRI 2.0
  * MRI 1.9.3
  * JRuby 1.7+
