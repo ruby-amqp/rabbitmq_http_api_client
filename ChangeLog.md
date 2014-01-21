@@ -1,5 +1,9 @@
 ## Changes Between 0.9.0 and 1.0.0
 
+### Hashi Upgrade
+
+The library now depends on `hashie ~> 2.0.5`.
+
 ### Faraday Upgrade
 
 The library now depends on `faraday ~> 0.8.9`.
