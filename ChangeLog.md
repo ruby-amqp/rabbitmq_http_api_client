@@ -1,3 +1,10 @@
+## Changes Between 0.9.0 and 1.0.0
+
+### MultiJSON Upgrade
+
+The library now depends on `multi_json ~> 1.8.4`.
+
+
 ## Changes Between 0.8.0 and 0.9.0
 
 ### New Queue Binding Methods
