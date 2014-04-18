@@ -110,7 +110,7 @@ module RabbitMQ
         decode_resource_collection(@connection.get(path))
       end
 
-      def create_exchange(vhost, name, attributes)
+      def create_exchange(vhost, name, attributes={})
         final_attrs = {
           "type" => "direct", 
           "auto_delete" => false, 
@@ -120,7 +120,7 @@ module RabbitMQ
 
         response = @connection.put("/api/exchanges/#{uri_encode(vhost)}/#{uri_encode(name)}") do |req|
           req.headers['Content-Type'] = 'application/json'
-          req.body = MultiJSON.dump(final_attrs)
+          req.body = MultiJson.dump(final_attrs)
         end
         decode_resource(response)
       end
