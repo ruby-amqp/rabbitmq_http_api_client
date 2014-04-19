@@ -110,6 +110,21 @@ module RabbitMQ
         decode_resource_collection(@connection.get(path))
       end
 
+      def create_exchange(vhost, name, attributes={})
+        final_attrs = {
+          "type" => "direct", 
+          "auto_delete" => false, 
+          "durable" => true,
+          "arguments" => []
+        }.merge!(attributes)
+
+        response = @connection.put("/api/exchanges/#{uri_encode(vhost)}/#{uri_encode(name)}") do |req|
+          req.headers['Content-Type'] = 'application/json'
+          req.body = MultiJson.dump(final_attrs)
+        end
+        decode_resource(response)
+      end
+
       def exchange_info(vhost, name)
         decode_resource(@connection.get("/api/exchanges/#{uri_encode(vhost)}/#{uri_encode(name)}"))
       end
@@ -163,7 +178,6 @@ module RabbitMQ
         end
         decode_resource_collection(response)
       end
-
 
       def list_bindings(vhost = nil)
         path = if vhost.nil?
