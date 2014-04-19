@@ -1,3 +1,16 @@
+## Changes Between 1.0.0 and 1.1.0
+
+### declare_exchange
+
+It is now possible to declare an exchange over HTTP API using `RabbitMQ::HTTP::Client#declare_exchange`:
+
+``` ruby
+c.declare_exchange("/", exchange_name, :durable => false, :type => "fanout")
+```
+
+Contributed by Jake Davis (Simple).
+
+
 ## Changes Between 0.9.0 and 1.0.0
 
 ### Hashi Upgrade
