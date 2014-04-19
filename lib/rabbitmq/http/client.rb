@@ -112,10 +112,10 @@ module RabbitMQ
 
       def declare_exchange(vhost, name, attributes = {})
         opts = {
-          "type" => "direct",
-          "auto_delete" => false,
-          "durable" => true,
-          "arguments" => {}
+          :type => "direct",
+          :auto_delete => false,
+          :durable => true,
+          :arguments => {}
         }.merge(attributes)
 
         response = @connection.put("/api/exchanges/#{uri_encode(vhost)}/#{uri_encode(name)}") do |req|
