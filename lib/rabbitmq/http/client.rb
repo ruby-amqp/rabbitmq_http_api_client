@@ -110,17 +110,17 @@ module RabbitMQ
         decode_resource_collection(@connection.get(path))
       end
 
-      def create_exchange(vhost, name, attributes={})
-        final_attrs = {
-          "type" => "direct", 
-          "auto_delete" => false, 
+      def declare_exchange(vhost, name, attributes = {})
+        opts = {
+          "type" => "direct",
+          "auto_delete" => false,
           "durable" => true,
-          "arguments" => []
-        }.merge!(attributes)
+          "arguments" => {}
+        }.merge(attributes)
 
         response = @connection.put("/api/exchanges/#{uri_encode(vhost)}/#{uri_encode(name)}") do |req|
           req.headers['Content-Type'] = 'application/json'
-          req.body = MultiJson.dump(final_attrs)
+          req.body = MultiJson.dump(opts)
         end
         decode_resource(response)
       end
@@ -196,7 +196,7 @@ module RabbitMQ
       def queue_binding_info(vhost, queue, exchange, properties_key)
         decode_resource(@connection.get("/api/bindings/#{uri_encode(vhost)}/e/#{uri_encode(exchange)}/q/#{uri_encode(queue)}/#{uri_encode(properties_key)}"))
       end
-      
+
       def bind_queue(vhost, queue, exchange, routing_key, arguments = [])
         resp = @connection.post("/api/bindings/#{uri_encode(vhost)}/e/#{uri_encode(exchange)}/q/#{uri_encode(queue)}") do |req|
           req.headers['Content-Type'] = 'application/json'
@@ -204,7 +204,7 @@ module RabbitMQ
         end
         resp.headers['location']
       end
-      
+
       def delete_queue_binding(vhost, queue, exchange, properties_key)
         resp = @connection.delete("/api/bindings/#{uri_encode(vhost)}/e/#{uri_encode(exchange)}/q/#{uri_encode(queue)}/#{uri_encode(properties_key)}")
         resp.success?
