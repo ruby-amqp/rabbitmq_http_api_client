@@ -269,6 +269,21 @@ describe RabbitMQ::HTTP::Client do
     end
   end
 
+  describe "PUT /api/exchanges/:vhost/:name" do
+    before :all do
+      @channel    = @connection.create_channel
+    end
+
+    let(:exchange_name) { "httpdeclared" }
+
+    it "declares an exchange" do
+      subject.declare_exchange("/", exchange_name, :durable => false, :type => "fanout")
+
+      x = @channel.fanout(exchange_name, :durable => false, :auto_delete => false)
+      x.delete
+    end
+  end
+
   describe "GET /api/exchanges/:vhost/:name/bindings/source" do
     before :all do
       @channel    = @connection.create_channel
