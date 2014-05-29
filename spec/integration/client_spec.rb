@@ -729,10 +729,10 @@ describe RabbitMQ::HTTP::Client do
 
   describe "PUT /api/users/:name" do
     it "updates information about a user" do
-      subject.update_user("alt", :tags => "http policymaker management", :password => "alt")
+      subject.update_user("alt", :tags => "http, policymaker, management", :password => "alt")
 
       u = subject.user_info("alt")
-      u.tags.should == "http policymaker management"
+      u.tags.should == "http,policymaker,management"
     end
   end
 
