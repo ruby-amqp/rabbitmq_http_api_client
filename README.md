@@ -306,7 +306,7 @@ puts u.password_hash
 puts u.tags
 
 # Update information about a user
-client.update_user("myapp", :tags => "services", :password => "t0ps3krEt")
+client.update_user("myapp", :tags => "services,policymaker,management", :password => "t0ps3krEt")
 
 # Delete a user
 client.delete_user("myapp")
