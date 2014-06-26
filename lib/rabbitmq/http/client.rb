@@ -200,7 +200,7 @@ module RabbitMQ
       def bind_queue(vhost, queue, exchange, routing_key, arguments = [])
         resp = @connection.post("/api/bindings/#{uri_encode(vhost)}/e/#{uri_encode(exchange)}/q/#{uri_encode(queue)}") do |req|
           req.headers['Content-Type'] = 'application/json'
-          req.body = MultiJson.dump({ routing_key: routing_key, arguments: arguments })
+          req.body = MultiJson.dump({:routing_key => routing_key, :arguments => arguments})
         end
         resp.headers['location']
       end
