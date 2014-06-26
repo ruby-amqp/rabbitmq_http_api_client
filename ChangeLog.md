@@ -1,3 +1,16 @@
+## Changes Between 1.2.0 and 1.3.0
+
+No changes yet.
+
+
+## Changes Between 1.1.0 and 1.2.0
+
+### Ruby 1.8 Compatibility Restored
+
+The library no longer uses 1.9-specific hash syntax.
+
+
+
 ## Changes Between 1.0.0 and 1.1.0
 
 ### declare_exchange
