@@ -1,5 +1,5 @@
 bundler_args: --without development
-script: "bundle exec rspec -cfs spec"
+script: "bundle exec rspec --color --format documentation spec"
 rvm:
   - "2.1"
   - "2.0"
