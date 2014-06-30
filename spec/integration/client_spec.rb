@@ -284,6 +284,20 @@ describe RabbitMQ::HTTP::Client do
     end
   end
 
+  describe "DELETE /api/exchanges/:vhost/:name" do
+    before :all do
+      @channel    = @connection.create_channel
+    end
+
+    let(:exchange_name) { "httpdeclared" }
+
+    it "deletes an exchange" do
+      x = @channel.declare_exchange("/", exchange_name, :durable => false, :type => "fanout")
+      subject.delete_exchange("/", exchange_name)
+    end
+  end
+
+
   describe "GET /api/exchanges/:vhost/:name/bindings/source" do
     before :all do
       @channel    = @connection.create_channel

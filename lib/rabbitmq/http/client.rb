@@ -125,6 +125,10 @@ module RabbitMQ
         decode_resource(response)
       end
 
+      def delete_exchange(vhost, name)
+        decode_resource(@connection.delete("/api/exchanges/#{uri_encode(vhost)}/#{uri_encode(name)}"))
+      end
+
       def exchange_info(vhost, name)
         decode_resource(@connection.get("/api/exchanges/#{uri_encode(vhost)}/#{uri_encode(name)}"))
       end
