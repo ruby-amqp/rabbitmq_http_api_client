@@ -1,6 +1,20 @@
 ## Changes Between 1.2.0 and 1.3.0
 
-No changes yet.
+### Faraday Upgrade
+
+The project now depends on Faraday `0.9.x`.
+
+Contributed by John Murphy.
+
+### Exchange Deletion
+
+`RabbitMQ::HTTP::Client#delete_exchange` is a new function that deletes exchanges:
+
+``` ruby
+c.delete_exchange("/", "an.exchange")
+```
+
+Contributed by Matt Bostock.
 
 
 ## Changes Between 1.1.0 and 1.2.0
