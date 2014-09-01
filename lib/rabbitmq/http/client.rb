@@ -172,7 +172,8 @@ module RabbitMQ
       end
 
       def purge_queue(vhost, name)
-        decode_resource(@connection.delete("/api/queues/#{uri_encode(vhost)}/#{uri_encode(name)}/contents"))
+        @connection.delete("/api/queues/#{uri_encode(vhost)}/#{uri_encode(name)}/contents")
+        Hashie::Mash.new
       end
 
       def get_messages(vhost, name, options)
