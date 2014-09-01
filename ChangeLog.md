@@ -1,3 +1,11 @@
+## Changes Between 1.3.0 and 1.4.0
+
+### Protocol Ports for Non-Administrators
+
+`Client#protocol_ports` no longer fails with a nil pointer exception
+for non-administrators.
+
+
 ## Changes Between 1.2.0 and 1.3.0
 
 ### Faraday Upgrade
