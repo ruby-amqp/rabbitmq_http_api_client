@@ -274,6 +274,10 @@ describe RabbitMQ::HTTP::Client do
       @channel    = @connection.create_channel
     end
 
+    after :all do
+      @channel.close
+    end
+
     let(:exchange_name) { "httpdeclared" }
 
     it "declares an exchange" do
@@ -289,10 +293,14 @@ describe RabbitMQ::HTTP::Client do
       @channel    = @connection.create_channel
     end
 
+    after :all do
+      @channel.close
+    end
+
     let(:exchange_name) { "httpdeclared" }
 
     it "deletes an exchange" do
-      x = @channel.declare_exchange("/", exchange_name, :durable => false, :type => "fanout")
+      x = @channel.fanout(exchange_name, :durable => false)
       subject.delete_exchange("/", exchange_name)
     end
   end
@@ -301,6 +309,10 @@ describe RabbitMQ::HTTP::Client do
   describe "GET /api/exchanges/:vhost/:name/bindings/source" do
     before :all do
       @channel    = @connection.create_channel
+    end
+
+    after :all do
+      @channel.close
     end
 
     it "returns a list of all bindings in which the given exchange is the source" do
