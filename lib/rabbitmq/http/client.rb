@@ -56,7 +56,7 @@ module RabbitMQ
       #
       # @return [Hash<String, Integer>] Hash of protocol => port
       def protocol_ports
-        self.overview.listeners.
+        (self.overview.listeners || []).
           reduce(Hash.new) { |acc, lnr| acc[lnr.protocol] = lnr.port; acc }
       end
 
