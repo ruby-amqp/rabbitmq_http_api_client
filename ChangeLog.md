@@ -5,6 +5,18 @@
 `Client#protocol_ports` no longer fails with a nil pointer exception
 for non-administrators.
 
+### Hashi Upgrade
+
+The library now depends on `hashie ~> 3.2`.
+
+Contributed by Damon Morgan.
+
+### MultiJSON Upgrade
+
+The library now depends on `multi_json ~> 1.9`.
+
+Contributed by Damon Morgan.
+
 
 ## Changes Between 1.2.0 and 1.3.0
 
