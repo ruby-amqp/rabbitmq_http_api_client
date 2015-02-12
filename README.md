@@ -18,14 +18,10 @@ and will support more HTTP API features in the future
 
 ## Supported Ruby Versions
 
- * MRI 2.1
- * MRI 2.0
- * MRI 1.9.3
+ * CRuby 1.8.7 through 2.2.x
  * JRuby 1.7+
  * Rubinius 2.0+
- * MRI 1.9.2
- * MRI 1.8.7
-
+ 
 ## Supported RabbitMQ Versions
 
  * RabbitMQ 3.x
