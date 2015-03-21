@@ -575,7 +575,7 @@ describe RabbitMQ::HTTP::Client do
     before :all do
       @channel    = @connection.create_channel
     end
-  
+
     it "creates a binding between an exchange and a queue" do
       routing_key = 'test.key'
       q = @channel.queue("")
@@ -604,11 +604,11 @@ describe RabbitMQ::HTTP::Client do
 
       xs = subject.list_bindings_between_queue_and_exchange("/", q.name, x.name)
       b1 = xs.first
-      
+
       b2 = subject.queue_binding_info("/", q.name, x.name, b1.properties_key)
-      
+
       b1.should == b2
-    
+
     end
   end
 
@@ -616,7 +616,7 @@ describe RabbitMQ::HTTP::Client do
     before :all do
       @channel    = @connection.create_channel
     end
-  
+
     it "deletes an individual binding between an exchange and a queue" do
       routing_key = 'test.key'
       q = @channel.queue("")
@@ -625,11 +625,11 @@ describe RabbitMQ::HTTP::Client do
 
       xs = subject.list_bindings_between_queue_and_exchange("/", q.name, x.name)
       b  = xs.first
-      
+
       subject.delete_queue_binding("/", q.name, x.name, b.properties_key).should be_true
 
       xs = subject.list_bindings_between_queue_and_exchange("/", q.name, x.name)
-      
+
       xs.size.should == 0
 
       q.delete
