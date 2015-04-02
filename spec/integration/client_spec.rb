@@ -104,9 +104,8 @@ describe RabbitMQ::HTTP::Client do
   describe "GET /api/extensions" do
     it "returns a list of enabled management plugin extensions" do
       xs = subject.list_extensions
-      f  = xs.first
 
-      expect(["dispatcher.js", "shovel.js"]).to include(f.javascript)
+      expect(xs).to be_kind_of(Array)
     end
   end
 
