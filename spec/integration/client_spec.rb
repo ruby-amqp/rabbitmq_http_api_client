@@ -239,10 +239,8 @@ describe RabbitMQ::HTTP::Client do
 
       e.type.should == "fanout"
       e.name.should == "amq.fanout"
-      e.durable.should be_true
+      e.durable.should eq(true)
       e.vhost.should == "/"
-      e.internal.should be_false
-      e.auto_delete.should be_false
     end
   end
 
@@ -383,7 +381,7 @@ describe RabbitMQ::HTTP::Client do
         q  = @channel.queue("", :exclusive => true, :durable => false)
         i  = subject.queue_info("/", q.name)
 
-        i.durable.should be_false
+        i.durable.should eq(false)
         i.durable.should == q.durable?
 
         i.name.should == q.name
@@ -603,7 +601,7 @@ describe RabbitMQ::HTTP::Client do
       xs = subject.list_bindings_between_queue_and_exchange("/", q.name, x.name)
       b  = xs.first
 
-      subject.delete_queue_binding("/", q.name, x.name, b.properties_key).should be_true
+      subject.delete_queue_binding("/", q.name, x.name, b.properties_key).should eq(true)
 
       xs = subject.list_bindings_between_queue_and_exchange("/", q.name, x.name)
 
@@ -620,7 +618,7 @@ describe RabbitMQ::HTTP::Client do
       v  = xs.first
 
       v.name.should_not be_nil
-      v.tracing.should be_false
+      v.tracing.should eq(false)
     end
   end
 
@@ -630,7 +628,7 @@ describe RabbitMQ::HTTP::Client do
         v = subject.vhost_info("/")
 
         v.name.should_not be_nil
-        v.tracing.should be_false
+        v.tracing.should eq(false)
       end
     end
 
@@ -843,7 +841,7 @@ describe RabbitMQ::HTTP::Client do
     it "performs aliveness check" do
       r = subject.aliveness_test("/")
 
-      r.should be_true
+      r.should eq(true)
     end
   end
 end
