@@ -27,8 +27,8 @@ describe RabbitMQ::HTTP::Client do
       c = described_class.connect("http://guest:guest@127.0.0.1:15672")
 
       r = c.overview
-      r.rabbitmq_version.should_not be_nil
-      r.erlang_version.should_not be_nil
+      expect(r.rabbitmq_version).to_not be_nil
+      expect(r.erlang_version).to_not be_nil
     end
   end
 
@@ -44,11 +44,11 @@ describe RabbitMQ::HTTP::Client do
       ts = r.exchange_types.map { |h| h.name }.
         sort
       ["direct", "fanout", "headers", "topic"].each do |t|
-        ts.should include(t)
+        expect(ts).to include(t)
       end
 
-      r.rabbitmq_version.should_not be_nil
-      r.erlang_version.should_not be_nil
+      expect(r.rabbitmq_version).to_not be_nil
+      expect(r.erlang_version).to_not be_nil
     end
   end
 
@@ -56,7 +56,7 @@ describe RabbitMQ::HTTP::Client do
     it "returns a list of enabled protocols" do
       xs = subject.enabled_protocols
 
-      xs.should include("amqp")
+      expect(xs).to include("amqp")
     end
   end
 
@@ -65,7 +65,7 @@ describe RabbitMQ::HTTP::Client do
       xs = subject.protocol_ports
 
       # hash of protocol => port
-      xs["amqp"].should == 5672
+      expect(xs["amqp"]).to eq(5672)
     end
   end
 
@@ -79,9 +79,9 @@ describe RabbitMQ::HTTP::Client do
       n      = nodes.first
 
       rabbit = n.applications.detect { |app| app.name == "rabbit" }
-      rabbit.description.should == "RabbitMQ"
+      expect(rabbit.description).to eq("RabbitMQ")
 
-      n.name.should =~ /^rabbit/
+      expect(n.name).to match(/^rabbit/)
     end
   end
 
@@ -91,9 +91,9 @@ describe RabbitMQ::HTTP::Client do
       n  = subject.node_info(ns.first.name)
 
       rabbit = n.applications.detect { |app| app.name == "rabbit" }
-      rabbit.description.should == "RabbitMQ"
+      expect(rabbit.description).to eq("RabbitMQ")
 
-      n.name.should =~ /^rabbit/
+      expect(n.name).to match(/^rabbit/)
     end
   end
 
@@ -106,7 +106,7 @@ describe RabbitMQ::HTTP::Client do
       xs = subject.list_extensions
       f  = xs.first
 
-      ["dispatcher.js", "shovel.js"].should include(f.javascript)
+      expect(["dispatcher.js", "shovel.js"]).to include(f.javascript)
     end
   end
 
@@ -118,11 +118,11 @@ describe RabbitMQ::HTTP::Client do
     it "returns a list of all resources/definitions (vhosts, users, permissions, queues, exchanges, bindings, etc)" do
       xs = subject.list_definitions
 
-      xs.bindings.should be_instance_of(Array)
-      xs.queues.should be_instance_of(Array)
-      xs.exchanges.should be_instance_of(Array)
-      xs.users.should be_instance_of(Array)
-      xs.vhosts.should be_instance_of(Array)
+      expect(xs.bindings).to be_instance_of(Array)
+      expect(xs.queues).to be_instance_of(Array)
+      expect(xs.exchanges).to be_instance_of(Array)
+      expect(xs.users).to be_instance_of(Array)
+      expect(xs.vhosts).to be_instance_of(Array)
     end
   end
 
@@ -144,8 +144,8 @@ describe RabbitMQ::HTTP::Client do
       xs = subject.list_connections
       f  = xs.first
 
-      f.name.should =~ /127.0.0.1/
-      f.client_properties.product.should == "Bunny"
+      expect(f.name).to match(/127.0.0.1/)
+      expect(f.client_properties.product).to eq("Bunny")
     end
   end
 
@@ -154,8 +154,8 @@ describe RabbitMQ::HTTP::Client do
       xs = subject.list_connections
       c  = subject.connection_info(xs.first.name)
 
-      c.name.should =~ /127.0.0.1/
-      c.client_properties.product.should == "Bunny"
+      expect(c.name).to match(/127.0.0.1/)
+      expect(c.client_properties.product).to eq("Bunny")
     end
   end
 
@@ -166,10 +166,10 @@ describe RabbitMQ::HTTP::Client do
         xs = subject.list_connections
         c  = subject.close_connection(xs.first.name)
 
-        c.name.should =~ /127.0.0.1/
-        c.client_properties.product.should == "Bunny"
+        expect(c.name).to match(/127.0.0.1/)
+        expect(c.client_properties.product).to eq("Bunny")
 
-        @connection.should_not be_open
+        expect(@connection).to_not be_open
       end
     end
   end
@@ -188,8 +188,8 @@ describe RabbitMQ::HTTP::Client do
       xs = subject.list_channels
       f  = xs.first
 
-      f.number.should be >= 1
-      f.prefetch_count.should be >= 0
+      expect(f.number).to be >= 1
+      expect(f.prefetch_count).to be >= 0
     end
   end
 
@@ -202,8 +202,8 @@ describe RabbitMQ::HTTP::Client do
       xs = subject.list_channels
       c  = subject.channel_info(xs.first.name)
 
-      c.number.should be >= 1
-      c.prefetch_count.should be >= 0
+      expect(c.number).to be >= 1
+      expect(c.prefetch_count).to be >= 0
     end
   end
 
@@ -216,11 +216,11 @@ describe RabbitMQ::HTTP::Client do
       xs = subject.list_exchanges
       f  = xs.first
 
-      f.type.should_not be_nil
-      f.name.should_not be_nil
-      f.vhost.should_not be_nil
-      f.durable.should_not be_nil
-      f.auto_delete.should_not be_nil
+      expect(f.type).to_not be_nil
+      expect(f.name).to_not be_nil
+      expect(f.vhost).to_not be_nil
+      expect(f.durable).to_not be_nil
+      expect(f.auto_delete).to_not be_nil
     end
   end
 
@@ -229,7 +229,7 @@ describe RabbitMQ::HTTP::Client do
       xs = subject.list_exchanges("/")
       f  = xs.first
 
-      f.vhost.should == "/"
+      expect(f.vhost).to eq("/")
     end
   end
 
@@ -237,10 +237,10 @@ describe RabbitMQ::HTTP::Client do
     it "returns information about the exchange" do
       e = subject.exchange_info("/", "amq.fanout")
 
-      e.type.should == "fanout"
-      e.name.should == "amq.fanout"
-      e.durable.should eq(true)
-      e.vhost.should == "/"
+      expect(e.type).to eq("fanout")
+      expect(e.name).to eq("amq.fanout")
+      expect(e.durable).to eq(true)
+      expect(e.vhost).to eq("/")
     end
   end
 
@@ -298,11 +298,11 @@ describe RabbitMQ::HTTP::Client do
       xs = subject.list_bindings_by_source("/", "http.api.tests.fanout")
       f  = xs.first
 
-      f.destination.should == q.name
-      f.destination_type.should == "queue"
-      f.routing_key.should == ""
-      f.source.should == e.name
-      f.vhost.should == "/"
+      expect(f.destination).to eq(q.name)
+      expect(f.destination_type).to eq("queue")
+      expect(f.routing_key).to eq("")
+      expect(f.source).to eq(e.name)
+      expect(f.vhost).to eq("/")
 
       e.delete
       q.delete
@@ -323,11 +323,11 @@ describe RabbitMQ::HTTP::Client do
       xs = subject.list_bindings_by_destination("/", "http.api.tests.fanout1")
       f  = xs.first
 
-      f.destination.should == e1.name
-      f.destination_type.should == "exchange"
-      f.routing_key.should == ""
-      f.source.should == e2.name
-      f.vhost.should == "/"
+      expect(f.destination).to eq(e1.name)
+      expect(f.destination_type).to eq("exchange")
+      expect(f.routing_key).to eq("")
+      expect(f.source).to eq(e2.name)
+      expect(f.vhost).to eq("/")
 
       e1.delete
       e2.delete
@@ -354,7 +354,7 @@ describe RabbitMQ::HTTP::Client do
       q  = @channel.queue("", :exclusive => true)
 
       xs = subject.list_queues
-      xs.detect { |x| x.name == q.name }.should_not be_empty
+      expect(xs.detect { |x| x.name == q.name }).to_not be_empty
     end
   end
 
@@ -367,7 +367,7 @@ describe RabbitMQ::HTTP::Client do
       q  = @channel.queue("", :exclusive => true)
 
       xs = subject.list_queues("/")
-      xs.detect { |x| x.name == q.name }.should_not be_empty
+      expect(xs.detect { |x| x.name == q.name }).to_not be_empty
     end
   end
 
@@ -381,21 +381,21 @@ describe RabbitMQ::HTTP::Client do
         q  = @channel.queue("", :exclusive => true, :durable => false)
         i  = subject.queue_info("/", q.name)
 
-        i.durable.should eq(false)
-        i.durable.should == q.durable?
+        expect(i.durable).to eq(false)
+        expect(i.durable).to eq(q.durable?)
 
-        i.name.should == q.name
-        i.auto_delete.should == q.auto_delete?
-        i.active_consumers.should be_nil
-        i.backing_queue_status.avg_ack_egress_rate.should == 0.0
+        expect(i.name).to eq(q.name)
+        expect(i.auto_delete).to eq(q.auto_delete?)
+        expect(i.active_consumers).to be_nil
+        expect(i.backing_queue_status.avg_ack_egress_rate).to eq(0.0)
       end
     end
 
     context "when queue DOES NOT exist" do
       it "raises NotFound" do
-        lambda do
+        expect do
           subject.queue_info("/", Time.now.to_i.to_s)
-        end.should raise_error(Faraday::Error::ResourceNotFound)
+        end.to raise_error(Faraday::Error::ResourceNotFound)
       end
     end
   end
@@ -440,8 +440,8 @@ describe RabbitMQ::HTTP::Client do
       xs = subject.list_queue_bindings("/", q.name)
       x  = xs.first
 
-      x.destination.should == q.name
-      x.destination_type.should == "queue"
+      expect(x.destination).to eq(q.name)
+      expect(x.destination_type).to eq("queue")
     end
   end
 
@@ -460,10 +460,10 @@ describe RabbitMQ::HTTP::Client do
       end
       sleep 0.7
 
-      q.message_count.should == 10
+      expect(q.message_count).to eq(10)
       subject.purge_queue("/", q.name)
       sleep 0.5
-      q.message_count.should == 0
+      expect(q.message_count).to eq(0)
       q.delete
     end
   end
@@ -484,13 +484,13 @@ describe RabbitMQ::HTTP::Client do
       end
       sleep 0.7
 
-      q.message_count.should == 10
+      expect(q.message_count).to eq(10)
       xs = subject.get_messages("/", q.name, :count => 10, :requeue => false, :encoding => "auto")
       m  = xs.first
 
-      m.properties.content_type.should == "application/xyz"
-      m.payload.should == "msg 0"
-      m.payload_encoding.should == "string"
+      expect(m.properties.content_type).to eq("application/xyz")
+      expect(m.payload).to eq("msg 0")
+      expect(m.payload_encoding).to eq("string")
 
       q.delete
     end
@@ -501,11 +501,11 @@ describe RabbitMQ::HTTP::Client do
       xs = subject.list_bindings
       b  = xs.first
 
-      b.destination.should_not be_nil
-      b.destination_type.should_not be_nil
-      b.source.should_not be_nil
-      b.routing_key.should_not be_nil
-      b.vhost.should_not be_nil
+      expect(b.destination).to_not be_nil
+      expect(b.destination_type).to_not be_nil
+      expect(b.source).to_not be_nil
+      expect(b.routing_key).to_not be_nil
+      expect(b.vhost).to_not be_nil
     end
   end
 
@@ -514,11 +514,11 @@ describe RabbitMQ::HTTP::Client do
       xs = subject.list_bindings("/")
       b  = xs.first
 
-      b.destination.should_not be_nil
-      b.destination_type.should_not be_nil
-      b.source.should_not be_nil
-      b.routing_key.should_not be_nil
-      b.vhost.should_not be_nil
+      expect(b.destination).to_not be_nil
+      expect(b.destination_type).to_not be_nil
+      expect(b.source).to_not be_nil
+      expect(b.routing_key).to_not be_nil
+      expect(b.vhost).to_not be_nil
     end
   end
 
@@ -534,12 +534,12 @@ describe RabbitMQ::HTTP::Client do
 
       xs = subject.list_bindings_between_queue_and_exchange("/", q.name, x.name)
       b  = xs.first
-      b.destination.should == q.name
-      b.destination_type.should == "queue"
-      b.source.should == x.name
-      b.routing_key.should_not be_nil
-      b.properties_key.should_not be_nil
-      b.vhost.should == "/"
+      expect(b.destination).to eq(q.name)
+      expect(b.destination_type).to eq("queue")
+      expect(b.source).to eq(x.name)
+      expect(b.routing_key).to_not be_nil
+      expect(b.properties_key).to_not be_nil
+      expect(b.vhost).to eq("/")
 
       q.delete
       x.delete
@@ -559,7 +559,7 @@ describe RabbitMQ::HTTP::Client do
 
       b = subject.bind_queue("/", q.name, x.name, routing_key)
 
-      b.should == q.name + "/" + routing_key
+      expect(b).to eq(q.name + "/" + routing_key)
 
       q.delete
       x.delete
@@ -582,7 +582,7 @@ describe RabbitMQ::HTTP::Client do
 
       b2 = subject.queue_binding_info("/", q.name, x.name, b1.properties_key)
 
-      b1.should == b2
+      expect(b1).to eq(b2)
 
     end
   end
@@ -601,11 +601,11 @@ describe RabbitMQ::HTTP::Client do
       xs = subject.list_bindings_between_queue_and_exchange("/", q.name, x.name)
       b  = xs.first
 
-      subject.delete_queue_binding("/", q.name, x.name, b.properties_key).should eq(true)
+      expect(subject.delete_queue_binding("/", q.name, x.name, b.properties_key)).to eq(true)
 
       xs = subject.list_bindings_between_queue_and_exchange("/", q.name, x.name)
 
-      xs.size.should == 0
+      expect(xs.size).to eq(0)
 
       q.delete
       x.delete
@@ -617,8 +617,8 @@ describe RabbitMQ::HTTP::Client do
       xs = subject.list_vhosts
       v  = xs.first
 
-      v.name.should_not be_nil
-      v.tracing.should eq(false)
+      expect(v.name).to_not be_nil
+      expect(v.tracing).to eq(false)
     end
   end
 
@@ -627,16 +627,16 @@ describe RabbitMQ::HTTP::Client do
       it "returns infomation about a vhost" do
         v = subject.vhost_info("/")
 
-        v.name.should_not be_nil
-        v.tracing.should eq(false)
+        expect(v.name).to_not be_nil
+        expect(v.tracing).to eq(false)
       end
     end
 
     context "when vhost DOES NOT exist" do
       it "raises NotFound" do
-        lambda do
+        expect do
           subject.vhost_info(Time.now.to_i.to_s)
-        end.should raise_error(Faraday::Error::ResourceNotFound)
+        end.to raise_error(Faraday::Error::ResourceNotFound)
       end
     end
 
@@ -667,7 +667,7 @@ describe RabbitMQ::HTTP::Client do
           subject.create_vhost(vhost)
 
           v = subject.vhost_info(vhost)
-          v.name.should == vhost
+          expect(v.name).to eq(vhost)
 
           subject.delete_vhost(v.name)
         end
@@ -683,7 +683,7 @@ describe RabbitMQ::HTTP::Client do
           subject.create_vhost(vhost)
 
           v = subject.vhost_info(vhost)
-          v.name.should == vhost
+          expect(v.name).to eq(vhost)
 
           subject.delete_vhost(v.name)
         end
@@ -705,7 +705,7 @@ describe RabbitMQ::HTTP::Client do
       xs = subject.list_permissions("/")
       p  = xs.detect { |x| x.user == "guest" }
 
-      p.read.should == ".*"
+      expect(p.read).to eq(".*")
     end
   end
 
@@ -714,17 +714,17 @@ describe RabbitMQ::HTTP::Client do
       xs = subject.list_users
       u  = xs.first
 
-      u.name.should_not be_nil
-      u.password_hash.should_not be_nil
-      u.tags.should_not be_nil
+      expect(u.name).to_not be_nil
+      expect(u.password_hash).to_not be_nil
+      expect(u.tags).to_not be_nil
     end
   end
 
   describe "GET /api/users/:name" do
     it "returns information about a user" do
       u = subject.user_info("guest")
-      u.name.should == "guest"
-      u.tags.should == "administrator"
+      expect(u.name).to eq("guest")
+      expect(u.tags).to eq("administrator")
     end
   end
 
@@ -733,7 +733,7 @@ describe RabbitMQ::HTTP::Client do
       subject.update_user("alt", :tags => "http, policymaker, management", :password => "alt")
 
       u = subject.user_info("alt")
-      u.tags.should == "http,policymaker,management"
+      expect(u.tags).to eq("http,policymaker,management")
     end
   end
 
@@ -749,21 +749,21 @@ describe RabbitMQ::HTTP::Client do
       xs = subject.user_permissions("guest")
       p  = xs.first
 
-      p.read.should == ".*"
+      expect(p.read).to eq(".*")
     end
   end
 
   describe "GET /api/whoami" do
     it "returns information about the current user" do
       u = subject.whoami
-      u.name.should == "guest"
+      expect(u.name).to eq("guest")
     end
   end
 
   describe "GET /api/permissions" do
     it "lists all permissions" do
       xs = subject.list_permissions
-      xs.first.read.should_not be_nil
+      expect(xs.first.read).to_not be_nil
     end
   end
 
@@ -771,9 +771,9 @@ describe RabbitMQ::HTTP::Client do
     it "returns a list of permissions of a user in a vhost" do
       p = subject.list_permissions_of("/", "guest")
 
-      p.read.should == ".*"
-      p.write.should == ".*"
-      p.configure.should == ".*"
+      expect(p.read).to eq(".*")
+      expect(p.write).to eq(".*")
+      expect(p.configure).to eq(".*")
     end
   end
 
@@ -783,9 +783,9 @@ describe RabbitMQ::HTTP::Client do
 
       p = subject.list_permissions_of("/", "guest")
 
-      p.read.should == ".*"
-      p.write.should == ".*"
-      p.configure.should == ".*"
+      expect(p.read).to eq(".*")
+      expect(p.write).to eq(".*")
+      expect(p.configure).to eq(".*")
     end
   end
 
@@ -809,7 +809,7 @@ describe RabbitMQ::HTTP::Client do
   describe "GET /api/parameters" do
     it "returns a list of all parameters" do
       xs = subject.list_parameters
-      xs.should be_kind_of(Array)
+      expect(xs).to be_kind_of(Array)
     end
   end
 
@@ -821,14 +821,14 @@ describe RabbitMQ::HTTP::Client do
   describe "GET /api/policies" do
     it "returns a list of all policies" do
       xs = subject.list_policies
-      xs.should be_kind_of(Array)
+      expect(xs).to be_kind_of(Array)
     end
   end
 
   describe "GET /api/policies/:vhost" do
     it "returns a list of all policies in a vhost" do
       xs = subject.list_policies("/")
-      xs.should be_kind_of(Array)
+      expect(xs).to be_kind_of(Array)
     end
   end
 
@@ -841,7 +841,7 @@ describe RabbitMQ::HTTP::Client do
     it "performs aliveness check" do
       r = subject.aliveness_test("/")
 
-      r.should eq(true)
+      expect(r).to eq(true)
     end
   end
 end
