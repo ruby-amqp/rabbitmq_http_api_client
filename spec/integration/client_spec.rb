@@ -82,18 +82,6 @@ describe RabbitMQ::HTTP::Client do
       rabbit.description.should == "RabbitMQ"
 
       n.name.should =~ /^rabbit/
-      n.partitions.should == []
-      n.fd_used.should_not be_nil
-      n.fd_total.should_not be_nil
-      n.sockets_used.should_not be_nil
-      n.sockets_total.should_not be_nil
-      n.mem_used.should_not be_nil
-      n.mem_limit.should_not be_nil
-      n.disk_free_limit.should_not be_nil
-      n.disk_free.should_not be_nil
-      n.proc_used.should_not be_nil
-      n.proc_total.should_not be_nil
-      n.run_queue.should_not be_nil
     end
   end
 
@@ -106,19 +94,6 @@ describe RabbitMQ::HTTP::Client do
       rabbit.description.should == "RabbitMQ"
 
       n.name.should =~ /^rabbit/
-      n.partitions.should == []
-      n.fd_used.should_not be_nil
-      n.fd_total.should_not be_nil
-      n.sockets_used.should_not be_nil
-      n.sockets_total.should_not be_nil
-      n.mem_used.should_not be_nil
-      n.mem_limit.should_not be_nil
-      n.disk_free_limit.should_not be_nil
-      n.disk_free.should_not be_nil
-      n.proc_used.should_not be_nil
-      n.proc_total.should_not be_nil
-      n.run_queue.should_not be_nil
-      n.running.should be_true
     end
   end
 
