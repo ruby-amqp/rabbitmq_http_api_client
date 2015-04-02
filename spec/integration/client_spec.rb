@@ -159,16 +159,18 @@ describe RabbitMQ::HTTP::Client do
     end
   end
 
-  describe "DELETE /api/connections/:name" do
-    it "closes the connection" do
-      pending "Needs investigation, DELETE does not seem to close the connection"
-      xs = subject.list_connections
-      c  = subject.close_connection(xs.first.name)
+  unless ENV["CI"]
+    describe "DELETE /api/connections/:name" do
+      it "closes the connection" do
+        pending "Needs investigation, DELETE does not seem to close the connection"
+        xs = subject.list_connections
+        c  = subject.close_connection(xs.first.name)
 
-      c.name.should =~ /127.0.0.1/
-      c.client_properties.product.should == "Bunny"
+        c.name.should =~ /127.0.0.1/
+        c.client_properties.product.should == "Bunny"
 
-      @connection.should_not be_open
+        @connection.should_not be_open
+      end
     end
   end
 
