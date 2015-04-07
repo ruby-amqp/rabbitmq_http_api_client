@@ -1,7 +1,6 @@
 ## Changes Between 1.4.0 and 1.5.0
 
-No changes yet.
-
+Support for URIs containing a path.
 
 ## Changes Between 1.3.0 and 1.4.0
 
