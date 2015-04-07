@@ -29,7 +29,7 @@ module RabbitMQ
       end
 
       def overview
-        decode_resource(@connection.get("/api/overview"))
+        decode_resource(@connection.get("overview"))
       end
 
       # Returns a list of messaging protocols supported by
@@ -61,19 +61,19 @@ module RabbitMQ
       end
 
       def list_nodes
-        decode_resource_collection(@connection.get("/api/nodes"))
+        decode_resource_collection(@connection.get("nodes"))
       end
 
       def node_info(name)
-        decode_resource(@connection.get("/api/nodes/#{uri_encode(name)}"))
+        decode_resource(@connection.get("nodes/#{uri_encode(name)}"))
       end
 
       def list_extensions
-        decode_resource_collection(@connection.get("/api/extensions"))
+        decode_resource_collection(@connection.get("extensions"))
       end
 
       def list_definitions
-        decode_resource(@connection.get("/api/definitions"))
+        decode_resource(@connection.get("definitions"))
       end
 
       def upload_definitions(defs)
@@ -81,30 +81,30 @@ module RabbitMQ
       end
 
       def list_connections
-        decode_resource_collection(@connection.get("/api/connections"))
+        decode_resource_collection(@connection.get("connections"))
       end
 
       def connection_info(name)
-        decode_resource(@connection.get("/api/connections/#{uri_encode(name)}"))
+        decode_resource(@connection.get("connections/#{uri_encode(name)}"))
       end
 
       def close_connection(name)
-        decode_resource(@connection.delete("/api/connections/#{uri_encode(name)}"))
+        decode_resource(@connection.delete("connections/#{uri_encode(name)}"))
       end
 
       def list_channels
-        decode_resource_collection(@connection.get("/api/channels"))
+        decode_resource_collection(@connection.get("channels"))
       end
 
       def channel_info(name)
-        decode_resource(@connection.get("/api/channels/#{uri_encode(name)}"))
+        decode_resource(@connection.get("channels/#{uri_encode(name)}"))
       end
 
       def list_exchanges(vhost = nil)
         path = if vhost.nil?
-                 "/api/exchanges"
+                 "exchanges"
                else
-                 "/api/exchanges/#{uri_encode(vhost)}"
+                 "exchanges/#{uri_encode(vhost)}"
                end
 
         decode_resource_collection(@connection.get(path))
@@ -118,7 +118,7 @@ module RabbitMQ
           :arguments => {}
         }.merge(attributes)
 
-        response = @connection.put("/api/exchanges/#{uri_encode(vhost)}/#{uri_encode(name)}") do |req|
+        response = @connection.put("exchanges/#{uri_encode(vhost)}/#{uri_encode(name)}") do |req|
           req.headers['Content-Type'] = 'application/json'
           req.body = MultiJson.dump(opts)
         end
@@ -126,37 +126,37 @@ module RabbitMQ
       end
 
       def delete_exchange(vhost, name)
-        decode_resource(@connection.delete("/api/exchanges/#{uri_encode(vhost)}/#{uri_encode(name)}"))
+        decode_resource(@connection.delete("exchanges/#{uri_encode(vhost)}/#{uri_encode(name)}"))
       end
 
       def exchange_info(vhost, name)
-        decode_resource(@connection.get("/api/exchanges/#{uri_encode(vhost)}/#{uri_encode(name)}"))
+        decode_resource(@connection.get("exchanges/#{uri_encode(vhost)}/#{uri_encode(name)}"))
       end
 
       def list_bindings_by_source(vhost, exchange)
-        decode_resource_collection(@connection.get("/api/exchanges/#{uri_encode(vhost)}/#{uri_encode(exchange)}/bindings/source"))
+        decode_resource_collection(@connection.get("exchanges/#{uri_encode(vhost)}/#{uri_encode(exchange)}/bindings/source"))
       end
 
       def list_bindings_by_destination(vhost, exchange)
-        decode_resource_collection(@connection.get("/api/exchanges/#{uri_encode(vhost)}/#{uri_encode(exchange)}/bindings/destination"))
+        decode_resource_collection(@connection.get("exchanges/#{uri_encode(vhost)}/#{uri_encode(exchange)}/bindings/destination"))
       end
 
       def list_queues(vhost = nil)
         path = if vhost.nil?
-                 "/api/queues"
+                 "queues"
                else
-                 "/api/queues/#{uri_encode(vhost)}"
+                 "queues/#{uri_encode(vhost)}"
                end
 
         decode_resource_collection(@connection.get(path))
       end
 
       def queue_info(vhost, name)
-        decode_resource(@connection.get("/api/queues/#{uri_encode(vhost)}/#{uri_encode(name)}"))
+        decode_resource(@connection.get("queues/#{uri_encode(vhost)}/#{uri_encode(name)}"))
       end
 
       def declare_queue(vhost, name, attributes)
-        response = @connection.put("/api/queues/#{uri_encode(vhost)}/#{uri_encode(name)}") do |req|
+        response = @connection.put("queues/#{uri_encode(vhost)}/#{uri_encode(name)}") do |req|
           req.headers['Content-Type'] = "application/json"
           req.body = MultiJson.dump(attributes)
         end
@@ -164,20 +164,20 @@ module RabbitMQ
       end
 
       def delete_queue(vhost, name)
-        decode_resource(@connection.delete("/api/queues/#{uri_encode(vhost)}/#{uri_encode(name)}"))
+        decode_resource(@connection.delete("queues/#{uri_encode(vhost)}/#{uri_encode(name)}"))
       end
 
       def list_queue_bindings(vhost, queue)
-        decode_resource_collection(@connection.get("/api/queues/#{uri_encode(vhost)}/#{uri_encode(queue)}/bindings"))
+        decode_resource_collection(@connection.get("queues/#{uri_encode(vhost)}/#{uri_encode(queue)}/bindings"))
       end
 
       def purge_queue(vhost, name)
-        @connection.delete("/api/queues/#{uri_encode(vhost)}/#{uri_encode(name)}/contents")
+        @connection.delete("queues/#{uri_encode(vhost)}/#{uri_encode(name)}/contents")
         Hashie::Mash.new
       end
 
       def get_messages(vhost, name, options)
-        response = @connection.post("/api/queues/#{uri_encode(vhost)}/#{uri_encode(name)}/get") do |req|
+        response = @connection.post("queues/#{uri_encode(vhost)}/#{uri_encode(name)}/get") do |req|
           req.headers['Content-Type'] = "application/json"
           req.body = MultiJson.dump(options)
         end
@@ -186,24 +186,24 @@ module RabbitMQ
 
       def list_bindings(vhost = nil)
         path = if vhost.nil?
-                 "/api/bindings"
+                 "bindings"
                else
-                 "/api/bindings/#{uri_encode(vhost)}"
+                 "bindings/#{uri_encode(vhost)}"
                end
 
         decode_resource_collection(@connection.get(path))
       end
 
       def list_bindings_between_queue_and_exchange(vhost, queue, exchange)
-        decode_resource_collection(@connection.get("/api/bindings/#{uri_encode(vhost)}/e/#{uri_encode(exchange)}/q/#{uri_encode(queue)}"))
+        decode_resource_collection(@connection.get("bindings/#{uri_encode(vhost)}/e/#{uri_encode(exchange)}/q/#{uri_encode(queue)}"))
       end
 
       def queue_binding_info(vhost, queue, exchange, properties_key)
-        decode_resource(@connection.get("/api/bindings/#{uri_encode(vhost)}/e/#{uri_encode(exchange)}/q/#{uri_encode(queue)}/#{uri_encode(properties_key)}"))
+        decode_resource(@connection.get("bindings/#{uri_encode(vhost)}/e/#{uri_encode(exchange)}/q/#{uri_encode(queue)}/#{uri_encode(properties_key)}"))
       end
 
       def bind_queue(vhost, queue, exchange, routing_key, arguments = [])
-        resp = @connection.post("/api/bindings/#{uri_encode(vhost)}/e/#{uri_encode(exchange)}/q/#{uri_encode(queue)}") do |req|
+        resp = @connection.post("bindings/#{uri_encode(vhost)}/e/#{uri_encode(exchange)}/q/#{uri_encode(queue)}") do |req|
           req.headers['Content-Type'] = 'application/json'
           req.body = MultiJson.dump({:routing_key => routing_key, :arguments => arguments})
         end
@@ -211,49 +211,49 @@ module RabbitMQ
       end
 
       def delete_queue_binding(vhost, queue, exchange, properties_key)
-        resp = @connection.delete("/api/bindings/#{uri_encode(vhost)}/e/#{uri_encode(exchange)}/q/#{uri_encode(queue)}/#{uri_encode(properties_key)}")
+        resp = @connection.delete("bindings/#{uri_encode(vhost)}/e/#{uri_encode(exchange)}/q/#{uri_encode(queue)}/#{uri_encode(properties_key)}")
         resp.success?
       end
 
 
 
       def list_vhosts
-        decode_resource_collection(@connection.get("/api/vhosts"))
+        decode_resource_collection(@connection.get("vhosts"))
       end
 
       def vhost_info(name)
-        decode_resource(@connection.get("/api/vhosts/#{uri_encode(name)}"))
+        decode_resource(@connection.get("vhosts/#{uri_encode(name)}"))
       end
 
       def create_vhost(name)
-        response = @connection.put("/api/vhosts/#{uri_encode(name)}") do |req|
+        response = @connection.put("vhosts/#{uri_encode(name)}") do |req|
           req.headers['Content-Type'] = "application/json"
         end
         decode_resource(response)
       end
 
       def delete_vhost(name)
-        decode_resource(@connection.delete("/api/vhosts/#{uri_encode(name)}"))
+        decode_resource(@connection.delete("vhosts/#{uri_encode(name)}"))
       end
 
 
 
       def list_permissions(vhost = nil)
         path = if vhost
-                 "/api/vhosts/#{uri_encode(vhost)}/permissions"
+                 "vhosts/#{uri_encode(vhost)}/permissions"
                else
-                 "/api/permissions"
+                 "permissions"
                end
 
         decode_resource_collection(@connection.get(path))
       end
 
       def list_permissions_of(vhost, user)
-        decode_resource(@connection.get("/api/permissions/#{uri_encode(vhost)}/#{uri_encode(user)}"))
+        decode_resource(@connection.get("permissions/#{uri_encode(vhost)}/#{uri_encode(user)}"))
       end
 
       def update_permissions_of(vhost, user, attributes)
-        response = @connection.put("/api/permissions/#{uri_encode(vhost)}/#{uri_encode(user)}") do |req|
+        response = @connection.put("permissions/#{uri_encode(vhost)}/#{uri_encode(user)}") do |req|
           req.headers['Content-Type'] = "application/json"
           req.body = MultiJson.dump(attributes)
         end
@@ -261,21 +261,21 @@ module RabbitMQ
       end
 
       def clear_permissions_of(vhost, user)
-        decode_resource(@connection.delete("/api/permissions/#{uri_encode(vhost)}/#{uri_encode(user)}"))
+        decode_resource(@connection.delete("permissions/#{uri_encode(vhost)}/#{uri_encode(user)}"))
       end
 
 
 
       def list_users
-        decode_resource_collection(@connection.get("/api/users"))
+        decode_resource_collection(@connection.get("users"))
       end
 
       def user_info(name)
-        decode_resource(@connection.get("/api/users/#{uri_encode(name)}"))
+        decode_resource(@connection.get("users/#{uri_encode(name)}"))
       end
 
       def update_user(name, attributes)
-        response = @connection.put("/api/users/#{uri_encode(name)}") do |req|
+        response = @connection.put("users/#{uri_encode(name)}") do |req|
           req.headers['Content-Type'] = "application/json"
           req.body = MultiJson.dump(attributes)
         end
@@ -284,24 +284,24 @@ module RabbitMQ
       alias create_user update_user
 
       def delete_user(name)
-        decode_resource(@connection.delete("/api/users/#{uri_encode(name)}"))
+        decode_resource(@connection.delete("users/#{uri_encode(name)}"))
       end
 
       def user_permissions(name)
-        decode_resource_collection(@connection.get("/api/users/#{uri_encode(name)}/permissions"))
+        decode_resource_collection(@connection.get("users/#{uri_encode(name)}/permissions"))
       end
 
       def whoami
-        decode_resource(@connection.get("/api/whoami"))
+        decode_resource(@connection.get("whoami"))
       end
 
 
 
       def list_policies(vhost = nil)
         path = if vhost
-                 "/api/policies/#{uri_encode(vhost)}"
+                 "policies/#{uri_encode(vhost)}"
                else
-                 "/api/policies"
+                 "policies"
                end
 
         decode_resource_collection(@connection.get(path))
@@ -309,15 +309,15 @@ module RabbitMQ
 
       def list_policies_of(vhost, name = nil)
         path = if name
-                 "/api/policies/#{uri_encode(vhost)}/#{uri_encode(name)}"
+                 "policies/#{uri_encode(vhost)}/#{uri_encode(name)}"
                else
-                 "/api/policies/#{uri_encode(vhost)}"
+                 "policies/#{uri_encode(vhost)}"
                end
         decode_resource_collection(@connection.get(path))
       end
 
       def update_policies_of(vhost, name, attributes)
-        response = @connection.put("/api/policies/#{uri_encode(vhost)}/#{uri_encode(name)}") do |req|
+        response = @connection.put("policies/#{uri_encode(vhost)}/#{uri_encode(name)}") do |req|
           req.headers['Content-Type'] = "application/json"
           req.body = MultiJson.dump(attributes)
         end
@@ -325,7 +325,7 @@ module RabbitMQ
       end
 
       def clear_policies_of(vhost, name)
-        decode_resource(@connection.delete("/api/policies/#{uri_encode(vhost)}/#{uri_encode(name)}"))
+        decode_resource(@connection.delete("policies/#{uri_encode(vhost)}/#{uri_encode(name)}"))
       end
 
 
@@ -333,24 +333,24 @@ module RabbitMQ
 
       def list_parameters(component = nil)
         path = if component
-                 "/api/parameters/#{uri_encode(component)}"
+                 "parameters/#{uri_encode(component)}"
                else
-                 "/api/parameters"
+                 "parameters"
                end
         decode_resource_collection(@connection.get(path))
       end
 
       def list_parameters_of(component, vhost, name = nil)
         path = if name
-                 "/api/parameters/#{uri_encode(component)}/#{uri_encode(vhost)}/#{uri_encode(name)}"
+                 "parameters/#{uri_encode(component)}/#{uri_encode(vhost)}/#{uri_encode(name)}"
                else
-                 "/api/parameters/#{uri_encode(component)}/#{uri_encode(vhost)}"
+                 "parameters/#{uri_encode(component)}/#{uri_encode(vhost)}"
                end
         decode_resource_collection(@connection.get(path))
       end
 
       def update_parameters_of(component, vhost, name, attributes)
-        response = @connection.put("/api/parameters/#{uri_encode(component)}/#{uri_encode(vhost)}/#{uri_encode(name)}") do |req|
+        response = @connection.put("parameters/#{uri_encode(component)}/#{uri_encode(vhost)}/#{uri_encode(name)}") do |req|
           req.headers['Content-Type'] = "application/json"
           req.body = MultiJson.dump(attributes)
         end
@@ -358,13 +358,13 @@ module RabbitMQ
       end
 
       def clear_parameters_of(component, vhost, name)
-        decode_resource(@connection.delete("/api/parameters/#{uri_encode(component)}/#{uri_encode(vhost)}/#{uri_encode(name)}"))
+        decode_resource(@connection.delete("parameters/#{uri_encode(component)}/#{uri_encode(vhost)}/#{uri_encode(name)}"))
       end
 
 
 
       def aliveness_test(vhost)
-        r = @connection.get("/api/aliveness-test/#{uri_encode(vhost)}")
+        r = @connection.get("aliveness-test/#{uri_encode(vhost)}")
         r.body["status"] == "ok"
       end
 
@@ -373,11 +373,12 @@ module RabbitMQ
 
       def initialize_connection(endpoint, options = {})
         uri     = URI.parse(endpoint)
-
+        uri.path = "/api" if ["","/"].include?(uri.path)
         user     = uri.user     || options.delete(:username) || "guest"
         password = uri.password || options.delete(:password) || "guest"
+        options = options.merge(:url => uri.to_s)
 
-        @connection = Faraday.new(endpoint, options) do |conn|
+        @connection = Faraday.new(options) do |conn|
           conn.basic_auth user, password
           conn.use        FaradayMiddleware::FollowRedirects, :limit => 3
           conn.use        Faraday::Response::RaiseError

@@ -17,6 +17,19 @@ describe RabbitMQ::HTTP::Client do
     @connection.close
   end
 
+  #
+  # Default endpoint path
+  #
+  describe "default endpoint path" do
+    it "does NOT append '/api' if the endpoint provides a path" do
+      c = described_class.connect("http://guest:guest@127.0.0.1:15672/api")
+
+      r = c.overview
+      expect(r.rabbitmq_version).to_not be_nil
+      expect(r.erlang_version).to_not be_nil
+    end
+  end
+
 
   #
   # URI-only access
