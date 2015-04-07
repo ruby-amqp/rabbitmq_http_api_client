@@ -10,7 +10,7 @@ No changes yet.
 `Client#protocol_ports` no longer fails with a nil pointer exception
 for non-administrators.
 
-### Hashi Upgrade
+### Hashie Upgrade
 
 The library now depends on `hashie ~> 3.2`.
 
