@@ -1,6 +1,10 @@
 ## Changes Between 1.4.0 and 1.5.0
 
-Support for URIs containing a path.
+### Support for URIs containing a path
+
+If provided endpoint contains a path, it will be used instead of `/api`.
+
+Contributed by Pol Miro.
 
 ## Changes Between 1.3.0 and 1.4.0
 
