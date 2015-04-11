@@ -154,12 +154,12 @@ describe RabbitMQ::HTTP::Client do
     end
 
     it "returns true when successful" do
-      xs = subject.upload_definitions(definition)
-      expect(xs).to eq(true)
+      r = subject.upload_definitions(definition)
+      expect(r).to eq(true)
     end
 
     it "stores the uploaded definitions" do
-      xs = subject.upload_definitions(definition)
+      subject.upload_definitions(definition)
       xs = subject.list_definitions
       uploaded_queue = xs.queues.detect { |q| q.name = 'my-definition-queue' }
       expect(uploaded_queue).not_to eq(nil)
