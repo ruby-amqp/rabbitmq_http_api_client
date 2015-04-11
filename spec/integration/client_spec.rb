@@ -139,7 +139,31 @@ describe RabbitMQ::HTTP::Client do
   end
 
   describe "POST /api/definitions" do
-    it "uploads definitions to RabbitMQ"
+    let(:definition) do
+      {
+        :queues => [{
+          :name => 'my-definition-queue',
+          :vhost => '/',
+          :durable => true,
+          :auto_delete =>  false,
+          :arguments => {
+             "x-dead-letter-exchange" => 'dead'
+          }
+        }]
+      }.to_json
+    end
+
+    it "returns true when successful" do
+      xs = subject.upload_definitions(definition)
+      expect(xs).to eq(true)
+    end
+
+    it "stores the uploaded definitions" do
+      xs = subject.upload_definitions(definition)
+      xs = subject.list_definitions
+      uploaded_queue = xs.queues.detect { |q| q.name = 'my-definition-queue' }
+      expect(uploaded_queue).not_to eq(nil)
+    end
   end
 
   #

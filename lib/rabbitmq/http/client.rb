@@ -77,7 +77,11 @@ module RabbitMQ
       end
 
       def upload_definitions(defs)
-        raise NotImplementedError.new
+        response = @connection.post("definitions") do |req|
+          req.headers['Content-Type'] = "application/json"
+          req.body = defs
+        end
+        response.success?
       end
 
       def list_connections
