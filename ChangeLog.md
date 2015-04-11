@@ -1,6 +1,26 @@
 ## Changes Between 1.5.0 and 1.6.0
 
-No changes yet.
+### Definition Upload Support
+
+The client now can upload definitions (of queues, exchanges, etc):
+
+``` ruby
+defs = {
+        :queues => [{
+          :name => 'my-definition-queue',
+          :vhost => '/',
+          :durable => true,
+          :auto_delete =>  false,
+          :arguments => {
+             "x-dead-letter-exchange" => 'dead'
+          }
+        }]
+      }.to_json
+
+c.upload_definitions(defs)
+```
+
+Contributed by Pol Miro.
 
 
 
