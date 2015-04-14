@@ -33,7 +33,7 @@ All versions require [RabbitMQ Management UI plugin](http://www.rabbitmq.com/man
 
 Add this line to your application's Gemfile:
 
-    gem 'rabbitmq_http_api_client', '>= 1.5.0'
+    gem 'rabbitmq_http_api_client', '>= 1.6.0'
 
 And then execute:
 
