@@ -219,6 +219,9 @@ puts q.backing_queue_status
 puts q.active_consumers
 
 
+# Get information about a queue
+client.queue_info("/", "collector1.megacorp.local")
+
 # Declare a queue
 client.declare_queue("/", "collector1.megacorp.local", :durable => false, :auto_delete => true)
 
