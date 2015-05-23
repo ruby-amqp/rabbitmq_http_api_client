@@ -279,6 +279,8 @@ module RabbitMQ
       end
 
       def update_user(name, attributes)
+        attributes[:tags] ||= ""
+
         response = @connection.put("users/#{uri_encode(name)}") do |req|
           req.headers['Content-Type'] = "application/json"
           req.body = MultiJson.dump(attributes)

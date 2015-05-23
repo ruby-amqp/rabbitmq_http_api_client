@@ -765,11 +765,22 @@ describe RabbitMQ::HTTP::Client do
   end
 
   describe "PUT /api/users/:name" do
-    it "updates information about a user" do
-      subject.update_user("alt", :tags => "http, policymaker, management", :password => "alt")
+    context "with tags provided explicitly" do
+      it "updates information about a user" do
+        subject.update_user("alt", :tags => "http, policymaker, management", :password => "alt")
 
-      u = subject.user_info("alt")
-      expect(u.tags).to eq("http,policymaker,management")
+        u = subject.user_info("alt")
+        expect(u.tags).to eq("http,policymaker,management")
+      end
+    end
+
+    context "without tags provided" do
+      it "uses blank tag list" do
+        subject.update_user("alt", :password => "alt")
+
+        u = subject.user_info("alt")
+        expect(u.tags).to eq("")
+      end
     end
   end
 
