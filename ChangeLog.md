@@ -1,3 +1,11 @@
+## Changes Between 1.6.0 and 1.7.0
+
+### Blank Tags by Default
+
+The `:tags` attribute is no longer required by `Client#update_user`. If not provided,
+a blank list of tags will be used.
+
+
 ## Changes Between 1.5.0 and 1.6.0
 
 ### Definition Upload Support
