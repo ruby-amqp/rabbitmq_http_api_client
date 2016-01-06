@@ -345,13 +345,22 @@ ps = client.update_permissions_of("/", "guest", :write => ".*", :read => ".*", :
 ps = client.clear_permissions_of("/", "guest")
 ```
 
+## Running Tests
+
+    bundle install
+    bundle exec rspec -cfd spec
+
+The test suite assumes that RabbitMQ is running locally with stock settings
+and rabbitmq-management plugin enabled.
+
+
 ## Contributing
 
 1. Fork it
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
-5. Create new Pull Request
+5. Create a new pull request
 
 
 ## License & Copyright
