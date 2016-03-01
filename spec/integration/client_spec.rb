@@ -317,6 +317,15 @@ describe RabbitMQ::HTTP::Client do
       x = @channel.fanout(exchange_name, :durable => false)
       subject.delete_exchange("/", exchange_name)
     end
+
+    it "doesn't delete used exchange" do
+      q = @channel.queue("")
+      e = @channel.fanout(exchange_name, :durable => false)
+      q.bind(e)
+      expect do
+        subject.delete_exchange("/", exchange_name, true)
+      end.to raise_error(Faraday::ClientError)
+    end
   end
 
 

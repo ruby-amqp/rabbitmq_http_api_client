@@ -129,8 +129,11 @@ module RabbitMQ
         decode_resource(response)
       end
 
-      def delete_exchange(vhost, name)
-        decode_resource(@connection.delete("exchanges/#{uri_encode(vhost)}/#{uri_encode(name)}"))
+      def delete_exchange(vhost, name, if_unused = false)
+        response = @connection.delete("exchanges/#{uri_encode(vhost)}/#{uri_encode(name)}") do |req|
+          req.params["if-unused"] = true if if_unused
+        end
+        decode_resource(response)
       end
 
       def exchange_info(vhost, name)
