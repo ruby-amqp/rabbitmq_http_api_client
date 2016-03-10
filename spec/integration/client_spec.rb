@@ -365,7 +365,7 @@ describe RabbitMQ::HTTP::Client do
       @channel.close
     end
 
-    it "returns a list of all bindings in which the given exchange is the source" do
+    it "returns a list of all bindings in which the given exchange is the destination" do
       e1  = @channel.fanout("http.api.tests.fanout1", :durable => true)
       e2  = @channel.fanout("http.api.tests.fanout2", :durable => true)
       e1.bind(e2)
