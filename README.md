@@ -367,5 +367,5 @@ and rabbitmq-management plugin enabled.
 
 Double-licensed under the MIT and Mozilla Public License (same as RabbitMQ).
 
-(c) Michael S. Klishin, 2012-2014.
+(c) Michael S. Klishin, 2012-2016.
 
