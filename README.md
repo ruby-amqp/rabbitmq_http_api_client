@@ -235,7 +235,7 @@ bs = client.list_queue_bindings("/", "collector1.megacorp.local")
 client.purge_queue("/", "collector1.megacorp.local")
 
 # Fetch messages from a queue
-ms = client.get_messages("/", "collector1.megacorp.local", :count => 10, :requeue => false, :encoding => "auto")
+ms = client.get_messages("/", "collector1.megacorp.local", :count => 10, :ackmode => "ack_requeue_false", :encoding => "auto")
 m  = ms.first
 
 puts m.properties.content_type
