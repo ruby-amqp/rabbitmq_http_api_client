@@ -699,11 +699,15 @@ describe RabbitMQ::HTTP::Client do
       routing_key = 'test.key'
       sx = @channel.fanout("http.client.fanout_source")
       dx = @channel.fanout("http.client.fanout_destination")
+
+      xs = subject.list_bindings_between_exchanges("/", dx.name, sx.name)
+      expect(xs).to be_empty
+
       dx.bind(sx)
 
       b = subject.bind_exchange("/", dx.name, sx.name, routing_key)
-
-      expect(b).to eq(dx.name + "/" + routing_key)
+      xs = subject.list_bindings_between_exchanges("/", dx.name, sx.name)
+      expect(xs).to_not be_empty
 
       dx.delete
       sx.delete
