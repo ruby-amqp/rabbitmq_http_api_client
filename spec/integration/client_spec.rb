@@ -687,6 +687,81 @@ describe RabbitMQ::HTTP::Client do
     end
   end
 
+  describe "POST /api/bindings/:vhost/e/:source_exchange/e/:destination_exchange" do
+    before :each do
+      @channel    = @conn.create_channel
+    end
+    after :each do
+      @channel.close
+    end
+
+    it "creates a binding between two exchanges" do
+      routing_key = 'test.key'
+      sx = @channel.fanout("http.client.fanout_source")
+      dx = @channel.fanout("http.client.fanout_destination")
+      dx.bind(sx)
+
+      b = subject.bind_exchange("/", dx.name, sx.name, routing_key)
+
+      expect(b).to eq(dx.name + "/" + routing_key)
+
+      dx.delete
+      sx.delete
+    end
+  end
+
+  describe "GET /api/bindings/:vhost/e/:exchange/q/:queue/props" do
+    before :each do
+      @channel    = @conn.create_channel
+    end
+    after :each do
+      @channel.close
+    end
+
+    it "returns an individual binding between two exchanges" do
+      routing_key = 'test.key'
+      sx = @channel.fanout("http.client.fanout_source")
+      dx = @channel.fanout("http.client.fanout_destination")
+      dx.bind(sx)
+
+      xs = subject.list_bindings_between_exchanges("/", dx.name, sx.name)
+      b1 = xs.first
+
+      b2 = subject.exchange_binding_info("/", dx.name, sx.name, b1.properties_key)
+
+      expect(b1).to eq(b2)
+
+    end
+  end
+
+  describe "DELETE /api/bindings/:vhost/e/:exchange/q/:queue/props" do
+    before :each do
+      @channel    = @conn.create_channel
+    end
+    after :each do
+      @channel.close
+    end
+
+    it "deletes an individual binding between two exchanges" do
+      routing_key = 'test.key'
+      sx = @channel.fanout("http.client.fanout_source")
+      dx = @channel.fanout("http.client.fanout_destination")
+      dx.bind(sx)
+
+      xs = subject.list_bindings_between_exchanges("/", dx.name, sx.name)
+      b  = xs.first
+
+      expect(subject.delete_exchange_binding("/", dx.name, sx.name, b.properties_key)).to eq(true)
+
+      xs = subject.list_bindings_between_exchanges("/", dx.name, sx.name)
+
+      expect(xs.size).to eq(0)
+
+      dx.delete
+      sx.delete
+    end
+  end
+
   describe "GET /api/vhosts" do
     it "returns a list of vhosts" do
       xs = subject.list_vhosts
