@@ -222,6 +222,27 @@ module RabbitMQ
         resp.success?
       end
 
+      def list_bindings_between_exchanges(vhost, destination_exchange, source_exchange)
+        decode_resource_collection(@connection.get("bindings/#{uri_encode(vhost)}/e/#{uri_encode(source_exchange)}/e/#{uri_encode(destination_exchange)}"))
+      end
+
+      def exchange_binding_info(vhost, destination_exchange, source_exchange, properties_key)
+        decode_resource(@connection.get("bindings/#{uri_encode(vhost)}/e/#{uri_encode(source_exchange)}/e/#{uri_encode(destination_exchange)}/#{uri_encode(properties_key)}"))
+      end
+
+
+      def bind_exchange(vhost, destination_exchange, source_exchange, routing_key, arguments = [])
+        resp = @connection.post("bindings/#{uri_encode(vhost)}/e/#{uri_encode(source_exchange)}/e/#{uri_encode(destination_exchange)}") do |req|
+          req.headers['Content-Type'] = 'application/json'
+          req.body = MultiJson.dump({:routing_key => routing_key, :arguments => arguments})
+        end
+        resp.headers['location']
+      end
+
+      def delete_exchange_binding(vhost, destination_exchange, source_exchange, properties_key)
+        resp = @connection.delete("bindings/#{uri_encode(vhost)}/e/#{uri_encode(source_exchange)}/e/#{uri_encode(destination_exchange)}/#{uri_encode(properties_key)}")
+        resp.success?
+      end
 
 
       def list_vhosts
