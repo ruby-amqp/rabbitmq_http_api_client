@@ -551,7 +551,7 @@ describe RabbitMQ::HTTP::Client do
       sleep 0.7
 
       expect(q.message_count).to eq(10)
-      xs = subject.get_messages("/", q.name, :count => 10, :requeue => false, :encoding => "auto")
+      xs = subject.get_messages("/", q.name, :count => 10, :ackmode => "ack_requeue_false", :encoding => "auto")
       m  = xs.first
 
       expect(m.properties.content_type).to eq("application/xyz")
