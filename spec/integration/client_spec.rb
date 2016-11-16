@@ -146,7 +146,7 @@ describe RabbitMQ::HTTP::Client do
         :queues => [{
           :name => queue_name,
           :vhost => '/',
-          :durable => true,
+          durable: true,
           :auto_delete =>  false,
           :arguments => {
              "x-dead-letter-exchange" => 'dead'
@@ -301,9 +301,9 @@ describe RabbitMQ::HTTP::Client do
     let(:exchange_name) { "httpdeclared" }
 
     it "declares an exchange" do
-      subject.declare_exchange("/", exchange_name, :durable => false, :type => "fanout")
+      subject.declare_exchange("/", exchange_name, durable: false, type: "fanout")
 
-      x = @channel.fanout(exchange_name, :durable => false, :auto_delete => false)
+      x = @channel.fanout(exchange_name, durable: false, auto_delete: false)
       x.delete
     end
   end
@@ -320,14 +320,14 @@ describe RabbitMQ::HTTP::Client do
     let(:exchange_name) { "httpdeclared" }
 
     it "deletes an exchange" do
-      x = @channel.fanout(exchange_name, :durable => false)
+      x = @channel.fanout(exchange_name, durable: false)
       subject.delete_exchange("/", exchange_name)
     end
 
     # HTTP client tries to uncompress an empty response :( MK
     xit "doesn't delete used exchange" do
       q = @channel.queue("")
-      e = @channel.fanout(exchange_name, :durable => false)
+      e = @channel.fanout(exchange_name, durable: false)
       q.bind(e)
       expect do
         subject.delete_exchange("/", exchange_name, true)
@@ -345,8 +345,8 @@ describe RabbitMQ::HTTP::Client do
     end
 
     it "returns a list of all bindings in which the given exchange is the source" do
-      e  = @channel.fanout("http.api.tests.fanout", :durable => true)
-      q  = @channel.queue("http.api.tests.queue1",  :durable => true)
+      e  = @channel.fanout("http.api.tests.fanout", durable: true)
+      q  = @channel.queue("http.api.tests.queue1",  durable: true)
       q.bind(e)
 
       xs = subject.list_bindings_by_source("/", "http.api.tests.fanout")
@@ -373,8 +373,8 @@ describe RabbitMQ::HTTP::Client do
     end
 
     it "returns a list of all bindings in which the given exchange is the destination" do
-      e1  = @channel.fanout("http.api.tests.fanout1", :durable => true)
-      e2  = @channel.fanout("http.api.tests.fanout2", :durable => true)
+      e1  = @channel.fanout("http.api.tests.fanout1", durable: true)
+      e2  = @channel.fanout("http.api.tests.fanout2", durable: true)
       e1.bind(e2)
 
       xs = subject.list_bindings_by_destination("/", "http.api.tests.fanout1")
@@ -411,10 +411,12 @@ describe RabbitMQ::HTTP::Client do
     end
 
     it "returns a list of all queues" do
-      q  = @channel.queue("", :exclusive => true)
+      q  = @channel.queue("", durable: false)
 
       xs = subject.list_queues
       expect(xs.detect { |x| x.name == q.name }).to_not be_empty
+
+      subject.delete_queue("/", q.name)
     end
   end
 
@@ -427,10 +429,12 @@ describe RabbitMQ::HTTP::Client do
     end
 
     it "returns a list of all queues" do
-      q  = @channel.queue("", :exclusive => true)
+      q  = @channel.queue("", durable: false)
 
       xs = subject.list_queues("/")
       expect(xs.detect { |x| x.name == q.name }).to_not be_empty
+
+      subject.delete_queue("/", q.name)
     end
   end
 
@@ -444,7 +448,7 @@ describe RabbitMQ::HTTP::Client do
       end
 
       it "returns information about a queue" do
-        q  = @channel.queue("", :exclusive => true, :durable => false)
+        q  = @channel.queue("", durable: false)
         i  = subject.queue_info("/", q.name)
 
         expect(i.durable).to eq(false)
@@ -454,6 +458,8 @@ describe RabbitMQ::HTTP::Client do
         expect(i.auto_delete).to eq(q.auto_delete?)
         expect(i.active_consumers).to be_nil
         expect(i.backing_queue_status.avg_ack_egress_rate).to eq(0.0)
+
+        subject.delete_queue("/", q.name)
       end
     end
 
@@ -474,9 +480,9 @@ describe RabbitMQ::HTTP::Client do
     let(:queue_name) { "httpdeclared" }
 
     it "declares a queue" do
-      subject.declare_queue("/", queue_name, :durable => false, :auto_delete => true)
+      subject.declare_queue("/", queue_name, durable: false, auto_delete: true)
 
-      q = @channel.queue(queue_name, :durable => false, :auto_delete => true)
+      q = @channel.queue(queue_name, durable: false, auto_delete: true)
       q.delete
     end
   end
@@ -489,7 +495,7 @@ describe RabbitMQ::HTTP::Client do
     let(:queue_name) { "httpdeclared" }
 
     it "deletes a queue" do
-      q = @channel.queue(queue_name, :durable => false)
+      q = @channel.queue(queue_name, durable: false)
       subject.delete_queue("/", queue_name)
     end
   end
@@ -508,6 +514,8 @@ describe RabbitMQ::HTTP::Client do
 
       expect(x.destination).to eq(q.name)
       expect(x.destination_type).to eq("queue")
+
+      q.delete
     end
   end
 
@@ -521,7 +529,7 @@ describe RabbitMQ::HTTP::Client do
 
     it "purges a queue" do
       q   = @channel.queue("")
-      x   = @channel.fanout("amq.fanout", :durable => true, :auto_delete => false)
+      x   = @channel.fanout("amq.fanout", durable: true, auto_delete: false)
       q.bind(x)
 
       10.times do
@@ -548,7 +556,7 @@ describe RabbitMQ::HTTP::Client do
 
     it "fetches a message from a queue, a la basic.get" do
       q   = @channel.queue("")
-      x   = @channel.fanout("amq.fanout", :durable => true, :auto_delete => false)
+      x   = @channel.fanout("amq.fanout", durable: true, auto_delete: false)
       q.bind(x)
 
       10.times do |i|
@@ -664,7 +672,7 @@ describe RabbitMQ::HTTP::Client do
       b2 = subject.queue_binding_info("/", q.name, x.name, b1.properties_key)
 
       expect(b1).to eq(b2)
-
+      q.delete
     end
   end
 
