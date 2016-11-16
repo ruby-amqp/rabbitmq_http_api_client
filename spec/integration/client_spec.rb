@@ -139,10 +139,12 @@ describe RabbitMQ::HTTP::Client do
   end
 
   describe "POST /api/definitions" do
+    let(:queue_name) { 'my-definition-queue' }
+
     let(:definition) do
       {
         :queues => [{
-          :name => 'my-definition-queue',
+          :name => queue_name,
           :vhost => '/',
           :durable => true,
           :auto_delete =>  false,
@@ -156,13 +158,17 @@ describe RabbitMQ::HTTP::Client do
     it "returns true when successful" do
       r = subject.upload_definitions(definition)
       expect(r).to eq(true)
+
+      subject.delete_queue("/", queue_name)
     end
 
     it "stores the uploaded definitions" do
       subject.upload_definitions(definition)
       xs = subject.list_definitions
-      uploaded_queue = xs.queues.detect { |q| q.name = 'my-definition-queue' }
+      uploaded_queue = xs.queues.detect { |q| q.name == queue_name }
       expect(uploaded_queue).not_to eq(nil)
+
+      subject.delete_queue("/", queue_name)
     end
   end
 
