@@ -1,8 +1,9 @@
 bundler_args: --without development
-script: "bundle exec rspec --color --format documentation spec"
+before_script: ./bin/before_build.sh
+script: "bundle exec rspec"
 rvm:
-  - "2.3.0"
-  - "2.2.2"  
+  - "2.3.3"
+  - "2.2"
 notifications:
   email: michael@rabbitmq.com
 services:
