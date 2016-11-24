@@ -450,6 +450,7 @@ describe RabbitMQ::HTTP::Client do
 
       it "returns information about a queue" do
         q  = @channel.queue("", durable: false)
+        await_event_propagation
         i  = subject.queue_info("/", q.name)
 
         expect(i.durable).to eq(false)
