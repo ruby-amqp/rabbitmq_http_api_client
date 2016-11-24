@@ -18,6 +18,18 @@ describe RabbitMQ::HTTP::Client do
   end
 
   #
+  # Helpers
+  #
+
+  # Statistics tables in the server are updated asynchronously,
+  # in particular starting with rabbitmq/rabbitmq-management#236,
+  # so in some cases we need to wait before GET'ing e.g. a newly opened connection.
+  def await_event_propagation
+    # same number as used in rabbit-hole test suite. Works OK.
+    sleep 1
+  end
+
+  #
   # Default endpoint path
   #
   describe "default endpoint path" do
@@ -183,6 +195,7 @@ describe RabbitMQ::HTTP::Client do
     end
 
     it "returns a list of all active connections" do
+      await_event_propagation
       xs = subject.list_connections
       f  = xs.first
 
@@ -193,26 +206,12 @@ describe RabbitMQ::HTTP::Client do
 
   describe "GET /api/connections/:name" do
     it "returns information about the connection" do
+      await_event_propagation
       xs = subject.list_connections
       c  = subject.connection_info(xs.first.name)
 
       expect(c.name).to match(/127.0.0.1/)
       expect(c.client_properties.product).to eq("Bunny")
-    end
-  end
-
-  unless ENV["CI"]
-    describe "DELETE /api/connections/:name" do
-      it "closes the connection" do
-        pending "Needs investigation, DELETE does not seem to close the connection"
-        xs = subject.list_connections
-        c  = subject.close_connection(xs.first.name)
-
-        expect(c.name).to match(/127.0.0.1/)
-        expect(c.client_properties.product).to eq("Bunny")
-
-        expect(@conn).to_not be_open
-      end
     end
   end
 
@@ -225,6 +224,7 @@ describe RabbitMQ::HTTP::Client do
     it "returns a list of all active channels" do
       conn = Bunny.new; conn.start
       ch   = conn.create_channel
+      await_event_propagation
       xs   = subject.list_channels
       f    = xs.first
 
@@ -241,6 +241,7 @@ describe RabbitMQ::HTTP::Client do
       conn = Bunny.new; conn.start
       ch   = conn.create_channel
 
+      await_event_propagation
       xs   = subject.list_channels
       c    = subject.channel_info(xs.first.name)
 
@@ -581,6 +582,7 @@ describe RabbitMQ::HTTP::Client do
 
   describe "GET /api/bindings" do
     it "returns a list of all bindings" do
+      await_event_propagation
       xs = subject.list_bindings
       b  = xs.first
 
@@ -594,6 +596,7 @@ describe RabbitMQ::HTTP::Client do
 
   describe "GET /api/bindings/:vhost" do
     it "returns a list of all bindings in a vhost" do
+      await_event_propagation
       xs = subject.list_bindings("/")
       b  = xs.first
 
