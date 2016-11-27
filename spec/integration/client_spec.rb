@@ -582,7 +582,17 @@ describe RabbitMQ::HTTP::Client do
   end
 
   describe "GET /api/bindings" do
+    before :each do
+      @channel    = @conn.create_channel
+    end
+    after :each do
+      @channel.close
+    end
+
     it "returns a list of all bindings" do
+      q   = @channel.queue("")
+      x   = @channel.fanout("amq.fanout", durable: true, auto_delete: false)
+      q.bind(x)
       await_event_propagation
       xs = subject.list_bindings
       b  = xs.first
@@ -592,11 +602,23 @@ describe RabbitMQ::HTTP::Client do
       expect(b.source).to_not be_nil
       expect(b.routing_key).to_not be_nil
       expect(b.vhost).to_not be_nil
+
+      q.delete
     end
   end
 
   describe "GET /api/bindings/:vhost" do
+    before :each do
+      @channel    = @conn.create_channel
+    end
+    after :each do
+      @channel.close
+    end
+
     it "returns a list of all bindings in a vhost" do
+      q   = @channel.queue("")
+      x   = @channel.fanout("amq.fanout", durable: true, auto_delete: false)
+      q.bind(x)
       await_event_propagation
       xs = subject.list_bindings("/")
       b  = xs.first
@@ -606,6 +628,8 @@ describe RabbitMQ::HTTP::Client do
       expect(b.source).to_not be_nil
       expect(b.routing_key).to_not be_nil
       expect(b.vhost).to_not be_nil
+
+      q.delete
     end
   end
 
@@ -613,11 +637,16 @@ describe RabbitMQ::HTTP::Client do
     before :each do
       @channel    = @conn.create_channel
     end
+    after :each do
+      @channel.close
+    end
 
     it "returns a list of all bindings between an exchange and a queue" do
       q = @channel.queue("")
       x = @channel.fanout("http.client.fanout")
       q.bind(x)
+
+      await_event_propagation
 
       xs = subject.list_bindings_between_queue_and_exchange("/", q.name, x.name)
       b  = xs.first
@@ -965,7 +994,7 @@ describe RabbitMQ::HTTP::Client do
 
   describe "PUT /api/permissions/:vhost/:user" do
     it "updates permissions of a user in a vhost" do
-      subject.update_permissions_of("/", "guest", :write => ".*", :read => ".*", :configure => ".*")
+      subject.update_permissions_of("/", "guest", {write: ".*", read: ".*", configure: ".*"})
 
       p = subject.list_permissions_of("/", "guest")
 
@@ -977,14 +1006,13 @@ describe RabbitMQ::HTTP::Client do
 
   describe "DELETE /api/permissions/:vhost/:user" do
     it "clears permissions of a user in a vhost" do
-      pending
-      subject.create_user("/", "alt3")
-      subject.update_permissions_of("/", "alt3", :write => ".*", :read => ".*", :configure => ".*")
+      subject.create_user("alt3", {password: "s3cRE7"})
+      subject.update_permissions_of("/", "alt3", {write: ".*", read: ".*", configure: ".*"}).inspect
       subject.clear_permissions_of("/", "alt3")
 
-      p = subject.list_permissions_of("/", "alt3")
-
-      puts p.inspect
+      expect do
+        subject.list_permissions_of("/", "alt3")
+      end.to raise_error(Faraday::Error::ResourceNotFound)
     end
   end
 
