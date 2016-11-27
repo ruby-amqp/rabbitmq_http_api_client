@@ -326,7 +326,7 @@ describe RabbitMQ::HTTP::Client do
     end
 
     # HTTP client tries to uncompress an empty response :( MK
-    xit "doesn't delete used exchange" do
+    it "doesn't delete used exchange" do
       q = @channel.queue("")
       e = @channel.fanout(exchange_name, durable: false)
       q.bind(e)
