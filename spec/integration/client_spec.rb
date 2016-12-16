@@ -143,11 +143,12 @@ describe RabbitMQ::HTTP::Client do
       await_event_propagation
       xs = subject.list_definitions
 
-      expect(xs.bindings).to be_instance_of(Hashie::Array)
-      expect(xs.queues).to be_instance_of(Hashie::Array)
-      expect(xs.exchanges).to be_instance_of(Hashie::Array)
-      expect(xs.users).to be_instance_of(Hashie::Array)
-      expect(xs.vhosts).to be_instance_of(Hashie::Array)
+      expect(xs.bindings).not_to be_nil
+      expect(xs.queues).not_to be_nil
+
+      expect(xs.exchanges).not_to be_empty
+      expect(xs.users).not_to be_empty
+      expect(xs.vhosts).not_to be_empty
     end
   end
 
