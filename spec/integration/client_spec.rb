@@ -100,6 +100,7 @@ describe RabbitMQ::HTTP::Client do
 
   describe "GET /api/nodes" do
     it "lists cluster nodes with detailed status information for each one of them" do
+      await_event_propagation
       nodes  = subject.list_nodes
       n      = nodes.first
 
@@ -112,6 +113,7 @@ describe RabbitMQ::HTTP::Client do
 
   describe "GET /api/node/:name" do
     it "returns status information for a single cluster node" do
+      await_event_propagation
       ns = subject.list_nodes
       n  = subject.node_info(ns.first.name)
 
@@ -128,6 +130,7 @@ describe RabbitMQ::HTTP::Client do
 
   describe "GET /api/extensions" do
     it "returns a list of enabled management plugin extensions" do
+      await_event_propagation
       xs = subject.list_extensions
 
       expect(xs).to be_kind_of(Array)
