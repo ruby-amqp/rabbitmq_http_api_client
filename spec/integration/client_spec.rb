@@ -104,9 +104,6 @@ describe RabbitMQ::HTTP::Client do
       nodes  = subject.list_nodes
       n      = nodes.first
 
-      rabbit = n.applications.detect { |app| app.name == "rabbit" }
-      expect(rabbit.description).to eq("RabbitMQ")
-
       expect(n.name).to match(/^rabbit/)
     end
   end
@@ -116,9 +113,6 @@ describe RabbitMQ::HTTP::Client do
       await_event_propagation
       ns = subject.list_nodes
       n  = subject.node_info(ns.first.name)
-
-      rabbit = n.applications.detect { |app| app.name == "rabbit" }
-      expect(rabbit.description).to eq("RabbitMQ")
 
       expect(n.name).to match(/^rabbit/)
     end
