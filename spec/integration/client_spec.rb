@@ -140,13 +140,14 @@ describe RabbitMQ::HTTP::Client do
 
   describe "GET /api/definitions" do
     it "returns a list of all resources/definitions (vhosts, users, permissions, queues, exchanges, bindings, etc)" do
+      await_event_propagation
       xs = subject.list_definitions
 
-      expect(xs.bindings).to be_instance_of(Array)
-      expect(xs.queues).to be_instance_of(Array)
-      expect(xs.exchanges).to be_instance_of(Array)
-      expect(xs.users).to be_instance_of(Array)
-      expect(xs.vhosts).to be_instance_of(Array)
+      expect(xs.bindings).to be_instance_of(Hashie::Array)
+      expect(xs.queues).to be_instance_of(Hashie::Array)
+      expect(xs.exchanges).to be_instance_of(Hashie::Array)
+      expect(xs.users).to be_instance_of(Hashie::Array)
+      expect(xs.vhosts).to be_instance_of(Hashie::Array)
     end
   end
 
