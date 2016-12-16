@@ -145,10 +145,9 @@ describe RabbitMQ::HTTP::Client do
 
       expect(xs.bindings).not_to be_nil
       expect(xs.queues).not_to be_nil
-
-      expect(xs.exchanges).not_to be_empty
-      expect(xs.users).not_to be_empty
-      expect(xs.vhosts).not_to be_empty
+      expect(xs.exchanges).not_to be_nil
+      expect(xs.users).not_to be_nil
+      expect(xs.vhosts).not_to be_nil
     end
   end
 
