@@ -878,7 +878,7 @@ describe RabbitMQ::HTTP::Client do
       end
     end
 
-    1000.times do
+    200.times do
       vhost = gen.string
 
       context "when vhost name is #{vhost}" do
