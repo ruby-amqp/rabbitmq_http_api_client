@@ -923,18 +923,18 @@ describe RabbitMQ::HTTP::Client do
   describe "PUT /api/users/:name" do
     context "with tags provided explicitly" do
       it "updates information about a user" do
-        subject.update_user("alt", :tags => "http, policymaker, management", :password => "alt")
+        subject.update_user("alt-user", tags: "http, policymaker, management", password: "alt-user")
 
-        u = subject.user_info("alt")
+        u = subject.user_info("alt-user")
         expect(u.tags).to eq("http,policymaker,management")
       end
     end
 
     context "without tags provided" do
       it "uses blank tag list" do
-        subject.update_user("alt", :password => "alt")
+        subject.update_user("alt-user", password: "alt-user")
 
-        u = subject.user_info("alt")
+        u = subject.user_info("alt-user")
         expect(u.tags).to eq("")
       end
     end
@@ -942,8 +942,8 @@ describe RabbitMQ::HTTP::Client do
 
   describe "DELETE /api/users/:name" do
     it "deletes a user" do
-      subject.update_user("alt2", :tags => "http", :password => "alt")
-      subject.delete_user("alt2")
+      subject.update_user("alt2-user", tags: "http", password: "alt2-user")
+      subject.delete_user("alt2-user")
     end
   end
 
