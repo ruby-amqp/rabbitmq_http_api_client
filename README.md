@@ -18,7 +18,7 @@ and will support more HTTP API features in the future
 
 ## Supported Ruby Versions
 
- * CRuby 2.0 through 2.3.x
+ * CRuby 2.0 through 2.4.x
  * JRuby 9K
  
 ## Supported RabbitMQ Versions
@@ -350,6 +350,10 @@ ps = client.clear_permissions_of("/", "guest")
 
 The test suite assumes that RabbitMQ is running locally with stock settings
 and rabbitmq-management plugin enabled.
+
+## Continuous Integration
+
+[![Build Status](https://travis-ci.org/ruby-amqp/rabbitmq_http_api_client.svg?branch=master)](https://travis-ci.org/ruby-amqp/rabbitmq_http_api_client)
 
 
 ## Contributing
