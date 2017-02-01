@@ -4,9 +4,6 @@ require "faraday_middleware"
 require "multi_json"
 require "uri"
 
-# for URI encoding
-require "cgi"
-
 module RabbitMQ
   module HTTP
     class Client
@@ -419,7 +416,8 @@ module RabbitMQ
       end
 
       def uri_encode(s)
-        CGI.escape(s)
+        # correctly escapes spaces, unlike CGI.escape, see ruby-amqp/rabbitmq_http_api_client#28
+        URI.escape(s, Regexp.new("[^#{URI::PATTERN::UNRESERVED}]"))
       end
 
       def decode_resource(response)
