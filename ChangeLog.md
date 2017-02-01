@@ -1,3 +1,14 @@
+## Changes Between 1.7.0 and 1.8.0
+
+### Correct URI Path Segment Encoding
+
+URI path segment encoding (e.g. vhosts, queue names, etc)
+in this client now correctly encodes spaces.
+
+GitHub issue: [#28](https://github.com/ruby-amqp/rabbitmq_http_api_client/issues/28).
+
+
+
 ## Changes Between 1.6.0 and 1.7.0
 
 ### Blank Tags by Default
