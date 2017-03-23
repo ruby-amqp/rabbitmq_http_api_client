@@ -404,6 +404,7 @@ module RabbitMQ
         user     = uri.user     || options.delete(:username) || "guest"
         password = uri.password || options.delete(:password) || "guest"
         options = options.merge(:url => uri.to_s)
+        adapter = options.delete(:adapter) || Faraday.default_adapter
 
         @connection = Faraday.new(options) do |conn|
           conn.basic_auth user, password
@@ -411,7 +412,7 @@ module RabbitMQ
           conn.use        Faraday::Response::RaiseError
           conn.response   :json, :content_type => /\bjson$/
 
-          conn.adapter    options.fetch(:adapter, Faraday.default_adapter)
+          conn.adapter    adapter
         end
       end
 
