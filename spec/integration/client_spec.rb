@@ -1046,4 +1046,17 @@ describe RabbitMQ::HTTP::Client do
       expect(r).to eq(true)
     end
   end
+
+  #
+  # Accept Faraday adapter options
+  #
+  describe "connection accepts different faraday adapters" do
+    it "accepts explicit adapter" do
+      c = described_class.connect("http://guest:guest@127.0.0.1:15672/api",
+                                  adapter: :net_http)
+      r = c.overview
+      expect(r.rabbitmq_version).to_not be_nil
+      expect(r.erlang_version).to_not be_nil
+    end
+  end
 end
