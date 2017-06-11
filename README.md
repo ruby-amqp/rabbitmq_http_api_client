@@ -31,15 +31,17 @@ All versions require [RabbitMQ Management UI plugin](http://www.rabbitmq.com/man
 
 Add this line to your application's Gemfile:
 
-    gem 'rabbitmq_http_api_client', '>= 1.8.0'
+``` ruby
+gem 'rabbitmq_http_api_client', '>= 1.8.0'
+```
 
 And then execute:
 
-    $ bundle install
+    bundle install
 
 Or install it yourself as:
 
-    $ gem install rabbitmq_http_api_client
+    gem install rabbitmq_http_api_client
 
 ## Usage
 
