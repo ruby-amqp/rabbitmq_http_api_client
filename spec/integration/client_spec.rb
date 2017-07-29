@@ -890,6 +890,23 @@ describe RabbitMQ::HTTP::Client do
       subject.create_vhost(vhost)
       subject.delete_vhost(vhost)
     end
+
+    gen = Rantly.new
+    200.times do
+      vhost = gen.string
+
+      context "when vhost #{vhost} is deleted immediately after being created" do
+        it "creates a vhost" do
+          subject.create_vhost(vhost)
+          subject.create_vhost(vhost)
+
+          v = subject.vhost_info(vhost)
+          expect(v.name).to eq(vhost)
+
+          subject.delete_vhost(v.name)
+        end
+      end
+    end
   end
 
   describe "GET /api/vhosts/:name/permissions" do
