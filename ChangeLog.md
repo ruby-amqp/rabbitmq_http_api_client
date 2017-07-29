@@ -1,3 +1,13 @@
+## Changes Between 1.8.0 and 1.9.0
+
+### Make it Possible to Pass Faraday Adapter as Option
+
+GitHub issue: [#30](https://github.com/ruby-amqp/rabbitmq_http_api_client/issues/30)
+
+Contributed by Mrinmoy Das
+
+
+
 ## Changes Between 1.7.0 and 1.8.0
 
 ### Correct URI Path Segment Encoding
