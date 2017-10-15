@@ -7,7 +7,7 @@ Gem::Specification.new do |gem|
   gem.name          = "rabbitmq_http_api_client"
   gem.version       = RabbitMQ::HTTP::Client::VERSION
   gem.authors       = ["Michael Klishin"]
-  gem.email         = ["michael@defprotocol.org"]
+  gem.email         = ["michael@clojurewerkz.org"]
   gem.description   = %q{RabbitMQ HTTP API client for Ruby}
   gem.summary       = %q{RabbitMQ HTTP API client for Ruby}
   gem.homepage      = "http://github.com/ruby-amqp/rabbitmq_http_api_client"
