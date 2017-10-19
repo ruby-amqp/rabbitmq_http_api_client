@@ -3,6 +3,11 @@
 No changes yet.
 
 
+## Changes Between 1.9.0 and 1.9.1 (Oct 19th, 2017)
+
+Spec files and development/CI scripts are no longer included into the gem.
+
+
 ## Changes Between 1.8.0 and 1.9.0 (July 30th, 2017)
 
 ### Make it Possible to Pass Faraday Adapter as Option
