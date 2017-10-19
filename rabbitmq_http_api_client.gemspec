@@ -13,7 +13,7 @@ Gem::Specification.new do |gem|
   gem.homepage      = "http://github.com/ruby-amqp/rabbitmq_http_api_client"
   gem.licenses      = ["MIT", "Mozilla Public License"]
 
-  gem.files         = `git ls-files`.split($/)
+  gem.files         = Dir["ChangeLog.md", "LICENSE.txt", "README.md", "lib/**/*"]
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.require_paths = ["lib"]
