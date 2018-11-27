@@ -1,6 +1,6 @@
 #!/bin/sh
 
-${RUBY_RABBITMQ_HTTP_API_CLIENT_RABBITMQCTL:="sudo rabbitmqctl"}
+$RUBY_RABBITMQ_HTTP_API_CLIENT_RABBITMQCTL:="sudo rabbitmqctl"
 
 # guest:guest has full access to /
 
