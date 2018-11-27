@@ -1,6 +1,13 @@
-## Changes Between 1.9.0 and 1.10.0 (unreleased)
+## Changes Between 1.9.0 and 1.10.0 (Nov 27th, 2018)
 
-No changes yet.
+### Improved Resource Deserialisation
+
+Bodies of responses with content length of 0 will no longer
+be deserialised.
+
+This improves compatibility with future versions of RabbitMQ
+that will use Cowboy 2.7.0 or later, which doesn't include
+the content-type header for blank responses (e.g. PUTs).
 
 
 ## Changes Between 1.9.0 and 1.9.1 (Oct 19th, 2017)
