@@ -422,7 +422,11 @@ module RabbitMQ
       end
 
       def decode_resource(response)
-        Hashie::Mash.new(response.body)
+        if response.body.instance_of? String then
+          Hashie::Mash.new Hash.new
+        else
+          Hashie::Mash.new(response.body)
+        end
       end
 
       def decode_resource_collection(response)
