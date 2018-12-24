@@ -22,5 +22,4 @@ Gem::Specification.new do |gem|
   gem.add_dependency    "multi_json",         "~> 1.12"
   gem.add_dependency    "faraday",            "~> 0.13.0"
   gem.add_dependency    "faraday_middleware", "~> 0.12.0"
-  gem.add_dependency    "effin_utf8",         "~> 1.0.0"
 end
