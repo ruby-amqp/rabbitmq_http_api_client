@@ -1,6 +1,16 @@
-## Changes Between 1.10.0 and 1.11.0 (unreleased)
+## Changes Between 1.11.0 and 1.12.0 (unreleased)
 
 No changes yet.
+
+
+## Changes Between 1.10.0 and 1.11.0 (Dec 25th, 2018)
+
+### effin_utf8 Dependency Dropped
+
+This library no longer supports Ruby 1.8 and thus
+doesn't need to depend on the `effin_utf8` gem.
+
+Contributed by Luciano Sousa.
 
 
 ## Changes Between 1.9.0 and 1.10.0 (Nov 27th, 2018)
