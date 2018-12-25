@@ -32,7 +32,7 @@ All versions require [RabbitMQ Management UI plugin](http://www.rabbitmq.com/man
 Add this line to your application's Gemfile:
 
 ``` ruby
-gem 'rabbitmq_http_api_client', '>= 1.9.1'
+gem 'rabbitmq_http_api_client', '>= 1.11.0'
 ```
 
 And then execute:
@@ -59,7 +59,7 @@ Use `RabbitMQ::HTTP::Client#connect` to specify RabbitMQ HTTP API endpoint (e.g.
 require "rabbitmq/http/client"
 
 endpoint = "http://127.0.0.1:15672"
-client = RabbitMQ::HTTP::Client.new(endpoint, :username => "guest", :password => "guest")
+client = RabbitMQ::HTTP::Client.new(endpoint, username: "guest", password: "guest")
 ```
 
 Alternatively, credentials can be specified in the endpoint URI:
