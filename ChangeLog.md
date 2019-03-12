@@ -1,6 +1,15 @@
-## Changes Between 1.11.0 and 1.12.0 (unreleased)
+## Changes Between 1.12.0 and 1.13.0 (unreleased)
 
 No changes yet.
+
+
+## Changes Between 1.11.0 and 1.12.0 (March 12th, 2019)
+
+### Dependency Updates
+
+GitHub issue: [#38](https://github.com/ruby-amqp/rabbitmq_http_api_client/pull/38)
+
+Contributed by Jon Homan.
 
 
 ## Changes Between 1.10.0 and 1.11.0 (Dec 25th, 2018)
