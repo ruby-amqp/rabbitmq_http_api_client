@@ -20,7 +20,7 @@ and will support more HTTP API features in the future
 
  * CRuby 2.0 through 2.4.x
  * JRuby 9K
- 
+
 ## Supported RabbitMQ Versions
 
  * RabbitMQ 3.x
@@ -32,7 +32,7 @@ All versions require [RabbitMQ Management UI plugin](http://www.rabbitmq.com/man
 Add this line to your application's Gemfile:
 
 ``` ruby
-gem 'rabbitmq_http_api_client', '>= 1.11.0'
+gem 'rabbitmq_http_api_client', '>= 1.12.0'
 ```
 
 And then execute:
@@ -127,7 +127,7 @@ puts n.proc_used
 puts n.fd_total
 
 # Get Management Plugin extension list
-xs    = client.list_extensions 
+xs    = client.list_extensions
 
 # List all the entities (vhosts, queues, exchanges, bindings, users, etc)
 defs  = client.list_definitions
@@ -371,5 +371,4 @@ and rabbitmq-management plugin enabled.
 
 Double-licensed under the MIT and Mozilla Public License (same as RabbitMQ).
 
-(c) Michael S. Klishin, 2012-2017.
-
+(c) Michael S. Klishin, 2012-2019.
