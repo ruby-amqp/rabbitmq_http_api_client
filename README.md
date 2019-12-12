@@ -259,7 +259,7 @@ puts b.vhost
 # List all bindings in a vhost
 bs = client.list_bindings("/")
 
-# List all binsings between an exchange and a queue
+# List all bindings between an exchange and a queue
 bs = client.list_bindings_between_queue_and_exchange("/", "collector1.megacorp.local", "log.events")
 ```
 
