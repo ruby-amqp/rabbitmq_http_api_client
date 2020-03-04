@@ -57,16 +57,16 @@ module RabbitMQ
           reduce(Hash.new) { |acc, lnr| acc[lnr.protocol] = lnr.port; acc }
       end
 
-      def list_nodes
-        decode_resource_collection(@connection.get("nodes"))
+      def list_nodes(query = {})
+        decode_resource_collection(@connection.get("nodes", query))
       end
 
       def node_info(name)
         decode_resource(@connection.get("nodes/#{uri_encode(name)}"))
       end
 
-      def list_extensions
-        decode_resource_collection(@connection.get("extensions"))
+      def list_extensions(query = {})
+        decode_resource_collection(@connection.get("extensions", query))
       end
 
       def list_definitions
@@ -81,8 +81,8 @@ module RabbitMQ
         response.success?
       end
 
-      def list_connections
-        decode_resource_collection(@connection.get("connections"))
+      def list_connections(query = {})
+        decode_resource_collection(@connection.get("connections", query))
       end
 
       def connection_info(name)
@@ -93,22 +93,22 @@ module RabbitMQ
         decode_resource(@connection.delete("connections/#{uri_encode(name)}"))
       end
 
-      def list_channels
-        decode_resource_collection(@connection.get("channels"))
+      def list_channels(query = {})
+        decode_resource_collection(@connection.get("channels", query))
       end
 
       def channel_info(name)
         decode_resource(@connection.get("channels/#{uri_encode(name)}"))
       end
 
-      def list_exchanges(vhost = nil)
+      def list_exchanges(vhost = nil, query = {})
         path = if vhost.nil?
                  "exchanges"
                else
                  "exchanges/#{uri_encode(vhost)}"
                end
 
-        decode_resource_collection(@connection.get(path))
+        decode_resource_collection(@connection.get(path, query))
       end
 
       def declare_exchange(vhost, name, attributes = {})
@@ -137,22 +137,22 @@ module RabbitMQ
         decode_resource(@connection.get("exchanges/#{uri_encode(vhost)}/#{uri_encode(name)}"))
       end
 
-      def list_bindings_by_source(vhost, exchange)
-        decode_resource_collection(@connection.get("exchanges/#{uri_encode(vhost)}/#{uri_encode(exchange)}/bindings/source"))
+      def list_bindings_by_source(vhost, exchange, query = {})
+        decode_resource_collection(@connection.get("exchanges/#{uri_encode(vhost)}/#{uri_encode(exchange)}/bindings/source", query))
       end
 
-      def list_bindings_by_destination(vhost, exchange)
-        decode_resource_collection(@connection.get("exchanges/#{uri_encode(vhost)}/#{uri_encode(exchange)}/bindings/destination"))
+      def list_bindings_by_destination(vhost, exchange, query = {})
+        decode_resource_collection(@connection.get("exchanges/#{uri_encode(vhost)}/#{uri_encode(exchange)}/bindings/destination", query))
       end
 
-      def list_queues(vhost = nil)
+      def list_queues(vhost = nil, query = {})
         path = if vhost.nil?
                  "queues"
                else
                  "queues/#{uri_encode(vhost)}"
                end
 
-        decode_resource_collection(@connection.get(path))
+        decode_resource_collection(@connection.get(path, query))
       end
 
       def queue_info(vhost, name)
@@ -171,8 +171,8 @@ module RabbitMQ
         decode_resource(@connection.delete("queues/#{uri_encode(vhost)}/#{uri_encode(name)}"))
       end
 
-      def list_queue_bindings(vhost, queue)
-        decode_resource_collection(@connection.get("queues/#{uri_encode(vhost)}/#{uri_encode(queue)}/bindings"))
+      def list_queue_bindings(vhost, queue, query = {})
+        decode_resource_collection(@connection.get("queues/#{uri_encode(vhost)}/#{uri_encode(queue)}/bindings", query))
       end
 
       def purge_queue(vhost, name)
@@ -188,18 +188,18 @@ module RabbitMQ
         decode_resource_collection(response)
       end
 
-      def list_bindings(vhost = nil)
+      def list_bindings(vhost = nil, query = {})
         path = if vhost.nil?
                  "bindings"
                else
                  "bindings/#{uri_encode(vhost)}"
                end
 
-        decode_resource_collection(@connection.get(path))
+        decode_resource_collection(@connection.get(path, query))
       end
 
-      def list_bindings_between_queue_and_exchange(vhost, queue, exchange)
-        decode_resource_collection(@connection.get("bindings/#{uri_encode(vhost)}/e/#{uri_encode(exchange)}/q/#{uri_encode(queue)}"))
+      def list_bindings_between_queue_and_exchange(vhost, queue, exchange, query = {})
+        decode_resource_collection(@connection.get("bindings/#{uri_encode(vhost)}/e/#{uri_encode(exchange)}/q/#{uri_encode(queue)}", query))
       end
 
       def queue_binding_info(vhost, queue, exchange, properties_key)
@@ -219,8 +219,8 @@ module RabbitMQ
         resp.success?
       end
 
-      def list_bindings_between_exchanges(vhost, destination_exchange, source_exchange)
-        decode_resource_collection(@connection.get("bindings/#{uri_encode(vhost)}/e/#{uri_encode(source_exchange)}/e/#{uri_encode(destination_exchange)}"))
+      def list_bindings_between_exchanges(vhost, destination_exchange, source_exchange, query = {})
+        decode_resource_collection(@connection.get("bindings/#{uri_encode(vhost)}/e/#{uri_encode(source_exchange)}/e/#{uri_encode(destination_exchange)}", query))
       end
 
       def exchange_binding_info(vhost, destination_exchange, source_exchange, properties_key)
@@ -242,8 +242,8 @@ module RabbitMQ
       end
 
 
-      def list_vhosts
-        decode_resource_collection(@connection.get("vhosts"))
+      def list_vhosts(query = {})
+        decode_resource_collection(@connection.get("vhosts", query))
       end
 
       def vhost_info(name)
@@ -263,14 +263,14 @@ module RabbitMQ
 
 
 
-      def list_permissions(vhost = nil)
+      def list_permissions(vhost = nil, query = {})
         path = if vhost
                  "vhosts/#{uri_encode(vhost)}/permissions"
                else
                  "permissions"
                end
 
-        decode_resource_collection(@connection.get(path))
+        decode_resource_collection(@connection.get(path, query))
       end
 
       def list_permissions_of(vhost, user)
@@ -291,8 +291,8 @@ module RabbitMQ
 
 
 
-      def list_users
-        decode_resource_collection(@connection.get("users"))
+      def list_users(query = {})
+        decode_resource_collection(@connection.get("users", query))
       end
 
       def user_info(name)
@@ -314,8 +314,8 @@ module RabbitMQ
         decode_resource(@connection.delete("users/#{uri_encode(name)}"))
       end
 
-      def user_permissions(name)
-        decode_resource_collection(@connection.get("users/#{uri_encode(name)}/permissions"))
+      def user_permissions(name, query = {})
+        decode_resource_collection(@connection.get("users/#{uri_encode(name)}/permissions", query))
       end
 
       def whoami
@@ -324,23 +324,23 @@ module RabbitMQ
 
 
 
-      def list_policies(vhost = nil)
+      def list_policies(vhost = nil, query = {})
         path = if vhost
                  "policies/#{uri_encode(vhost)}"
                else
                  "policies"
                end
 
-        decode_resource_collection(@connection.get(path))
+        decode_resource_collection(@connection.get(path, query))
       end
 
-      def list_policies_of(vhost, name = nil)
+      def list_policies_of(vhost, name = nil, query = {})
         path = if name
                  "policies/#{uri_encode(vhost)}/#{uri_encode(name)}"
                else
                  "policies/#{uri_encode(vhost)}"
                end
-        decode_resource_collection(@connection.get(path))
+        decode_resource_collection(@connection.get(path, query))
       end
 
       def update_policies_of(vhost, name, attributes)
@@ -358,22 +358,22 @@ module RabbitMQ
 
 
 
-      def list_parameters(component = nil)
+      def list_parameters(component = nil, query = {})
         path = if component
                  "parameters/#{uri_encode(component)}"
                else
                  "parameters"
                end
-        decode_resource_collection(@connection.get(path))
+        decode_resource_collection(@connection.get(path, query))
       end
 
-      def list_parameters_of(component, vhost, name = nil)
+      def list_parameters_of(component, vhost, name = nil, query = {})
         path = if name
                  "parameters/#{uri_encode(component)}/#{uri_encode(vhost)}/#{uri_encode(name)}"
                else
                  "parameters/#{uri_encode(component)}/#{uri_encode(vhost)}"
                end
-        decode_resource_collection(@connection.get(path))
+        decode_resource_collection(@connection.get(path, query))
       end
 
       def update_parameters_of(component, vhost, name, attributes)
@@ -436,7 +436,9 @@ module RabbitMQ
       end
 
       def decode_resource_collection(response)
-        response.body.map { |i| Hashie::Mash.new(i) }
+        collection = response.body.is_a?(Array) ? response.body : response.body.fetch('items')
+
+        collection.map { |i| Hashie::Mash.new(i) }
       end
     end # Client
   end # HTTP

@@ -399,13 +399,30 @@ describe RabbitMQ::HTTP::Client do
       @channel.close
     end
 
-    it "returns a list of all queues" do
-      q  = @channel.queue("", durable: false)
+    context "when no params given" do
+      it "returns a list of all queues" do
+        q1 = @channel.queue("", durable: false)
+        q2 = @channel.queue("", durable: false)
 
-      xs = subject.list_queues
-      expect(xs.detect { |x| x.name == q.name }).to_not be_empty
+        xs = subject.list_queues
+        expect(xs.select { |x| [q1.name, q2.name].include?(x.name) }.count).to eq 2
 
-      subject.delete_queue("/", q.name)
+        subject.delete_queue("/", q1.name)
+        subject.delete_queue("/", q2.name)
+      end
+    end
+
+    context "when pagination params given" do
+      it "returns a paginated list of queues" do
+        q1 = @channel.queue("", durable: false)
+        q2 = @channel.queue("", durable: false)
+
+        xs = subject.list_queues(nil, page: 1, page_size: 1)
+        expect(xs.count).to eq 1
+
+        subject.delete_queue("/", q1.name)
+        subject.delete_queue("/", q2.name)
+      end
     end
   end
 
