@@ -1,6 +1,20 @@
-## Changes Between 1.12.0 and 1.13.0 (unreleased)
+## Changes Between 1.12.0 and 1.13.0 (March 5th, 2020)
 
 No changes yet.
+
+## Changes Between 1.12.0 and 1.13.0 (March 5th, 2020)
+
+### Pagination Support
+
+GitHub issue: [#43](https://github.com/ruby-amqp/rabbitmq_http_api_client/pull/43)
+
+Contributed by Rustam Sharshenov.
+
+### Dependency Updates
+
+GitHub issue: [#42](https://github.com/ruby-amqp/rabbitmq_http_api_client/pull/42)
+
+Contributed by @hatch-carl.
 
 
 ## Changes Between 1.11.0 and 1.12.0 (March 12th, 2019)
