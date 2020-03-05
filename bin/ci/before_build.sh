@@ -1,7 +1,5 @@
 #!/bin/sh
 
-#!/bin/sh
-
 CTL=${RUBY_RABBITMQ_HTTP_API_CLIENT_RABBITMQCTL:-"sudo rabbitmqctl"}
 PLUGINS=${RUBY_RABBITMQ_HTTP_API_CLIENT_RABBITMQ_PLUGINS:-"sudo rabbitmq-plugins"}
 
