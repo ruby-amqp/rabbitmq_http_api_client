@@ -18,7 +18,7 @@ and will support more HTTP API features in the future
 
 ## Supported Ruby Versions
 
- * CRuby 2.0 through 2.4.x
+ * CRuby 2.2 through 2.7.x
  * JRuby 9K
 
 ## Supported RabbitMQ Versions
@@ -32,7 +32,7 @@ All versions require [RabbitMQ Management UI plugin](http://www.rabbitmq.com/man
 Add this line to your application's Gemfile:
 
 ``` ruby
-gem 'rabbitmq_http_api_client', '>= 1.12.0'
+gem 'rabbitmq_http_api_client', '>= 1.13.0'
 ```
 
 And then execute:
