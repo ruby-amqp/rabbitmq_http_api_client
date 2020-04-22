@@ -418,8 +418,6 @@ module RabbitMQ
       end
 
       def encode_uri_path_segment(segment)
-        
-        segment_with_escaped_slashes = segment
         # Correctly escapes spaces, see ruby-amqp/rabbitmq_http_api_client#28.
         #
         # Note that slashes also must be escaped since this is a single URI path segment,
