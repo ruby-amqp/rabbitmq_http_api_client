@@ -1,5 +1,10 @@
 ## Changes Between 1.12.0 and 1.13.0 (unreleased)
 
+### URI.escape is No Longer Used
+
+Deprecated `URI.escape` has been replaced with `Addressable::URI.escape_component`.
+This introduces `addressable` as a new dependency.
+
 ### Dependency Bump
 
 Note: Faraday will now raise a `Faraday::ResourceNotFound` instead of `Faraday::Error::ResourceNotFound`.
