@@ -474,7 +474,7 @@ describe RabbitMQ::HTTP::Client do
       it "raises NotFound" do
         expect do
           subject.queue_info("/", Time.now.to_i.to_s)
-        end.to raise_error(Faraday::Error::ResourceNotFound)
+        end.to raise_error(Faraday::ResourceNotFound)
       end
     end
   end
@@ -845,7 +845,7 @@ describe RabbitMQ::HTTP::Client do
       it "raises NotFound" do
         expect do
           subject.vhost_info(Time.now.to_i.to_s)
-        end.to raise_error(Faraday::Error::ResourceNotFound)
+        end.to raise_error(Faraday::ResourceNotFound)
       end
     end
 
@@ -1034,7 +1034,7 @@ describe RabbitMQ::HTTP::Client do
 
       expect do
         subject.list_permissions_of("/", "alt3")
-      end.to raise_error(Faraday::Error::ResourceNotFound)
+      end.to raise_error(Faraday::ResourceNotFound)
     end
   end
 

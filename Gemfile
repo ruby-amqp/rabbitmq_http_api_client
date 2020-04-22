@@ -1,9 +1,9 @@
 source 'https://rubygems.org'
 
 group :development, :test do
-  gem "rspec", "~> 3.8.0"
+  gem 'rspec', '~> 3.9'
   gem "json", :platform => :ruby_18
-  gem "bunny", "~> 2.14.2"
+  gem "bunny", "~> 2.15.0"
 
   gem "rantly"
 end
