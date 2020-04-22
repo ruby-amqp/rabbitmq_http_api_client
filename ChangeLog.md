@@ -288,7 +288,7 @@ it possible to access the URI a client instance uses.
 ### Meaningful Exceptions for 4xx and 5xx Responses
 
 `4xx` and `5xx` responses now will result in meaningful exceptions
-being raised. For example, `404` responses will raise `Faraday::ResourceNotFound`.
+being raised. For example, `404` responses will raise `Faraday::Error::ResourceNotFound`.
 
 
 ## Changes Between 0.2.0 and 0.3.0
