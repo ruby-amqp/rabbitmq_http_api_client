@@ -18,8 +18,8 @@ Gem::Specification.new do |gem|
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.require_paths = ["lib"]
 
-  gem.add_dependency    "hashie",             "~> 3.6"
-  gem.add_dependency    "multi_json",         "~> 1.13.1"
-  gem.add_dependency    "faraday",            [">= 0.15", "< 1"]
-  gem.add_dependency    "faraday_middleware", [">= 0.13.0", "< 1"]
+  gem.add_dependency    'hashie', '~> 4.1'
+  gem.add_dependency    'multi_json', '~> 1.14', '>= 1.14.1'
+  gem.add_dependency    'faraday', '~> 1.0', '>= 1.0.1'
+  gem.add_dependency    'faraday_middleware', '~> 1.0'
 end
