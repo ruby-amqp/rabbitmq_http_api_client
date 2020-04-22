@@ -1,6 +1,12 @@
-## Changes Between 1.12.0 and 1.13.0 (March 5th, 2020)
+## Changes Between 1.12.0 and 1.13.0 (unreleased)
 
-No changes yet.
+### Dependency Bump
+
+Note: Faraday will now raise a `Faraday::ResourceNotFound` instead of `Faraday::Error::ResourceNotFound`.
+
+GitHub issue: [#45](https://github.com/ruby-amqp/rabbitmq_http_api_client/pull/45)
+
+Contributed by Niels Jansen.
 
 ## Changes Between 1.12.0 and 1.13.0 (March 5th, 2020)
 
