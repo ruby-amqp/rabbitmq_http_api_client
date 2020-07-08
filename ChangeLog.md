@@ -1,8 +1,8 @@
-## Changes Between 1.13.0 and 1.14.0 (unreleased)
+## Changes Between 1.14.0 and 1.15.0 (unreleased)
 
 No changes yet.
 
-## Changes Between 1.12.0 and 1.13.0 (July 8th, 2020)
+## Changes Between 1.13.0 and 1.14.0 (July 8th, 2020)
 
 ### URI.escape is No Longer Used
 
