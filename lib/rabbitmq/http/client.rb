@@ -426,16 +426,10 @@ module RabbitMQ
       end
 
       def decode_resource(response)
-        case response.headers["content-length"]
-        when nil then Hashie::Mash.new
-        when 0   then Hashie::Mash.new
-        when "0" then Hashie::Mash.new
+        if response.body.empty?
+          Hashie::Mash.new
         else
-          if response.body.empty?
-            Hashie::Mash.new
-          else
-            Hashie::Mash.new(response.body)
-          end
+          Hashie::Mash.new(response.body)
         end
       end
 
