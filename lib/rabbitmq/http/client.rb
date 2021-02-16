@@ -114,10 +114,10 @@ module RabbitMQ
 
       def declare_exchange(vhost, name, attributes = {})
         opts = {
-          :type => "direct",
-          :auto_delete => false,
-          :durable => true,
-          :arguments => {}
+          type: "direct",
+          auto_delete: false,
+          durable: true,
+          arguments: {}
         }.merge(attributes)
 
         response = @connection.put("exchanges/#{encode_uri_path_segment(vhost)}/#{encode_uri_path_segment(name)}") do |req|
@@ -293,11 +293,22 @@ module RabbitMQ
 
 
       def list_users(query = {})
-        decode_resource_collection(@connection.get("users", query))
+        results = decode_resource_collection(@connection.get("users", query))
+
+        # HTTP API will return tags as an array starting with RabbitMQ 3.9
+        results.map do |u|
+          u.tags = u.tags.split(",") if u.tags.is_a?(String)
+          u
+        end
       end
 
       def user_info(name)
-        decode_resource(@connection.get("users/#{encode_uri_path_segment(name)}"))
+        result = decode_resource(@connection.get("users/#{encode_uri_path_segment(name)}"))
+
+        # HTTP API will return tags as an array starting with RabbitMQ 3.9
+        result.tags = result.tags.split(",") if result.tags.is_a?(String)
+
+        result
       end
 
       def update_user(name, attributes)
@@ -387,13 +398,6 @@ module RabbitMQ
 
       def clear_parameters_of(component, vhost, name)
         decode_resource(@connection.delete("parameters/#{encode_uri_path_segment(component)}/#{encode_uri_path_segment(vhost)}/#{encode_uri_path_segment(name)}"))
-      end
-
-
-
-      def aliveness_test(vhost)
-        r = @connection.get("aliveness-test/#{encode_uri_path_segment(vhost)}")
-        r.body["status"] == "ok"
       end
 
 

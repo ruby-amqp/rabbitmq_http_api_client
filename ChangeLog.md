@@ -1,6 +1,29 @@
-## Changes Between 1.15.0 and 1.16.0 (unreleased)
+## Changes Between 1.15.0 and 2.0.0 (unreleased)
 
-No changes yet.
+### Health Check Endpoint Changes
+
+`RabbitMQ::HTTP::Client#aliveness_test` has been removed. The endpoint has been deprecated
+in favor of [more focussed health check endpoints](https://www.rabbitmq.com/monitoring.html#health-checks):
+
+ * `GET  {hostname}:15672/api/health/checks/alarms`
+ * `GET  {hostname}:15672/api/health/checks/local-alarms`
+ * `GET  {hostname}:15672/api/health/checks/virtual-hosts`
+ * `GET  {hostname}:15672/api/health/checks/node-is-quorum-critical`
+ * `GET  {hostname}:15672/api/health/checks/node-is-mirror-sync-critical`
+ * `GET  {hostname}:15672/api/health/checks/port-listener/{port}`
+ * `GET  {hostname}:15672/api/health/checks/protocol-listener/{protocol}`
+ * `GET  {hostname}:15672/api/health/checks/certificate-expiration/{within}/{unit}`
+
+Support for those endpoints in `RabbitMQ::HTTP::Client` is TBD.
+### User Tags Type Change
+
+User tags returned by the `RabbitMQ::HTTP::Client#list_users` and `RabbitMQ::HTTP::Client#user_info`
+methods are now arrays of strings instead of comma-separated strings.
+
+Internally the method encodes both command-separated strings and JSON arrays in API responses
+to support response types from RabbitMQ 3.9 and earlier versions.
+
+See https://github.com/rabbitmq/rabbitmq-server/pull/2676 for details.
 
 ## Changes Between 1.14.0 and 1.15.0 (February 16th, 2021)
 ### Content Length Detection Changes
