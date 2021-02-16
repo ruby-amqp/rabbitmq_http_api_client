@@ -851,80 +851,7 @@ describe RabbitMQ::HTTP::Client do
 
   end
 
-  describe "PUT /api/vhosts/:name" do
-    gen = Rantly.new
 
-    [
-      "http-created",
-      "http_created",
-      "http created",
-      "создан по хатэтэпэ",
-      "creado a través de HTTP",
-      "通过http",
-      "HTTP를 통해 생성",
-      "HTTPを介して作成",
-      "created over http?",
-      "created @ http API",
-      "erstellt über http",
-      "http पर बनाया",
-      "ถูกสร้างขึ้นผ่าน HTTP",
-      "±!@^&#*"
-    ].each do |vhost|
-      context "when vhost name is #{vhost}" do
-        it "creates a vhost" do
-          subject.create_vhost(vhost)
-          subject.create_vhost(vhost)
-
-          v = subject.vhost_info(vhost)
-          expect(v.name).to eq(vhost)
-
-          subject.delete_vhost(v.name)
-        end
-      end
-    end
-
-    200.times do
-      vhost = gen.string
-
-      context "when vhost name is #{vhost}" do
-        it "creates a vhost" do
-          subject.create_vhost(vhost)
-          subject.create_vhost(vhost)
-
-          v = subject.vhost_info(vhost)
-          expect(v.name).to eq(vhost)
-
-          subject.delete_vhost(v.name)
-        end
-      end
-    end
-  end
-
-  describe "DELETE /api/vhosts/:name" do
-    let(:vhost) { "http-created2" }
-
-    it "deletes a vhost" do
-      subject.create_vhost(vhost)
-      subject.delete_vhost(vhost)
-    end
-
-    gen = Rantly.new
-    200.times do
-      vhost = gen.string
-
-      context "when vhost #{vhost} is deleted immediately after being created" do
-        it "creates a vhost" do
-          subject.create_vhost(vhost)
-          subject.create_vhost(vhost)
-
-          v = subject.vhost_info(vhost)
-          expect(v.name).to eq(vhost)
-
-          subject.delete_vhost(v.name)
-        end
-      end
-    end
-  end
 
   describe "GET /api/vhosts/:name/permissions" do
     it "returns a list of permissions in a vhost" do
@@ -950,7 +877,8 @@ describe RabbitMQ::HTTP::Client do
     it "returns information about a user" do
       u = subject.user_info("guest")
       expect(u.name).to eq("guest")
-      expect(u.tags).to eq("administrator")
+
+      expect(u.tags).to include("administrator")
     end
   end
 
@@ -960,7 +888,7 @@ describe RabbitMQ::HTTP::Client do
         subject.update_user("alt-user", tags: "http, policymaker, management", password: "alt-user")
 
         u = subject.user_info("alt-user")
-        expect(u.tags).to eq("http,policymaker,management")
+        expect(u.tags.sort).to eq(["http", "policymaker", "management"].sort)
       end
     end
 
@@ -969,7 +897,7 @@ describe RabbitMQ::HTTP::Client do
         subject.update_user("alt-user", password: "alt-user")
 
         u = subject.user_info("alt-user")
-        expect(u.tags).to eq("")
+        expect(u.tags).to eq([])
       end
     end
   end
@@ -1068,18 +996,6 @@ describe RabbitMQ::HTTP::Client do
     end
   end
 
-
-  #
-  # Aliveness Test
-  #
-
-  describe "GET /api/aliveness-test/:vhost" do
-    it "performs aliveness check" do
-      r = subject.aliveness_test("/")
-
-      expect(r).to eq(true)
-    end
-  end
 
   #
   # Accept Faraday adapter options
