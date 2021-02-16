@@ -1,6 +1,16 @@
-## Changes Between 1.14.0 and 1.15.0 (unreleased)
+## Changes Between 1.15.0 and 1.16.0 (unreleased)
 
 No changes yet.
+
+## Changes Between 1.14.0 and 1.15.0 (February 16th, 2021)
+### Content Length Detection Changes
+
+When deserialising response bodies, the client now uses actual body length instead of
+the value of the `content-length` header.
+
+Contributed by Ryan @rquant Quant.
+
+GitHub issue: [#49](https://github.com/ruby-amqp/rabbitmq_http_api_client/pull/49)
 
 ## Changes Between 1.13.0 and 1.14.0 (July 8th, 2020)
 
