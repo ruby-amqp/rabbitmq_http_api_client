@@ -11,7 +11,7 @@ Gem::Specification.new do |gem|
   gem.description   = %q{RabbitMQ HTTP API client for Ruby}
   gem.summary       = %q{RabbitMQ HTTP API client for Ruby}
   gem.homepage      = "http://github.com/ruby-amqp/rabbitmq_http_api_client"
-  gem.licenses      = ["MIT", "Mozilla Public License"]
+  gem.licenses      = ["MIT", "MPL-2.0"]
 
   gem.files         = Dir["ChangeLog.md", "LICENSE.txt", "README.md", "lib/**/*"]
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
@@ -20,7 +20,7 @@ Gem::Specification.new do |gem|
 
   gem.add_dependency    'addressable', '~> 2.7'
   gem.add_dependency    'hashie', '~> 4.1'
-  gem.add_dependency    'multi_json', '~> 1.14', '>= 1.14.1'
-  gem.add_dependency    'faraday', '~> 1.0', '>= 1.0.1'
+  gem.add_dependency    'multi_json', '~> 1.15'
+  gem.add_dependency    'faraday', '~> 1.3'
   gem.add_dependency    'faraday_middleware', '~> 1.0'
 end
