@@ -5,16 +5,29 @@
 `RabbitMQ::HTTP::Client#aliveness_test` has been removed. The endpoint has been deprecated
 in favor of [more focussed health check endpoints](https://www.rabbitmq.com/monitoring.html#health-checks):
 
- * `GET  {hostname}:15672/api/health/checks/alarms`
- * `GET  {hostname}:15672/api/health/checks/local-alarms`
- * `GET  {hostname}:15672/api/health/checks/virtual-hosts`
- * `GET  {hostname}:15672/api/health/checks/node-is-quorum-critical`
- * `GET  {hostname}:15672/api/health/checks/node-is-mirror-sync-critical`
- * `GET  {hostname}:15672/api/health/checks/port-listener/{port}`
- * `GET  {hostname}:15672/api/health/checks/protocol-listener/{protocol}`
- * `GET  {hostname}:15672/api/health/checks/certificate-expiration/{within}/{unit}`
+``` ruby
+c = RabbitMQ::HTTP::Client.new("http://username:s3kRe7@localhost:15672")
 
-Support for those endpoints in `RabbitMQ::HTTP::Client` is TBD.
+# Returns a pair of [success, details]. Details will be nil
+# if the check succeeds.
+#
+# Checks for any alarms across the cluster
+passed, details = c.health.check_alarms
+
+# alarms on the given node
+passed, details = c.health.check_local_alarms
+
+# is this node essential for an online quorum of any quorum queues?
+passed, details = c.health.check_if_node_is_quorum_critical
+
+# do any certificates used by this node's TLS listeners expire within
+# three months?
+passed, details = c.health.check_certificate_expiration(3, "months")
+```
+
+See the list of methods in `RabbitMQ::HTTP::HealthChecks` to find out what other
+health checks are available.
+
 ### User Tags Type Change
 
 User tags returned by the `RabbitMQ::HTTP::Client#list_users` and `RabbitMQ::HTTP::Client#user_info`

@@ -5,6 +5,10 @@ require "faraday_middleware"
 require "multi_json"
 require "uri"
 
+require_relative "client/request_helper"
+require_relative "client/response_helper"
+require_relative "client/health_checks"
+
 module RabbitMQ
   module HTTP
     class Client
@@ -13,7 +17,8 @@ module RabbitMQ
       # API
       #
 
-      attr_reader :endpoint
+      attr_reader :endpoint, :health
+      attr_reader :connection, :request_helper, :response_helper
 
       def self.connect(endpoint, options = {})
         new(endpoint, options)
@@ -22,6 +27,10 @@ module RabbitMQ
       def initialize(endpoint, options = {})
         @endpoint = endpoint
         @options  = options
+
+        @request_helper = RequestHelper.new()
+        @response_helper = ResponseHelper.new(self)
+        @health = HealthChecks.new(self)
 
         initialize_connection(endpoint, options)
       end
@@ -400,7 +409,6 @@ module RabbitMQ
         decode_resource(@connection.delete("parameters/#{encode_uri_path_segment(component)}/#{encode_uri_path_segment(vhost)}/#{encode_uri_path_segment(name)}"))
       end
 
-
       protected
 
       def initialize_connection(endpoint, options = {})
@@ -422,25 +430,19 @@ module RabbitMQ
       end
 
       def encode_uri_path_segment(segment)
-        # Correctly escapes spaces, see ruby-amqp/rabbitmq_http_api_client#28.
-        #
-        # Note that slashes also must be escaped since this is a single URI path segment,
-        # not an entire path.
-        Addressable::URI.encode_component(segment, Addressable::URI::CharacterClasses::UNRESERVED)
+        @request_helper.encode_uri_path_segment(segment)
       end
 
       def decode_resource(response)
-        if response.body.empty?
-          Hashie::Mash.new
-        else
-          Hashie::Mash.new(response.body)
-        end
+        @response_helper.decode_resource(response)
+      end
+
+      def decode_response_body(body)
+        @response_helper.decode_response_body(body)
       end
 
       def decode_resource_collection(response)
-        collection = response.body.is_a?(Array) ? response.body : response.body.fetch('items')
-
-        collection.map { |i| Hashie::Mash.new(i) }
+        @response_helper.decode_resource_collection(response)
       end
     end # Client
   end # HTTP
