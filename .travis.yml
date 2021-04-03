@@ -1,4 +1,4 @@
-dist: xenial
+dist: bionic
 language: ruby
 bundler_args: --without development
 cache: bundler
@@ -10,10 +10,10 @@ before_script:
   - "./bin/ci/before_build.sh"
 script: "bundle exec rspec"
 rvm:
-  - "ruby-head"
-  - "2.6.2"
-  - "2.5.5"
-  - "2.4.6"
+  - ruby-head
+  - "2.7.1"
+  - "2.6.6"
+  - "2.5.8"
 notifications:
   email: michael@rabbitmq.com
 services:
