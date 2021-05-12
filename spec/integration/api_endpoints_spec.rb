@@ -381,9 +381,28 @@ describe RabbitMQ::HTTP::Client do
   end
 
 
-
   describe "POST /api/exchanges/:vhost/:name/publish" do
-    it "publishes a messages to the exchange"
+    let(:queue_name) { "my_queue" }
+    let(:vhost) { "/" }
+    let(:exchange) { "" }
+
+    before :each do
+      @channel    = @conn.create_channel
+      @channel.queue(queue_name, durable: false, auto_delete: true)
+    end
+    after :each do
+      @channel.queue_delete queue_name
+      @channel.close
+    end
+
+    it "publishes a messages to the exchange" do
+      opts = {
+        routing_key: queue_name,
+        payload: "message body",
+      }
+      response = subject.exchange_publish(vhost, exchange, opts)
+      expect(response.routed).to eq true
+    end
   end
 
 

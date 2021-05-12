@@ -147,6 +147,19 @@ module RabbitMQ
         decode_resource(@connection.get("exchanges/#{encode_uri_path_segment(vhost)}/#{encode_uri_path_segment(name)}"))
       end
 
+      def exchange_publish(vhost, name, attributes)
+        opts = {
+          properties: {},
+          payload_encoding: "string",
+        }.merge(attributes)
+        path = "exchanges/#{encode_uri_path_segment(vhost)}/#{encode_uri_path_segment(name)}/publish"
+        response = @connection.post(path) do |req|
+          req.headers['Content-Type'] = 'application/json'
+          req.body = MultiJson.dump(opts)
+        end
+        decode_resource(response)
+      end
+
       def list_bindings_by_source(vhost, exchange, query = {})
         decode_resource_collection(@connection.get("exchanges/#{encode_uri_path_segment(vhost)}/#{encode_uri_path_segment(exchange)}/bindings/source", query))
       end
