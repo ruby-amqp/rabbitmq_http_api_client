@@ -1,4 +1,4 @@
-## Changes Between 1.15.0 and 2.0.0 (unreleased)
+## Changes Between 1.15.0 and 2.0.0 (May 21, 2021)
 
 ### Health Check Endpoint Changes
 
