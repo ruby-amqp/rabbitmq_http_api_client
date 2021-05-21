@@ -23,7 +23,7 @@ and will support more HTTP API features in the future
 
 ## Supported RabbitMQ Versions
 
- * RabbitMQ 3.x
+All [supported RabbitMQ release series](https://www.rabbitmq.com/versions.html).
 
 All versions require [RabbitMQ Management UI plugin](http://www.rabbitmq.com/management.html) to be installed and enabled.
 
@@ -32,7 +32,7 @@ All versions require [RabbitMQ Management UI plugin](http://www.rabbitmq.com/man
 Add this line to your application's Gemfile:
 
 ``` ruby
-gem 'rabbitmq_http_api_client', '>= 1.15.0'
+gem 'rabbitmq_http_api_client', '>= 2.0.0'
 ```
 
 And then execute:
