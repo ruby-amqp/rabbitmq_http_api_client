@@ -381,9 +381,30 @@ describe RabbitMQ::HTTP::Client do
   end
 
 
-
   describe "POST /api/exchanges/:vhost/:name/publish" do
-    it "publishes a messages to the exchange"
+    let(:queue_name) { "my_queue" }
+    let(:vhost) { "/" }
+    let(:exchange) { "" }
+    let(:payload) { "payload" }
+
+    before :each do
+      @channel    = @conn.create_channel
+    end
+    after :each do
+      @channel.close
+    end
+
+    it "publishes a messages to the exchange" do
+      queue = Bunny::Queue.new(@channel, queue_name, auto_delete: true)
+      opts = {
+        routing_key: queue_name,
+        payload: payload,
+      }
+      response = subject.exchange_publish(vhost, exchange, opts)
+      delivery_info, properties, received_payload = queue.pop
+      expect(received_payload).to eq payload
+      queue.delete
+    end
   end
 
 

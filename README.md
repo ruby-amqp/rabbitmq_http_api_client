@@ -9,10 +9,10 @@ This gem is a [RabbitMQ HTTP API](http://hg.rabbitmq.com/rabbitmq-management/raw
  * Getting information about vhosts, users, permissions
  * Getting information about enabled plugins, protocols, their ports, etc
  * Managing vhosts, users, permissions
+ * Publishing messages via HTTP
 
 and will support more HTTP API features in the future
 
- * Publishing messages via HTTP
  * Operations on components/extensions
  * Operations on federation policies
 
@@ -203,6 +203,9 @@ client.list_bindings_by_source("/", "log.events")
 
 # List all exchanges in a vhost for which an exchange is the destination
 client.list_bindings_by_destination("/", "command.handlers.email")
+
+# publish to an exchange
+client.exchange_publish("/", "log.events", routing_key: "routing-key-here", payload: "body here")
 ```
 
 ### Operations on Queues
