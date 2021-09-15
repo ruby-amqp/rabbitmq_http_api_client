@@ -420,7 +420,7 @@ module RabbitMQ
         adapter = options.delete(:adapter) || Faraday.default_adapter
 
         @connection = Faraday.new(options) do |conn|
-          conn.basic_auth user, password
+          conn.request    :basic_auth, user, password
           conn.use        FaradayMiddleware::FollowRedirects, :limit => 3
           conn.use        Faraday::Response::RaiseError
           conn.response   :json, :content_type => /\bjson$/
