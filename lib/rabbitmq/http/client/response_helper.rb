@@ -13,7 +13,7 @@ module RabbitMQ
       end
 
       def decode_resource(response)
-        if response.body.empty?
+        if !defined?(response.body) || response.body.empty?
           Hashie::Mash.new
         else
           decode_response_body(response.body)
@@ -21,7 +21,7 @@ module RabbitMQ
       end
 
       def decode_response_body(body)
-        if body.empty?
+        if !defined?(body) || body.empty?
           Hashie::Mash.new
         else
           Hashie::Mash.new(body)
