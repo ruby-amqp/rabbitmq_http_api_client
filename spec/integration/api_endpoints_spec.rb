@@ -967,6 +967,44 @@ describe RabbitMQ::HTTP::Client do
   end
 
   #
+  # Topic permissions 
+  #
+
+  describe "GET /api/topic-permissions" do
+    it "returns a list of topic permissions" do
+      xs = subject.list_topic_permissions
+      expect(xs.first.read).to_not be_nil
+    end
+
+  end
+
+  describe "GET /api/topic-permissions/:vhost/:user" do
+    it "returns a list of topic permissions of a user in a vhost" do
+      p = subject.list_topic_permissions_of("/", "guest").first
+
+      expect(p.exchange).to eq("amq.topic")
+      expect(p.read).to eq(".*")
+      expect(p.write).to eq(".*")
+    end
+  end
+
+  describe "PUT /api/topic-permissions/:vhost/:user" do
+    it "updates the topic permissions of a user in a vhost" do
+      subject.update_topic_permissions_of(
+        "/",
+        "guest",
+        { exchange: "amq.topic", read: ".*", write: ".*" }
+      )
+
+      p = subject.list_topic_permissions_of("/", "guest").first
+
+      expect(p.exchange).to eq("amq.topic")
+      expect(p.read).to eq(".*")
+      expect(p.write).to eq(".*")
+    end
+  end
+
+  #
   # Parameters
   #
 
