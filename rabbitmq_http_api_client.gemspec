@@ -22,5 +22,5 @@ Gem::Specification.new do |gem|
   gem.add_dependency    'hashie', '~> 4.1'
   gem.add_dependency    'multi_json', '~> 1.15'
   gem.add_dependency    'faraday', '~> 1.3'
-  gem.add_dependency    'faraday_middleware', '~> 1.0'
+  gem.add_dependency    'faraday_middleware', '~> 1.2'
 end
