@@ -894,9 +894,10 @@ describe RabbitMQ::HTTP::Client do
 
     context "without tags provided" do
       it "uses blank tag list" do
-        subject.update_user("alt-user", password: "alt-user")
+        username = "alt-user-without-tags"
+        subject.update_user(username, password: "alt-user")
 
-        u = subject.user_info("alt-user")
+        u = subject.user_info(username)
         expect(u.tags).to eq([])
       end
     end
