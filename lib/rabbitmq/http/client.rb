@@ -299,7 +299,29 @@ module RabbitMQ
         decode_resource(@connection.delete("permissions/#{encode_uri_path_segment(vhost)}/#{encode_uri_path_segment(user)}"))
       end
 
+      def list_topic_permissions(vhost = nil, query = {})
+        path = if vhost
+                 "vhosts/#{encode_uri_path_segment(vhost)}/topic-permissions"
+                else
+                  "topic-permissions"
+                end
 
+        decode_resource_collection(@connection.get(path, query))
+      end
+
+      def list_topic_permissions_of(vhost, user)
+        path = "topic-permissions/#{encode_uri_path_segment(vhost)}/#{encode_uri_path_segment(user)}"
+        decode_resource_collection(@connection.get(path))
+      end
+
+      def update_topic_permissions_of(vhost, user, attributes)
+        response = @connection.put("topic-permissions/#{encode_uri_path_segment(vhost)}/#{encode_uri_path_segment(user)}") do |req|
+          req.headers['Content-Type'] = "application/json"
+          req.body = MultiJson.dump(attributes)
+        end
+
+        nil
+      end
 
       def list_users(query = {})
         results = decode_resource_collection(@connection.get("users", query))
