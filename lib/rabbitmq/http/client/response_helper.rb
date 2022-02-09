@@ -13,7 +13,7 @@ module RabbitMQ
       end
 
       def decode_resource(response)
-        if response.body.empty?
+        if response.nil? || response.body.empty?
           Hashie::Mash.new
         else
           decode_response_body(response.body)
