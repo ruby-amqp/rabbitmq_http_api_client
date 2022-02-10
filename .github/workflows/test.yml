@@ -1,0 +1,51 @@
+name: Test
+on:
+  push:
+  #!   branches:
+  #!     - master
+  #! pull_request:
+  #!   branches:
+  #!     - master
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    services:
+      rabbitmq:
+        image: rabbitmq:3.9-management
+        ports:
+          - 5672:5672
+          - 15672:15672
+        options: >-
+          --name rabbitmq
+    env:
+      RUBY_RABBITMQ_HTTP_API_CLIENT_RABBITMQCTL: docker exec rabbitmq rabbitmqctl
+      RUBY_RABBITMQ_HTTP_API_CLIENT_RABBITMQ_PLUGINS: docker exec rabbitmq rabbitmq-plugins
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+      - name: Configure Broker
+        run: |
+          # Wait for rabbit
+          set +e
+          tries=5;
+          while [[ $tries -gt 0 ]]; do
+            $RUBY_RABBITMQ_HTTP_API_CLIENT_RABBITMQCTL eval 'true = rabbit:is_running().'
+            if [[ $? -ne 0 ]]; then
+              ((tries--)); sleep 10
+            else
+              break
+            fi
+          done
+          set -e
+          $RUBY_RABBITMQ_HTTP_API_CLIENT_RABBITMQCTL eval 'true = rabbit:is_running().'
+
+          # Reduce retention policy for faster publishing of stats
+          $RUBY_RABBITMQ_HTTP_API_CLIENT_RABBITMQCTL eval 'supervisor2:terminate_child(rabbit_mgmt_sup_sup, rabbit_mgmt_sup), application:set_env(rabbitmq_management,       sample_retention_policies, [{global, [{605, 1}]}, {basic, [{605, 1}]}, {detailed, [{10, 1}]}]), rabbit_mgmt_sup_sup:start_child().' || true
+          $RUBY_RABBITMQ_HTTP_API_CLIENT_RABBITMQCTL eval  'supervisor2:terminate_child(rabbit_mgmt_agent_sup_sup, rabbit_mgmt_agent_sup), application:set_env(rabbitmq_management_agent, sample_retention_policies, [{global, [{605, 1}]}, {basic, [{605, 1}]}, {detailed, [{10, 1}]}]), rabbit_mgmt_agent_sup_sup:start_child().' || true
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 2.6 # Not needed with a .ruby-version file
+          bundler-cache: true # runs 'bundle install' and caches installed gems automatically
+      - name: Run Tests
+        run: |
+          bundle exec rspec -cfd spec
