@@ -197,7 +197,7 @@ describe RabbitMQ::HTTP::Client do
       xs = subject.list_connections
       f  = xs.first
 
-      expect(f.name).to match(/127.0.0.1/)
+      expect(f.name).to match(/(127\.0\.0\.1|172\.18\.0\.1)/)
       expect(f.client_properties.product).to eq("Bunny")
     end
   end
@@ -208,7 +208,7 @@ describe RabbitMQ::HTTP::Client do
       xs = subject.list_connections
       c  = subject.connection_info(xs.first.name)
 
-      expect(c.name).to match(/127.0.0.1/)
+      expect(c.name).to match(/(127\.0\.0\.1|172\.18\.0\.1)/)
       expect(c.client_properties.product).to eq("Bunny")
     end
   end
