@@ -1,7 +1,18 @@
 ## Changes Between 2.0.0 and 2.1.0 (in development)
 
-No changes yet.
+### Handle Responses that Do Not Contain a Body
 
+GitHub issue: [#52](https://github.com/ruby-amqp/rabbitmq_http_api_client/issues/52)
+
+### Support for Management of Topic Permissions
+
+Contributed by @bagedevimo.
+
+GitHub issue: [#57](https://github.com/ruby-amqp/rabbitmq_http_api_client/issues/57)
+
+### Upgraded Faraday Middleware
+
+Faraday (a dependency) has been upgraded to `1.2.x` to eliminate some deprecation warnings.
 
 
 ## Changes Between 1.15.0 and 2.0.0 (May 21, 2021)
@@ -42,7 +53,7 @@ methods are now arrays of strings instead of comma-separated strings.
 Internally the method encodes both command-separated strings and JSON arrays in API responses
 to support response types from RabbitMQ 3.9 and earlier versions.
 
-See https://github.com/rabbitmq/rabbitmq-server/pull/2676 for details.
+See [rabbitmq/rabbitmq-server#2676](https://github.com/rabbitmq/rabbitmq-server/pull/2676) for details.
 
 ## Changes Between 1.14.0 and 1.15.0 (February 16th, 2021)
 ### Content Length Detection Changes
@@ -53,6 +64,7 @@ the value of the `content-length` header.
 Contributed by Ryan @rquant Quant.
 
 GitHub issue: [#49](https://github.com/ruby-amqp/rabbitmq_http_api_client/pull/49)
+
 
 ## Changes Between 1.13.0 and 1.14.0 (July 8th, 2020)
 
