@@ -1,4 +1,9 @@
-## Changes Between 2.0.0 and 2.1.0 (in development)
+## Changes Between 2.1.0 and 2.2.0 (in development)
+
+No changes yet.
+
+
+## Changes Between 2.0.0 and 2.1.0 (February 12, 2022)
 
 ### Handle Responses that Do Not Contain a Body
 
