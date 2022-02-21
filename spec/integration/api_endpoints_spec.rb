@@ -973,15 +973,15 @@ describe RabbitMQ::HTTP::Client do
 
   describe "GET /api/topic-permissions" do
     it "returns a list of topic permissions" do
-      xs = subject.list_topic_permissions
-      expect(xs.first.read).to_not be_nil
+      p, *r = subject.list_topic_permissions
+      expect(p.read).to_not be_nil
     end
 
   end
 
   describe "GET /api/topic-permissions/:vhost/:user" do
     it "returns a list of topic permissions of a user in a vhost" do
-      p = subject.list_topic_permissions_of("/", "guest").first
+      p, *r = subject.list_topic_permissions_of("/", "guest")
 
       expect(p.exchange).to eq("amq.topic")
       expect(p.read).to eq(".*")

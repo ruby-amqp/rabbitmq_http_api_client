@@ -23,22 +23,26 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
-      - name: Configure Broker
+      - name: Wait for Broker to Finish Starting
         run: |
-          # Wait for rabbit
           set +e
-          tries=5;
-          while [[ $tries -gt 0 ]]; do
+          tries=6;
+          while true; do
             $RUBY_RABBITMQ_HTTP_API_CLIENT_RABBITMQCTL eval 'true = rabbit:is_running().'
             if [[ $? -ne 0 ]]; then
-              ((tries--)); sleep 10
+              ((tries--))
+              if [[ $tries -gt 0 ]]; then
+                echo "Rabbit is not yet running, will retry in 10s"
+                sleep 10
+              else
+                exit 1
+              fi
             else
-              break
+              exit 0
             fi
           done
-          set -e
-          $RUBY_RABBITMQ_HTTP_API_CLIENT_RABBITMQCTL eval 'true = rabbit:is_running().'
-
+      - name: Configure Broker for Test Suite
+        run: |
           # Reduce retention policy for faster publishing of stats
           $RUBY_RABBITMQ_HTTP_API_CLIENT_RABBITMQCTL eval 'supervisor2:terminate_child(rabbit_mgmt_sup_sup, rabbit_mgmt_sup), application:set_env(rabbitmq_management,       sample_retention_policies, [{global, [{605, 1}]}, {basic, [{605, 1}]}, {detailed, [{10, 1}]}]), rabbit_mgmt_sup_sup:start_child().' || true
           $RUBY_RABBITMQ_HTTP_API_CLIENT_RABBITMQCTL eval  'supervisor2:terminate_child(rabbit_mgmt_agent_sup_sup, rabbit_mgmt_agent_sup), application:set_env(rabbitmq_management_agent, sample_retention_policies, [{global, [{605, 1}]}, {basic, [{605, 1}]}, {detailed, [{10, 1}]}]), rabbit_mgmt_agent_sup_sup:start_child().' || true
@@ -48,4 +52,4 @@ jobs:
           bundler-cache: true # runs 'bundle install' and caches installed gems automatically
       - name: Run Tests
         run: |
-          bundle exec rspec -cfd spec
+          bundle exec rspec --order rand -cfd spec
