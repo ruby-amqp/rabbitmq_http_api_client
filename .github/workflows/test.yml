@@ -52,4 +52,4 @@ jobs:
           bundler-cache: true # runs 'bundle install' and caches installed gems automatically
       - name: Run Tests
         run: |
-          bundle exec rspec --order rand -cfd spec
+          bundle exec rspec -cfd spec
