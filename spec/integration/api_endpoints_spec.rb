@@ -197,7 +197,7 @@ describe RabbitMQ::HTTP::Client do
       xs = subject.list_connections
       f  = xs.first
 
-      expect(f.name).to match(/127.0.0.1/)
+      expect(f.name).to match(/(127\.0\.0\.1|172\.18\.0\.1)/)
       expect(f.client_properties.product).to eq("Bunny")
     end
   end
@@ -208,7 +208,7 @@ describe RabbitMQ::HTTP::Client do
       xs = subject.list_connections
       c  = subject.connection_info(xs.first.name)
 
-      expect(c.name).to match(/127.0.0.1/)
+      expect(c.name).to match(/(127\.0\.0\.1|172\.18\.0\.1)/)
       expect(c.client_properties.product).to eq("Bunny")
     end
   end
@@ -971,37 +971,49 @@ describe RabbitMQ::HTTP::Client do
   # Topic permissions 
   #
 
-  describe "GET /api/topic-permissions" do
-    it "returns a list of topic permissions" do
-      xs = subject.list_topic_permissions
-      expect(xs.first.read).to_not be_nil
-    end
-
-  end
-
-  describe "GET /api/topic-permissions/:vhost/:user" do
-    it "returns a list of topic permissions of a user in a vhost" do
-      p = subject.list_topic_permissions_of("/", "guest").first
-
-      expect(p.exchange).to eq("amq.topic")
-      expect(p.read).to eq(".*")
-      expect(p.write).to eq(".*")
-    end
-  end
-
-  describe "PUT /api/topic-permissions/:vhost/:user" do
-    it "updates the topic permissions of a user in a vhost" do
+  describe "topic-permissions" do
+    before :each do
       subject.update_topic_permissions_of(
         "/",
         "guest",
         { exchange: "amq.topic", read: ".*", write: ".*" }
       )
+    end
+    after :each do
+      subject.delete_topic_permissions_of("/", "guest")
+    end
 
-      p = subject.list_topic_permissions_of("/", "guest").first
+    describe "GET /api/topic-permissions" do
+      it "returns a list of topic permissions" do
+        p, *r = subject.list_topic_permissions
+        expect(p.read).to_not be_nil
+      end
+    end
 
-      expect(p.exchange).to eq("amq.topic")
-      expect(p.read).to eq(".*")
-      expect(p.write).to eq(".*")
+    describe "GET /api/topic-permissions/:vhost/:user" do
+      it "returns a list of topic permissions of a user in a vhost" do
+        p, *r = subject.list_topic_permissions_of("/", "guest")
+
+        expect(p.exchange).to eq("amq.topic")
+        expect(p.read).to eq(".*")
+        expect(p.write).to eq(".*")
+      end
+    end
+
+    describe "PUT /api/topic-permissions/:vhost/:user" do
+      it "updates the topic permissions of a user in a vhost" do
+        subject.update_topic_permissions_of(
+          "/",
+          "guest",
+          { exchange: "amq.topic", read: ".*", write: ".foo" }
+        )
+
+        p = subject.list_topic_permissions_of("/", "guest").first
+
+        expect(p.exchange).to eq("amq.topic")
+        expect(p.read).to eq(".*")
+        expect(p.write).to eq(".foo")
+      end
     end
   end
 

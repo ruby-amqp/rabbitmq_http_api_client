@@ -323,6 +323,10 @@ module RabbitMQ
         nil
       end
 
+      def delete_topic_permissions_of(vhost, user)
+        decode_resource(@connection.delete("topic-permissions/#{encode_uri_path_segment(vhost)}/#{encode_uri_path_segment(user)}"))
+      end
+
       def list_users(query = {})
         results = decode_resource_collection(@connection.get("users", query))
 
