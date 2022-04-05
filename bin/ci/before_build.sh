@@ -10,8 +10,6 @@ $PLUGINS enable rabbitmq_management
 
 sleep 3
 
-$CTL:="sudo rabbitmqctl"
-
 # guest:guest has full access to /
 
 $CTL add_vhost /
