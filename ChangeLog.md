@@ -1,6 +1,11 @@
-## Changes Between 2.1.0 and 2.2.0 (in development)
+## Changes Between 2.2.0 and 2.3.0 (unreleased)
 
 No changes yet.
+
+
+## Changes Between 2.1.0 and 2.2.0 (May 19, 2022)
+
+Test suite and CI automation changes.
 
 
 ## Changes Between 2.0.0 and 2.1.0 (February 12, 2022)
