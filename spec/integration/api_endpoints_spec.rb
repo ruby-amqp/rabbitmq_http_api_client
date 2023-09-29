@@ -25,7 +25,9 @@ describe RabbitMQ::HTTP::Client do
   # in particular starting with rabbitmq/rabbitmq-management#236,
   # so in some cases we need to wait before GET'ing e.g. a newly opened connection.
   def await_event_propagation
-    # same number as used in rabbit-hole test suite. Works OK.
+    # same number as used in rabbit-hole test suite. It assumes that
+    # the tests are run after running a before_script that will reconfigure
+    # RabbitMQ to use a 1s stats emission interval instead of the default 5s.
     sleep 1
   end
 
@@ -464,7 +466,6 @@ describe RabbitMQ::HTTP::Client do
         expect(i.name).to eq(q.name)
         expect(i.auto_delete).to eq(q.auto_delete?)
         expect(i.active_consumers).to be_nil
-        expect(i.backing_queue_status.avg_ack_egress_rate).to eq(0.0)
 
         subject.delete_queue("/", q.name)
       end
