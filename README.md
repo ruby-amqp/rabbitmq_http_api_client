@@ -347,8 +347,21 @@ ps = client.clear_permissions_of("/", "guest")
 
 ## Running Tests
 
-    bundle install
-    bundle exec rspec -cfd spec
+Before running the test suites, run a script that will set up the local node:
+
+``` shell
+export RUBY_RABBITMQ_HTTP_API_CLIENT_RABBITMQCTL="rabbitmqctl"
+export RUBY_RABBITMQ_HTTP_API_CLIENT_RABBITMQ_PLUGINS="rabbitmq-plugins"
+
+./bin/ci/before_build.sh
+```
+
+To run all specs:
+
+``` shell
+bundle install
+bundle exec rspec -cfd spec
+```
 
 The test suite assumes that RabbitMQ is running locally with stock settings
 and rabbitmq-management plugin enabled.
