@@ -31,7 +31,13 @@ module RabbitMQ
       def decode_resource_collection(response)
         collection = response.body.is_a?(Array) ? response.body : response.body.fetch('items')
 
-        collection.map { |i| Hashie::Mash.new(i) }
+        collection.map do |i|
+          if i == []
+            Hashie::Mash.new()
+          else
+            Hashie::Mash.new(i)
+          end
+        end
       end
     end
   end

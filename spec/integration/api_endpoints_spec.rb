@@ -505,6 +505,35 @@ describe RabbitMQ::HTTP::Client do
     it "deletes a queue" do
       q = @channel.queue(queue_name, durable: false)
       subject.delete_queue("/", queue_name)
+      expect { subject.queue_info("/", queue_name) }.to raise_error(Faraday::ResourceNotFound)
+    end
+
+    it "doesn't delete non-empty queue if if-empty is set" do
+      q = @channel.queue(queue_name, durable: false)
+      q.publish("hello")
+      expect do
+        subject.delete_queue("/", queue_name, false, true)
+      end.to raise_error(Faraday::ClientError)
+
+      subject.purge_queue("/", q.name)
+      subject.delete_queue("/", queue_name, false, true)
+      expect { subject.queue_info("/", queue_name) }.to raise_error(Faraday::ResourceNotFound)
+    end
+
+    it "doesn't delete used queue if if-unused is set" do
+      q = @channel.queue(queue_name, durable: false)
+      # Simulate the queue being used by creating a consumer
+      consumer = q.subscribe do |_delivery_info, _properties, _body|
+        # consumer block
+      end
+
+      expect do
+        subject.delete_queue("/", queue_name, true, false)
+      end.to raise_error(Faraday::ClientError)
+
+      consumer.cancel
+      subject.delete_queue("/", queue_name, true, false)
+      expect { subject.queue_info("/", queue_name) }.to raise_error(Faraday::ResourceNotFound)
     end
   end
 

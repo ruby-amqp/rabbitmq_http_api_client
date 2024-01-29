@@ -177,8 +177,12 @@ module RabbitMQ
         decode_resource(response)
       end
 
-      def delete_queue(vhost, name)
-        decode_resource(@connection.delete("queues/#{encode_uri_path_segment(vhost)}/#{encode_uri_path_segment(name)}"))
+      def delete_queue(vhost, name, if_unused = false, if_empty = false)
+        response = @connection.delete("queues/#{encode_uri_path_segment(vhost)}/#{encode_uri_path_segment(name)}") do |req|
+          req.params["if-unused"] = true if if_unused
+          req.params["if-empty"] = true if if_empty
+        end
+        decode_resource(response)
       end
 
       def list_queue_bindings(vhost, queue, query = {})
