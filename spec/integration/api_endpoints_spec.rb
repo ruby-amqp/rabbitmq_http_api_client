@@ -522,7 +522,10 @@ describe RabbitMQ::HTTP::Client do
 
     it "doesn't delete used queue if if-unused is set" do
       q = @channel.queue(queue_name, durable: false)
-      consumer = q.subscribe
+      # Simulate the queue being used by creating a consumer
+      consumer = q.subscribe do |_delivery_info, _properties, _body|
+        # consumer block
+      end
 
       expect do
         subject.delete_queue("/", queue_name, true, false)
