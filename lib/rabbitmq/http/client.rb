@@ -450,11 +450,7 @@ module RabbitMQ
         adapter = options.delete(:adapter) || Faraday.default_adapter
 
         @connection = Faraday.new(options) do |conn|
-          if Gem::Version.new(Faraday::VERSION) < Gem::Version.new("2.0")
-            conn.request :basic_auth, user, password
-          else
-            conn.request :authorization, :basic, user, password
-          end
+          conn.request :authorization, :basic, user, password
 
           conn.use        Faraday::FollowRedirects::Middleware, :limit => 3
           conn.use        Faraday::Response::RaiseError
