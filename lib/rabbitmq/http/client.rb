@@ -450,7 +450,7 @@ module RabbitMQ
         adapter = options.delete(:adapter) || Faraday.default_adapter
 
         @connection = Faraday.new(options) do |conn|
-          conn.request :authorization, :basic, user, password
+          conn.request    :authorization, :basic, user, password
 
           conn.use        Faraday::FollowRedirects::Middleware, :limit => 3
           conn.use        Faraday::Response::RaiseError
