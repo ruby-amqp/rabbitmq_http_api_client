@@ -1,6 +1,6 @@
 require "hashie"
 require "faraday"
-require "faraday_middleware"
+require "faraday/follow_redirects"
 require "multi_json"
 require "uri"
 

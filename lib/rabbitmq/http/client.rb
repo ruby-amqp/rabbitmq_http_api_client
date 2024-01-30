@@ -1,7 +1,7 @@
 require "addressable/uri"
 require "hashie"
 require "faraday"
-require "faraday_middleware"
+require "faraday/follow_redirects"
 require "multi_json"
 require "uri"
 
@@ -450,9 +450,9 @@ module RabbitMQ
         adapter = options.delete(:adapter) || Faraday.default_adapter
 
         @connection = Faraday.new(options) do |conn|
-          conn.request    :basic_auth, user, password
+          conn.request    :authorization, :basic, user, password
 
-          conn.use        FaradayMiddleware::FollowRedirects, :limit => 3
+          conn.use        Faraday::FollowRedirects::Middleware, :limit => 3
           conn.use        Faraday::Response::RaiseError
           conn.response   :json, :content_type => /\bjson$/
 
