@@ -116,7 +116,6 @@ h     = client.overview
 # List cluster nodes with detailed status info for each one of them
 nodes = client.list_nodes
 n     = nodes.first
-puts n.sockets_used
 puts n.mem_used
 puts n.run_queue
 
