@@ -488,6 +488,7 @@ describe RabbitMQ::HTTP::Client do
     let(:queue_name) { "httpdeclared" }
 
     it "declares a queue" do
+      @channel.queue_delete(queue_name)
       subject.declare_queue("/", queue_name, durable: false, auto_delete: true)
 
       q = @channel.queue(queue_name, durable: false, auto_delete: true)

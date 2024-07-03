@@ -447,7 +447,7 @@ module RabbitMQ
         user     = uri.user     || options.delete(:username) || "guest"
         password = uri.password || options.delete(:password) || "guest"
         options = options.merge(:url => uri.to_s)
-        adapter = options.delete(:adapter) || Faraday.default_adapter
+        adapter = options.delete(:adapter) || Faraday.default_adapter || :httpclient
 
         @connection = Faraday.new(options) do |conn|
           conn.request    :authorization, :basic, user, password
