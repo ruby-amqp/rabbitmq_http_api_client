@@ -1,6 +1,26 @@
-## Changes Between 2.2.0 and 2.3.0 (unreleased)
+## Changes Between 2.2.0 and 3.0.0 (July 20, 2024)
 
-No changes yet.
+### Why the Major Version Bump?
+
+This release adopts a new major version of Faraday and targets
+only [community supported RabbitMQ versions](https://www.rabbitmq.com/release-information),
+which at this time means `3.13.x`.
+
+While there are no major breaking changes in the library itself,
+these two changes and more than two years that have passed since 2.0.0
+warrant a major version bump.
+
+### Support for Faraday 2.x
+
+Contributed by @shashankmehra.
+
+GitHub issue: [#63](https://github.com/ruby-amqp/rabbitmq_http_api_client/pull/63)
+
+### Queue Deletion: Support for if-unused and if-empty
+
+Contributed by @shashankmehra.
+
+GitHub issue: [#62](https://github.com/ruby-amqp/rabbitmq_http_api_client/pull/62)
 
 
 ## Changes Between 2.1.0 and 2.2.0 (May 19, 2022)
