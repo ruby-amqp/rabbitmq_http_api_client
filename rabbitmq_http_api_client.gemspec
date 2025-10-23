@@ -18,9 +18,9 @@ Gem::Specification.new do |gem|
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.require_paths = ["lib"]
 
-  gem.add_dependency    'addressable', '~> 2.7'
-  gem.add_dependency    'hashie', '~> 4.1'
-  gem.add_dependency    'multi_json', '~> 1.15'
-  gem.add_dependency    'faraday', '~> 2.9'
-  gem.add_dependency    'faraday-follow_redirects', '~> 0.3'
+  gem.add_dependency    'addressable', '~> 2.8'
+  gem.add_dependency    'hashie', '~> 5.0'
+  gem.add_dependency    'multi_json', '~> 1.17'
+  gem.add_dependency    'faraday', '~> 2.14'
+  gem.add_dependency    'faraday-follow_redirects', '~> 0.4'
 end
