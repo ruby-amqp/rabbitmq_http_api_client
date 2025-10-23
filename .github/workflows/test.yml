@@ -9,9 +9,15 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        ruby-version:
+          - "3.4.4"
+          - "3.3.9"
+          - "3.2.7"
     services:
       rabbitmq:
-        image: rabbitmq:3.9-management
+        image: rabbitmq:4-management
         ports:
           - 5672:5672
           - 15672:15672
@@ -23,17 +29,17 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
-      - name: Wait for Broker to Finish Starting
+      - name: Wait for RabbitMQ node to finish booting
         run: |
           set +e
           tries=6;
           while true; do
-            $RUBY_RABBITMQ_HTTP_API_CLIENT_RABBITMQCTL eval 'true = rabbit:is_running().'
+            $RUBY_RABBITMQ_HTTP_API_CLIENT_RABBITMQCTL await_startup
             if [[ $? -ne 0 ]]; then
               ((tries--))
               if [[ $tries -gt 0 ]]; then
-                echo "Rabbit is not yet running, will retry in 10s"
-                sleep 10
+                echo "Rabbit is not yet running, will retry in 3s"
+                sleep 3
               else
                 exit 1
               fi
@@ -47,9 +53,11 @@ jobs:
           $RUBY_RABBITMQ_HTTP_API_CLIENT_RABBITMQCTL eval 'supervisor2:terminate_child(rabbit_mgmt_sup_sup, rabbit_mgmt_sup), application:set_env(rabbitmq_management,       sample_retention_policies, [{global, [{605, 1}]}, {basic, [{605, 1}]}, {detailed, [{10, 1}]}]), rabbit_mgmt_sup_sup:start_child().' || true
           $RUBY_RABBITMQ_HTTP_API_CLIENT_RABBITMQCTL eval  'supervisor2:terminate_child(rabbit_mgmt_agent_sup_sup, rabbit_mgmt_agent_sup), application:set_env(rabbitmq_management_agent, sample_retention_policies, [{global, [{605, 1}]}, {basic, [{605, 1}]}, {detailed, [{10, 1}]}]), rabbit_mgmt_agent_sup_sup:start_child().' || true
       - uses: ruby/setup-ruby@v1
+      - name: Set up Ruby ${{ matrix.ruby-version }}
         with:
-          ruby-version: 2.6 # Not needed with a .ruby-version file
-          bundler-cache: true # runs 'bundle install' and caches installed gems automatically
+          ruby-version: ${{ matrix.ruby-version }}
+      - name: Install dependencies
+        run: bundle install
       - name: Run Tests
         run: |
           bundle exec rspec -cfd spec
