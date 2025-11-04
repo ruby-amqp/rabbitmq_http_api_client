@@ -1,6 +1,21 @@
-## Changes Between 3.0.0 and 3.1.0 (unreleased)
+## Changes Between 3.1.0 and 3.2.0 (in development)
 
 No changes yet.
+
+
+## Changes Between 3.0.0 and 3.1.0 (Nov 4, 2025)
+
+### Dependency Updates
+
+ * `addressable` to `2.8`
+ * `faraday` to `2.14`
+ * `faraday-follow_redirects` to `0.4`
+ * `hashie` to `5.0`
+ * `multi_json` to `1.17`
+
+Contributed by @fretb.
+
+GitHub issue: [#67](https://github.com/ruby-amqp/rabbitmq_http_api_client/pull/67)
 
 
 ## Changes Between 2.2.0 and 3.0.0 (July 20, 2024)

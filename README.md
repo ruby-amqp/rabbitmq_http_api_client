@@ -1,6 +1,6 @@
 # RabbitMQ HTTP API Client for Ruby
 
-This gem is a [RabbitMQ HTTP API]() client for Ruby. It supports
+This gem is a [RabbitMQ HTTP API](https://www.rabbitmq.com/docs/http-api-reference) client for Ruby. It supports
 
  * Getting cluster overview information
  * Getting cluster nodes status (# file descriptors used, RAM consumption and so on)
@@ -25,7 +25,7 @@ and will support more HTTP API features in the future
 
 This library targets [RabbitMQ release series covered by community support](https://www.rabbitmq.com/release-information).
 
-All versions require [RabbitMQ Management UI plugin](https://www.rabbitmq.com/docs/management/) to be installed and enabled.
+All versions require the [Management UI plugin](https://www.rabbitmq.com/docs/management/) to be enabled.
 
 ## Installation
 
@@ -34,7 +34,7 @@ use the latest version of this library:
 
 ``` ruby
 # Depends on Faraday 2.x
-gem 'rabbitmq_http_api_client', '>= 3.0.0'
+gem 'rabbitmq_http_api_client', '>= 3.1.0'
 ```
 
 If you **absolutely must** use Faraday 1.x, use the 2.x series:
@@ -42,7 +42,7 @@ If you **absolutely must** use Faraday 1.x, use the 2.x series:
 ``` ruby
 # Depends on Faraday 1.x.
 # Consider using 3.0.0 and later versions.
-gem 'rabbitmq_http_api_client', '>= 2.2.0'
+gem 'rabbitmq_http_api_client', '~> 2.2.0'
 ```
 
 And then execute:
