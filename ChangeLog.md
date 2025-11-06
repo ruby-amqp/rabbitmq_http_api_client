@@ -1,6 +1,23 @@
-## Changes Between 3.1.0 and 3.2.0 (in development)
+## Changes Between 3.2.0 and 3.3.0 (in development)
 
 No changes yet.
+
+
+## Changes Between 3.1.0 and 3.2.0 (in development)
+
+### Dependency Updates
+
+This version tweaks the dependency versions from `3.1.0` to allow for older
+minor series of several dependencies.
+
+ * `addressable` to `~> 2.7`
+ * `faraday` to `~> 2.9`
+  * `hashie` to `>= 4.1`
+ * `multi_json` to `~> 1.15`
+
+Contributed by @fretb.
+
+GitHub issue: [#69](https://github.com/ruby-amqp/rabbitmq_http_api_client/pull/69)
 
 
 ## Changes Between 3.0.0 and 3.1.0 (Nov 4, 2025)
