@@ -34,7 +34,7 @@ use the latest version of this library:
 
 ``` ruby
 # Depends on Faraday 2.x
-gem 'rabbitmq_http_api_client', '>= 3.2.0'
+gem 'rabbitmq_http_api_client', '>= 3.2.1'
 ```
 
 If you **absolutely must** use Faraday 1.x, use the 2.x series:
