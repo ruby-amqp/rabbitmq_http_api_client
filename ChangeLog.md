@@ -3,7 +3,7 @@
 No changes yet.
 
 
-## Changes Between 3.2.0 and 3.2.1 (Nov 7, 2025)
+## Changes Between 3.2.0 and 3.2.2 (Nov 7, 2025)
 
 ### Dependency Updates
 

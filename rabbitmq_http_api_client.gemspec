@@ -22,5 +22,5 @@ Gem::Specification.new do |gem|
   gem.add_dependency    'hashie', '>= 4.1'
   gem.add_dependency    'multi_json', '~> 1.15'
   gem.add_dependency    'faraday', '~> 2.9'
-  gem.add_dependency    'faraday-follow_redirects', '~> 0.4'
+  gem.add_dependency    'faraday-follow_redirects', '~> 0.3'
 end
