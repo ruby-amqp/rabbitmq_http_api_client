@@ -2,8 +2,19 @@
 
 No changes yet.
 
+## Changes Between 3.2.0 and 3.2.1 (Nov 7, 2025)
 
-## Changes Between 3.1.0 and 3.2.0 (in development)
+### Dependency Updates
+
+This version tweaks the dependency versions from `3.2.0` to allow for older
+minor series of several dependencies.
+
+ * `faraday-follow_redirects` to `~> 0.3`
+
+GitHub issue: [#69](https://github.com/ruby-amqp/rabbitmq_http_api_client/pull/69)
+
+
+## Changes Between 3.1.0 and 3.2.0 (Nov 5, 2025)
 
 ### Dependency Updates
 
